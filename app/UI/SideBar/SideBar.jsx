@@ -1,11 +1,12 @@
 'use client';
 
+import { useTableStore } from "@/app/zustand/useTablesStore";
 import { useState, memo } from "react";
 
 export default function SideBar() {
    const [openSideBar, setOpenSideBar] = useState(true);
    return (
-      <section className={`absolute z-10 shadow-lg left-0 top-10 p-2 transition-all text-sm ${!openSideBar ? "w-12" : "w-52"}`} style={{ height: 'calc(100% - 40px' }}>
+      <section className={`absolute z-10 shadow-lg left-0 top-10 p-2 transition-all text-sm ${!openSideBar ? "w-12" : "w-44"}`} style={{ height: 'calc(100% - 40px' }}>
          <div className="absolute flex items-center justify-center -right-3 top-4 h-7 w-7 bg-white rounded-full border border-gray-gray-200 cursor-pointer transition-all hover:bg-gray-200"
             onClick={() => setOpenSideBar(!openSideBar)}
          >
@@ -17,41 +18,44 @@ export default function SideBar() {
 }
 
 const TablesList = memo(() =>{
-   const options = {
-      2024: ['Novembro', 'Dezembro'],
-      2025: ['Janeiro', 'Fevereiro'],
-   }
+   const { tables } = useTableStore((state) => state);
    
    return (
       <div className="mt-10">
          <ul className="flex flex-col gap-[2px]">
-            {Object.keys(options).map((year) => (
-               <TablesListMonths key={year} options={options} year={year} />
+            {Object.keys(tables).map((year) => (
+               <TablesListMonths key={year} tables={tables} year={year} />
             ))}
-
          </ul>
       </div>
    )
 })
 
-function TablesListMonths({ options, year }) {
+function TablesListMonths({ year }) {
+   const { tables, removeMonthTable } = useTableStore((state) => state);
    const [expandUlYear, setExpandUlYear] = useState(false);
+
    return (
       <li
          key={year}
          className={`w-full overflow-hidden transition-max-height duration-200 ease-in-out`}
-         style={{ maxHeight: !expandUlYear ? '24px' : `${options[year].length * 24 + 24}px` }}
-         onClick={() => setExpandUlYear(!expandUlYear)}
+         style={{ maxHeight: !expandUlYear ? '24px' : `${tables[year].length * 24 + 24}px` }}
       >
-         <div className="flex flex-row h-6 gap-1 items-center mb-1 cursor-pointer rounded-md hover:bg-gray-200 transition-all">
-            <span className={`material-icons-outlined !text-lg transition-all ${expandUlYear && "rotate-180"}`}>expand_circle_down</span>
+         <div className="flex flex-row h-6 gap-1 items-center mb-1 cursor-pointer rounded-md hover:bg-gray-200 transition-all"
+            onClick={() => setExpandUlYear(!expandUlYear)}
+         >
+            <span className={`material-icons-outlined !text-lg transition-all ${expandUlYear && "rotate-180"}`}>
+               expand_circle_down
+            </span>
             <h3 className="font-semibold">{year}</h3>
+            
          </div>
          <ul className="ml-4 pl-1 border-l border-l-gray-400">
-            {options[year].map((month, index) => (
+            {tables[year].map((month, index) => (
                <li 
                   key={index}   
                   className="cursor-pointer transition-all w-fit px-2 rounded-md hover:bg-gray-200"
+                  onClick={()=> removeMonthTable(year, month)}
                >
                   <span>{month}</span>
                </li>
