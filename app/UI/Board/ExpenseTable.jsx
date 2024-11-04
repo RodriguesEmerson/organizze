@@ -1,4 +1,6 @@
-export default function Board(){
+
+
+export default function ExpenseTable(){
    return(
       <section>
          
