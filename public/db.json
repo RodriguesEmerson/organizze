@@ -1,0 +1,36 @@
+{
+   "expenses": {
+     "title": "Despesas",
+     "headers": ["Descrição", "Categ.", "Data", "Valor"],
+     "items": [
+       { "descricao": "Compra Mercado", "categoria": "mercado", "data": "2024/11/04", "valor": "123,45", "id": 1 },
+       { "descricao": "Conta de Luz", "categoria": "utilities", "data": "2024/11/03", "valor": "200,00", "id": 2 },
+       { "descricao": "Transporte", "categoria": "transporte", "data": "2024/11/02", "valor": "45,00", "id": 3 },
+       { "descricao": "Aluguel", "categoria": "house", "data": "2024/11/01", "valor": "1200,00", "id": 4 },
+       { "descricao": "Internet", "categoria": "utilities", "data": "2024/10/30", "valor": "100,00", "id": 5 },
+       { "descricao": "Restaurante", "categoria": "alimentação", "data": "2024/10/28", "valor": "90,00", "id": 6 },
+       { "descricao": "Assinatura Netflix", "categoria": "lazer", "data": "2024/10/27", "valor": "29,90", "id": 7 },
+       { "descricao": "Farmácia", "categoria": "saúde", "data": "2024/10/25", "valor": "50,00", "id": 8 },
+       { "descricao": "Petshop", "categoria": "pets", "data": "2024/10/23", "valor": "75,00", "id": 9 },
+       { "descricao": "Gasolina", "categoria": "transporte", "data": "2024/10/20", "valor": "150,00", "id": 10 },
+       { "descricao": "Materiais de Limpeza", "categoria": "casa", "data": "2024/10/18", "valor": "30,00", "id": 11 },
+       { "descricao": "Compra Mercado", "categoria": "mercado", "data": "2024/10/15", "valor": "200,00", "id": 12 },
+       { "descricao": "Cinema", "categoria": "lazer", "data": "2024/10/12", "valor": "35,00", "id": 13 },
+       { "descricao": "Curso Online", "categoria": "educação", "data": "2024/10/10", "valor": "150,00", "id": 14 },
+       { "descricao": "Roupa Nova", "categoria": "vestuário", "data": "2024/10/05", "valor": "180,00", "id": 15 }
+     ]
+   },
+   "incomes": {
+     "title": "Receitas",
+     "headers": ["Descrição", "Categ.", "Data", "Valor"],
+     "items": [
+       { "descricao": "Salário", "categoria": "salário", "data": "2024/11/01", "valor": "5000,00", "id": 1 },
+       { "descricao": "Freelance", "categoria": "trabalho", "data": "2024/10/28", "valor": "800,00", "id": 2 },
+       { "descricao": "Venda de Produto", "categoria": "vendas", "data": "2024/10/25", "valor": "250,00", "id": 3 },
+       { "descricao": "Investimentos", "categoria": "investimentos", "data": "2024/10/20", "valor": "150,00", "id": 4 },
+       { "descricao": "Renda Extra", "categoria": "trabalho", "data": "2024/10/15", "valor": "400,00", "id": 5 },
+       { "descricao": "Vale", "categoria": "imóveis", "data": "2024/10/10", "valor": "800,00", "id": 6 },
+       { "descricao": "Dividendos", "categoria": "investimentos", "data": "2024/10/05", "valor": "300,00", "id": 7 }
+     ]
+   }
+ }
