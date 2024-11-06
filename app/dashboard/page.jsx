@@ -1,16 +1,21 @@
+'use client';
+
 import ExpenseTable from "../UI/Board/ExpenseTable"
-import RevenueTable from "../UI/Board/RevenueGraphic"
+import IncomeTable from "../UI/Board/IncomeTable"
+import { usePage } from "../hooks/usePage"
 
 export default function DashBoard(){
+   const { data } = usePage();
+
    return(
       <section 
          className="ml-12 pl-5 pt-3 bg-gray-100"
-         style={{height: "calc(100vh - 50px)"}}
+         style={{height: "calc(100vh - 50px)"}} 
       >
          <div className="flex flex-row gap-2">
             <ExpenseTable />
             <div>
-               <RevenueTable />
+               <IncomeTable />
             </div>
          </div>
       </section>

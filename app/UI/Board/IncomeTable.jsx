@@ -1,6 +1,6 @@
 import { Table } from "@/app/components/Table"
 
-export default function RevenueTable(){
+export default function IncomeTable(){
    return(
       <div className="p-2 rounded-md shadow-lg w-fit bg-white overflow-hidden">
          <div

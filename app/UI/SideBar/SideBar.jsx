@@ -1,7 +1,8 @@
 'use client';
 
 import { useTableStore } from "@/app/zustand/useTablesStore";
-import { useState, memo } from "react";
+import { useSideBar } from "@/app/hooks/useSideBar";
+import { useState, memo, use } from "react";
 
 export default function SideBar() {
    const [openSideBar, setOpenSideBar] = useState(false)
@@ -18,7 +19,9 @@ export default function SideBar() {
 }
 
 const TablesList = memo(() =>{
-   const { tables } = useTableStore((state) => state);
+   const { tables, data } = useTableStore((state) => state);
+   const { sideBarHandler } = useSideBar();
+   console.log(data)
    
    return (
       <div className="mt-10">
@@ -32,7 +35,7 @@ const TablesList = memo(() =>{
 })
 
 function TablesListMonths({ year }) {
-   const { tables, removeMonthTable } = useTableStore((state) => state);
+   const { tables } = useTableStore((state) => state);
    const [expandUlYear, setExpandUlYear] = useState(false);
 
    return (
@@ -55,7 +58,7 @@ function TablesListMonths({ year }) {
                <li 
                   key={index}   
                   className="cursor-pointer transition-all w-fit px-2 rounded-md hover:bg-gray-200"
-                  onClick={()=> removeMonthTable(year, month)}
+                  onClick={()=> {}}
                >
                   <span>{month}</span>
                </li>
