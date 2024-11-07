@@ -1,8 +1,7 @@
-'use client';
-
+'use client'
+import { usePage } from "../hooks/usePage";
 import ExpenseTable from "../UI/Board/ExpenseTable"
 import IncomeTable from "../UI/Board/IncomeTable"
-import { usePage } from "../hooks/usePage"
 
 export default function DashBoard(){
    const { data } = usePage();

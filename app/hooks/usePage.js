@@ -14,13 +14,11 @@ export function usePage() {
             if(!res) throw new Error ("Falha ao buscar os dados!")
             
             setData(resolve);
-            console.log(resolve)
          } catch (error) {
             
          }
       }
       getDta();
    }, [])
-
    return { data };
 }

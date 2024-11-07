@@ -2,10 +2,12 @@
 
 import { useTableStore } from "@/app/zustand/useTablesStore";
 import { useSideBar } from "@/app/hooks/useSideBar";
-import { useState, memo, use } from "react";
+import { Spinner } from "../spinner";
+import { useState, memo, Suspense } from "react";
 
 export default function SideBar() {
-   const [openSideBar, setOpenSideBar] = useState(false)
+   const [openSideBar, setOpenSideBar] = useState(false);
+
    return (
       <section className={`absolute z-10 bg-white shadow-lg left-0 top-12 p-2 transition-all text-sm ${!openSideBar ? "w-12" : "w-44"}`} style={{ height: 'calc(100% - 48px' }}>
          <div className="absolute flex items-center justify-center -right-3 top-4 h-7 w-7 bg-white rounded-full border border-gray-gray-200 cursor-pointer transition-all hover:bg-gray-200"
@@ -19,10 +21,11 @@ export default function SideBar() {
 }
 
 const TablesList = memo(() =>{
-   const { tables, data } = useTableStore((state) => state);
    const { sideBarHandler } = useSideBar();
-   console.log(data)
+   const { data } = useTableStore((state) => state);
+   const  tables = data ? sideBarHandler.getTables(data) : null;
    
+   if(!tables) return <Spinner />
    return (
       <div className="mt-10">
          <ul className="flex flex-col gap-[2px]">
@@ -34,8 +37,7 @@ const TablesList = memo(() =>{
    )
 })
 
-function TablesListMonths({ year }) {
-   const { tables } = useTableStore((state) => state);
+function TablesListMonths({ year, tables }) {
    const [expandUlYear, setExpandUlYear] = useState(false);
 
    return (
