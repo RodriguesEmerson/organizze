@@ -8,7 +8,7 @@ export default function IncomeTable() {
          >Receitas</div>
 
          <div className="overflow-y-auto table-scroll-style">
-            <div className="pr-2"
+            <div className="pr-2 pb-2"
                style={{ maxHeight: "calc(100vh - 110px)" }}
             >
                <Table table={'incomes'} />

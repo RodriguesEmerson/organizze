@@ -5,21 +5,21 @@
     "months": {
       "Janeiro": {
         "expenses":[
-          { "desc": "Compra Mercado", "categ": "mercado", "date": "2024/11/04", "value": "123,45", "id": 1, "fixed": false },
-          { "desc": "Conta de Luz", "categ": "utilities", "date": "2024/11/03", "value": "200,00", "id": 2, "fixed": false },
-          { "desc": "Transporte", "categ": "transporte", "date": "2024/11/02", "value": "45,00", "id": 3, "fixed": false },
+          { "desc": "Compra Mercado", "categ": "food", "date": "2024/11/04", "value": "123,45", "id": 1, "fixed": false },
+          { "desc": "Conta de Luz", "categ": "house", "date": "2024/11/03", "value": "200,00", "id": 2, "fixed": false },
+          { "desc": "Transporte", "categ": "transport", "date": "2024/11/02", "value": "45,00", "id": 3, "fixed": false },
           { "desc": "Aluguel", "categ": "house", "date": "2024/11/01", "value": "1200,00", "id": 4, "fixed": false },
-          { "desc": "Internet", "categ": "utilities", "date": "2024/10/30", "value": "100,00", "id": 5, "fixed": false },
-          { "desc": "Restaurante", "categ": "alimentação", "date": "2024/10/28", "value": "90,00", "id": 6, "fixed": false },
-          { "desc": "Assinatura Netflix", "categ": "lazer", "date": "2024/10/27", "value": "29,90", "id": 7, "fixed": false },
-          { "desc": "Farmácia", "categ": "saúde", "date": "2024/10/25", "value": "50,00", "id": 8, "fixed": false },
+          { "desc": "Internet", "categ": "house", "date": "2024/10/30", "value": "100,00", "id": 5, "fixed": false },
+          { "desc": "Restaurante", "categ": "food", "date": "2024/10/28", "value": "90,00", "id": 6, "fixed": false },
+          { "desc": "Assinatura Netflix", "categ": "leisure", "date": "2024/10/27", "value": "29,90", "id": 7, "fixed": false },
+          { "desc": "Farmácia", "categ": "health", "date": "2024/10/25", "value": "50,00", "id": 8, "fixed": false },
           { "desc": "Petshop", "categ": "pets", "date": "2024/10/23", "value": "75,00", "id": 9, "fixed": false },
-          { "desc": "Gasolina", "categ": "transporte", "date": "2024/10/20", "value": "150,00", "id": 10, "fixed": false },
-          { "desc": "Materiais de Limpeza", "categ": "casa", "date": "2024/10/18", "value": "30,00", "id": 11, "fixed": false },
-          { "desc": "Compra Mercado", "categ": "mercado", "date": "2024/10/15", "value": "200,00", "id": 12, "fixed": false },
-          { "desc": "Cinema", "categ": "lazer", "date": "2024/10/12", "value": "35,00", "id": 13, "fixed": false },
-          { "desc": "Curso Online", "categ": "educação", "date": "2024/10/10", "value": "150,00", "id": 14, "fixed": false },
-          { "desc": "Roupa Nova", "categ": "vestuário", "date": "2024/10/05", "value": "180,00", "id": 15 }
+          { "desc": "Gasolina", "categ": "transport", "date": "2024/10/20", "value": "150,00", "id": 10, "fixed": false },
+          { "desc": "Materiais de Limpeza", "categ": "house", "date": "2024/10/18", "value": "30,00", "id": 11, "fixed": false },
+          { "desc": "Compra Mercado", "categ": "food", "date": "2024/10/15", "value": "200,00", "id": 12, "fixed": false },
+          { "desc": "Cinema", "categ": "leisure", "date": "2024/10/12", "value": "35,00", "id": 13, "fixed": false },
+          { "desc": "Curso Online", "categ": "education", "date": "2024/10/10", "value": "150,00", "id": 14, "fixed": false },
+          { "desc": "Roupa Nova", "categ": "self", "date": "2024/10/05", "value": "180,00", "id": 15 }
         ],
         "incomes":[
           { "desc": "Salário", "categ": "salário", "date": "2024/11/01", "value": "5000,00", "id": 1, "fixed": false },
