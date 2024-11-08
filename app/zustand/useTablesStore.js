@@ -5,7 +5,7 @@ const tables = {
 
 export const useTableStore = create((set) =>({
    tables: tables,
-   selectedTable: {year: 2014, month: 11},
+   selectedTable: {year: 2024, month: 'Janeiro'},
    data: null,
    changeTable: (year, month) => set((state) => (
       {

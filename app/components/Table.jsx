@@ -1,8 +1,18 @@
-export function Table({ data }){
+'use client';
+
+import { useTable } from "../hooks/useTable";
+import { Spinner } from "../UI/spinner";
+
+export function Table({ table }){
+   const { tableHandler, tablesHeaders } = useTable();
+   const data = tableHandler.getSelectedMonthData();
+   console.log(useTable())
+
+   if(!data) return <Spinner />
    const dados = {
-      titulo: 'Despesas',
+      titulo: 'Despesas', 
       headers: ['Descrição', 'Categ.', 'Data', 'Valor'],
-      infos: [
+      expenses: [
          {desc: 'Teste-1', categ: 'house', date: '2024/11/04', value: '1234,56', id: 123},
          {desc: 'Teste-2', categ: 'house', date: '2024/11/04', value: '1234,56', id: 456},
          {desc: 'Teste-3', categ: 'house', date: '2024/11/04', value: '1234,56', id: 789},
@@ -20,7 +30,7 @@ export function Table({ data }){
          </colgroup>
          <thead>
             <tr className="border-b-[1px] border-b-gray-400">
-            {dados.headers.map(colName => (
+            {tablesHeaders.map(colName => (
                <th 
                   key={colName} 
                   scope="col" 
@@ -30,7 +40,7 @@ export function Table({ data }){
             </tr>
          </thead>
          <tbody>
-            {dados.infos.map(item => (
+            {data[table].map(item => (
                <tr key={item.id} className="h-7 border-b-[1px] border-b-gray-300 text-[13px]">
                   <td className="pl-1">{item.desc}</td>
                   <td className="flex items-center justify-center pt-1">

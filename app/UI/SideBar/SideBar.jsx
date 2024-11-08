@@ -3,9 +3,9 @@
 import { useTableStore } from "@/app/zustand/useTablesStore";
 import { useSideBar } from "@/app/hooks/useSideBar";
 import { Spinner } from "../spinner";
-import { useState, memo, Suspense } from "react";
+import { useState, memo } from "react";
 
-export default function SideBar() {
+export default function SideBar() { 
    const [openSideBar, setOpenSideBar] = useState(false);
 
    return (

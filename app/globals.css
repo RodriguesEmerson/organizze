@@ -9,6 +9,13 @@
   box-sizing: border-box;  
 }
 
+.table-scroll-style{
+  scrollbar-width: thin;
+  height: calc(100% + 10px) !important;
+  margin-right: -8px !important;
+  scrollbar-color: rgba(9, 30, 66, 0.141) rgb(231, 231, 231);
+} 
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
