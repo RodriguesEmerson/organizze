@@ -22,13 +22,13 @@
           { "desc": "Roupa Nova", "categ": "self", "date": "2024/10/05", "value": "180,00", "id": 15 }
         ],
         "incomes":[
-          { "desc": "Salário", "categ": "salário", "date": "2024/11/01", "value": "5000,00", "id": 1, "fixed": false },
-          { "desc": "Freelance", "categ": "trabalho", "date": "2024/10/28", "value": "800,00", "id": 2, "fixed": false },
-          { "desc": "Venda de Produto", "categ": "vendas", "date": "2024/10/25", "value": "250,00", "id": 3, "fixed": false },
-          { "desc": "Investimentos", "categ": "investimentos", "date": "2024/10/20", "value": "150,00", "id": 4, "fixed": false },
-          { "desc": "Renda Extra", "categ": "trabalho", "date": "2024/10/15", "value": "400,00", "id": 5, "fixed": false },
-          { "desc": "Vale", "categ": "imóveis", "date": "2024/10/10", "value": "800,00", "id": 6, "fixed": false },
-          { "desc": "Dividendos", "categ": "investimentos", "date": "2024/10/05", "value": "300,00", "id": 7, "fixed": false }
+          { "desc": "Salário", "categ": "salary", "date": "2024/11/01", "value": "5000,00", "id": 1, "fixed": false },
+          { "desc": "Freelance", "categ": "others", "date": "2024/10/28", "value": "800,00", "id": 2, "fixed": false },
+          { "desc": "Venda de Produto", "categ": "sales", "date": "2024/10/25", "value": "250,00", "id": 3, "fixed": false },
+          { "desc": "Investimentos", "categ": "investments", "date": "2024/10/20", "value": "150,00", "id": 4, "fixed": false },
+          { "desc": "Renda Extra", "categ": "others", "date": "2024/10/15", "value": "400,00", "id": 5, "fixed": false },
+          { "desc": "Vale", "categ": "salary", "date": "2024/10/10", "value": "800,00", "id": 6, "fixed": false },
+          { "desc": "Dividendos", "categ": "investments", "date": "2024/10/05", "value": "300,00", "id": 7, "fixed": false }
         ]
       }
     }

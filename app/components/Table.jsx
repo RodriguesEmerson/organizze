@@ -9,16 +9,6 @@ export function Table({ table }){
    console.log(useTable())
 
    if(!data) return <Spinner />
-   const dados = {
-      titulo: 'Despesas', 
-      headers: ['Descrição', 'Categ.', 'Data', 'Valor'],
-      expenses: [
-         {desc: 'Teste-1', categ: 'house', date: '2024/11/04', value: '1234,56', id: 123},
-         {desc: 'Teste-2', categ: 'house', date: '2024/11/04', value: '1234,56', id: 456},
-         {desc: 'Teste-3', categ: 'house', date: '2024/11/04', value: '1234,56', id: 789},
-         {desc: 'Teste-4', categ: 'house', date: '2024/11/04', value: '1234,56', id: 910}
-      ]
-   }
    return (
       <table className="text-black text-sm w-96">
          <colgroup>
