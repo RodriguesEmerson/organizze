@@ -10,6 +10,7 @@ export function useTable(){
 
          //Current selected year and month.
          const { year, month } = selectedTable;
+         if(!data[year] || !data[year].months[month]) return false;
          
          //Cria uma copia da tabela.
          const currentTable = {...data[year].months[month]};

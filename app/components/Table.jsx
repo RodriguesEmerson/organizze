@@ -1,5 +1,3 @@
-'use client';
-
 import { useTable } from "../hooks/useTable";
 import { Spinner } from "../UI/spinner";
 
