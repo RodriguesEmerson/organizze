@@ -2,9 +2,9 @@ import { Table } from "@/app/components/Table"
 
 export default function ExpenseTable(){
    return(
-      <div className="p-2 rounded-md shadow-lg w-fit bg-white overflow-hidden">
+      <div className="p-2 pb-0 rounded-md shadow-lg w-fit bg-white overflow-hidden">
          <div
-            className="bg-gray-300 -ml-2 -mt-2 w-[108%] leading-7 text-center text-sm h-7"
+            className="text-center text-sm font-thin h-7 border-b-1 border-b-gray-200"
          >
             Despesas
          </div>

@@ -9,13 +9,15 @@ export default function SideBar() {
    const [openSideBar, setOpenSideBar] = useState(false);
 
    return (
-      <section className={`absolute z-10 bg-white shadow-lg left-0 top-12 p-2 transition-all text-sm ${!openSideBar ? "w-12" : "w-44"}`} style={{ height: 'calc(100% - 48px' }}>
+      <section className={`absolute z-10 bg-white shadow-xl left-0 top-12 p-2 transition-all text-sm ${!openSideBar ? "w-12" : "w-44"}`} style={{ height: 'calc(100% - 48px' }}>
          <div className="absolute flex items-center justify-center -right-3 top-4 h-7 w-7 bg-white rounded-full border border-gray-gray-200 cursor-pointer transition-all hover:bg-gray-200"
             onClick={() => setOpenSideBar(!openSideBar)}
          >
             <span className="material-icons transition-all">{!openSideBar ? " chevron_right" : "chevron_left"}</span>
          </div>
-         <TablesList />
+         {openSideBar &&
+            <TablesList />
+         }
       </section>
    )
 }
@@ -39,6 +41,7 @@ const TablesList = memo(() =>{
 
 function TablesListMonths({ year, tables }) {
    const [expandUlYear, setExpandUlYear] = useState(false);
+   const { changeTable } = useTableStore();
 
    return (
       <li
@@ -60,7 +63,7 @@ function TablesListMonths({ year, tables }) {
                <li 
                   key={index}   
                   className="cursor-pointer transition-all w-fit px-2 rounded-md hover:bg-gray-200"
-                  onClick={()=> {}}
+                  onClick={()=> {changeTable(year, month)}}
                >
                   <span>{month}</span>
                </li>

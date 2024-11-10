@@ -10,8 +10,15 @@ export function useTable(){
 
          //Current selected year and month.
          const { year, month } = selectedTable;
+         
+         //Cria uma copia da tabela.
+         const currentTable = {...data[year].months[month]};
+         
+         //Ordena as os item das tabelas por data em ordem crescente.
+         currentTable.expenses.sort((prev, curr) => new Date(prev.date) - new Date(curr.date));
+         currentTable.incomes.sort((prev, curr) => new Date(prev.date) - new Date(curr.date));
 
-         return data[year].months[month];
+         return currentTable;
       }
    }
 
