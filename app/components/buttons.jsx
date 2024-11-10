@@ -29,3 +29,15 @@ export function ButtonClose(){
       </button>
    )
 }
+
+export function ButtonSave(){
+   return(
+      <button 
+         className=" flex items-center justify-center text-sm gap-1 px-2 h-7 bg-gray-900  !text-gray-300 rounded-full  hover:!text-gray-400 transition-all" 
+         onClick={() => clickEvent()}
+      >
+         <span>Adicionar</span>
+         <span className="material-icons-outlined !text-sm !text-start">send</span>
+      </button>
+   )
+}

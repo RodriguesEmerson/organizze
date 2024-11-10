@@ -4,6 +4,18 @@ import 'material-icons/iconfont/material-icons.css';
 import "./globals.css";
 import Header from "./UI/Header/Header";
 import SideBar from "./UI/SideBar/SideBar";
+import { Poppins, Roboto } from "next/font/google"
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['300']
+})
+const roboto = Poppins({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['300']
+})
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,7 +37,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-br">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${roboto.className} ${geistMono.variable} antialiased`}
       >
       <Header />
       <SideBar />

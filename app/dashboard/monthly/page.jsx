@@ -23,7 +23,7 @@ export default function MonthlyDashBoard() {
       >
          {showAddReleaseModal &&
             <div 
-               className=" absolute flex justify-center items-center bg-black bg-opacity-65 top-0 left-0 h-full w-full z-20"
+               className=" absolute flex justify-center items-center bg-black bg-opacity-75 top-0 left-0 h-full w-full z-[11]"
                onClick={(e)=> {
                   !e.target.closest(".modal") &&
                   setHiddenAllModals()}
