@@ -136,6 +136,10 @@ export default function useCalendar() {
          }
          return false;
       },
+
+      checkData: function(){
+         //Essa função checará a data
+      },
       
       dateConvert: function (date, format) {
          console.log(date)
