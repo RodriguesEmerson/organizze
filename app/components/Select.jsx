@@ -9,7 +9,7 @@ export function Select({ name }){
    return(
       <div className=" relative" >
          <div 
-            className="flex flex-row gap-1 items-center justify-between h-7 cursor-pointer w-32 pl-2 font-thin border border-gray-300 rounded-xl"
+            className="flex flex-row gap-1 items-center justify-between h-7 cursor-pointer w-32 pl-2 font-thin border border-gray-300 rounded-md"
             onClick={()=> {setOpenSelect(!openSelect)}}
          >
             <input
@@ -26,7 +26,7 @@ export function Select({ name }){
             <ul>
                {categories.map(item =>(
                   <li 
-                     className={`flex flow-row items-center cursor-pointer px-1 gap-2 h-7 hover:bg-gray-200 transition-all ${option == item.categ && "bg-gray-200"}`} 
+                     className={`flex flow-row items-center cursor-pointer px-2 gap-2 h-7 hover:bg-gray-200 transition-all ${option == item.categ && "bg-gray-200"}`} 
                      key={item.categ}
                      onClick={()=> {setOption(item.categ); setOpenSelect(false)}}
                   >

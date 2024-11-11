@@ -2,6 +2,7 @@ import { useState } from "react"
 import { ButtonClose, ButtonSave } from "./buttons"
 import { Select } from "./Select";
 import { useNewRelease } from "../hooks/useNewRelease";
+import { Calendar } from "./Caledar";
 
 export function ModalNewRelease({ title }) {
    const { releaseHandler } = useNewRelease();
@@ -17,11 +18,11 @@ export function ModalNewRelease({ title }) {
             </div>
          </div>
          <div>
-            <form className="text-sm text-gray-700" id="new-release-form">
+            <form className="text-[13px] text-gray-700" id="new-release-form">
                <div className="flex flex-col gap-[2px] mb-2">
                   <label className="pl-1">Descrição</label>
                   <input
-                     className="h-7 pl-3 font-thin border border-gray-300 rounded-xl focus-within:outline-1 focus-within:outline-gray-400" 
+                     className="h-7 pl-3 font-thin border border-gray-300 rounded-md focus-within:outline-1 focus-within:outline-gray-400" 
                      type="text" 
                      name="descricao"
                      autoFocus
@@ -33,16 +34,12 @@ export function ModalNewRelease({ title }) {
                      <Select name={"categoria"}/>
                   </div>
 
-                  <div className="relative flex flex-col gap-[2px] max-w-full">
+                  <div className="relative flex flex-col gap-[2px]">
                      <label className="pl-1">Data</label>
                      <div className="flex flex-row gap-1 w-full">
+                        <Calendar name="data"/>
                         <input 
-                           className="h-7 w-[50%] pl-3 flex-1 font-thin border border-gray-300 rounded-xl focus-within:outline-1 focus-within:outline-gray-400"
-                           type="text" 
-                           name="data"
-                        />
-                        <input 
-                           className={`h-7 pl-3 w-[50%] flex-1 font-thin border border-gray-300 rounded-xl focus-within:outline-1 focus-within:outline-gray-400 ${!fixedRelease ? "bg-gray-200" : "bg-white"}`}
+                           className={`h-7 pl-3 w-full font-thin border border-gray-300 rounded-md focus-within:outline-1 focus-within:outline-gray-400 ${!fixedRelease ? "bg-gray-200" : "bg-white"}`}
                            type="text" 
                            name="dataFim"
                            disabled={!fixedRelease ? true : false}
@@ -63,12 +60,12 @@ export function ModalNewRelease({ title }) {
                <div className="flex flex-row items-center justify-end gap-1 w-full">
                   <label className="pl-1">Valor</label>
                   <input 
-                     className="h-7 w-[115px] pl-3 font-thin border border-gray-300 rounded-xl focus-within:outline-1 focus-within:outline-gray-400"
+                     className="h-7 w-[112px] pl-3 font-thin border border-gray-300 rounded-md focus-within:outline-1 focus-within:outline-gray-400"
                      type="text" 
                      name="valor"
                   />
                </div>
-               <div className="flex justify-center">
+               <div className="flex justify-center mt-2">
                   <ButtonSave clickEvent={releaseHandler.createNewRelease} type="expenses"/>
                </div>
             </form>

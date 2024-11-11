@@ -22,7 +22,6 @@ export default function ExpenseTable(){
                style={{maxHeight: "calc(100vh - 110px)"}}
             >
                <Table table={'expenses'}/>   
-
             </div>
 
          </div>
