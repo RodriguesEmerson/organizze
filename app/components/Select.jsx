@@ -1,24 +1,16 @@
 import { useState } from "react"
+import { useTableStore } from "../zustand/useTablesStore";
 
 export function Select({ name }){
-   const categories = [
-      {categ: "Casa", icon: "house"},
-      {categ: "Transporte", icon: "transport"},
-      {categ: "Alimentação", icon: "food"},
-      {categ: "Saúde", icon: "health"},
-      {categ: "Educação", icon: "education"},
-      {categ: "Pessoal", icon: "self"},
-      {categ: "Lazer", icon: "leisure"},
-      {categ: "Pets", icon: "pets"},
-   ]
+   const { categories } = useTableStore()
    
    const [option, setOption]  = useState('Casa');
    const [openSelect, setOpenSelect] = useState(false);
    return(
       <div className=" relative" >
          <div 
-            className="flex flex-row gap-1 items-center justify-between h-7 cursor-pointer w-32 pl-2 font-thin border border-gray-300 rounded-md"
-            onClick={()=> setOpenSelect(!openSelect)}
+            className="flex flex-row gap-1 items-center justify-between h-7 cursor-pointer w-32 pl-2 font-thin border border-gray-300 rounded-xl"
+            onClick={()=> {setOpenSelect(!openSelect)}}
          >
             <input
                className="outline-none w-[90%] bg-white max-w-full !cursor-pointer pointer-events-none"
@@ -30,7 +22,7 @@ export function Select({ name }){
             <span className="material-icons">keyboard_arrow_down</span>
          </div>
 
-         <div className={`absolute bg-white rounded-md shadow-xl overflow-hidden transition-all ${!openSelect ? "h-0" : "h-[225px]"}`}>
+         <div className={`absolute bg-white rounded-md shadow-xl mt-[1px] overflow-hidden transition-all ${!openSelect ? "h-0" : "h-[225px]"}`}>
             <ul>
                {categories.map(item =>(
                   <li 

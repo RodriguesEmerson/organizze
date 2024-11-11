@@ -14,7 +14,18 @@ export const useTableStore = create((set) =>({
    )),
    setData: (data) => set((state) => (
       {data: data}
-   ))
+   )),
+   categories: [
+      {categ: "Casa", icon: "house"},
+      {categ: "Transporte", icon: "transport"},
+      {categ: "Alimentação", icon: "food"},
+      {categ: "Saúde", icon: "health"},
+      {categ: "Educação", icon: "education"},
+      {categ: "Pessoal", icon: "self"},
+      {categ: "Lazer", icon: "leisure"},
+      {categ: "Pets", icon: "pets"},
+   ]
+
 
    // addYearTable: (newYear) => set((state) => ({tables: {...state.tables, newYear}})),
    // newoveYearTable: (deletedYear) => 
