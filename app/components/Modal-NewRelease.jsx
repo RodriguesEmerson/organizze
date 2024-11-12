@@ -4,6 +4,7 @@ import { Select } from "./Select";
 import { useNewRelease } from "../hooks/useNewRelease";
 import { Calendar } from "./Caledar";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
+import { FloatNotification } from "./FloatNotification";
 
 export function ModalNewRelease({ title }) {
    const { releaseHandler } = useNewRelease();
@@ -30,6 +31,7 @@ export function ModalNewRelease({ title }) {
                      placeholder="Descrição. . ."
                      autoFocus
                      required
+                     maxLength={50}
                   />
                </div>
                <div className="flex flex-row gap-1 mb-3">
@@ -71,6 +73,7 @@ export function ModalNewRelease({ title }) {
                </div>
             </form>
          </div>
+         <FloatNotification />
       </div>
    )
 }

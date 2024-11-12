@@ -107,27 +107,16 @@ export default function useCalendar() {
          if (analyzedDay >= startDate && analyzedDay <= endDate) return true;
       },
       
-      validateDate: function (date) {
+      isValidDate: function (date) {
          //Regex para validar o formato da data recebida.
-         console.log(date)
-         const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/;
-         if (!regex.test(date)) return false;
+         const regex = /^(\d{4})\/(\d{2})\/(\d{2})$/;
+         if(!regex.test(date)) return false;
+
+         //Valida da data.
+         const selectedDate = new Date(date);
+         if(isNaN(selectedDate.getTime())) return false;
          
-         //Converte a data para o padrão aceito pelo js. 
-         const convertedDate = this.dateConvert(date);
-         //Valida a data.
-         if (new Date(convertedDate) == 'Invalid Date') return false;
-         
-         const yearMilisseconds = 365 * 24 * 60 * 60 * 1000; //Um ano em milissegundos (365 dias);
-         const convertedDateMilisseconds = new Date(convertedDate).getTime(); //data recebida em milissegundos;
-         const todayMilisseconds = new Date(this.dateConvert(this.today())).getTime(); //hoje em milissegundos;
-         
-         //Vilida se o periodo da data tem o período de um ano.
-         if (convertedDateMilisseconds > todayMilisseconds + yearMilisseconds
-            || convertedDateMilisseconds < todayMilisseconds - yearMilisseconds
-         ) return false;
-         
-         return convertedDate;
+         return true;
       },
       
       isStartDateGreaterThanEndDate: function (date, endDate) {
