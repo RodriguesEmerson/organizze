@@ -1,19 +1,19 @@
 'use client'
-import { useTableStore } from "@/app/zustand/useTablesStore";
-import { usePage } from "/app/hooks/usePage";
-import ExpenseTable from "/app/UI/Board/ExpenseTable"
-import IncomeTable from "/app/UI/Board/IncomeTable"
+import { ModalNewRelease } from "@/app/components/Modal-NewRelease";
 import { useTable } from "@/app/hooks/useTable";
 import { Spinner } from "@/app/UI/spinner";
-import { useModalsHidden } from "@/app/zustand/useModalsHidden";
-import { ModalNewRelease } from "@/app/components/Modal-NewRelease";
+import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
+import { useTableStore } from "@/app/zustand/useTablesStore";
+import { usePage } from "/app/hooks/usePage";
+import ExpenseTable from "/app/UI/Board/ExpenseTable";
+import IncomeTable from "/app/UI/Board/IncomeTable";
 
 export default function MonthlyDashBoard() {
    const { data } = usePage();
    const { selectedTable } = useTableStore();
    const { tableHandler } = useTable();
    const table = tableHandler.getSelectedMonthData();
-   const { showAddReleaseModal, setHiddenAllModals } = useModalsHidden();
+   const { showAddReleaseModal, setHiddenAllModals } = useModalsHiddenStore();
 
    if (!data) return <Spinner />
    return (

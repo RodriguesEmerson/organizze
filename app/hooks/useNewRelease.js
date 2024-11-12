@@ -1,9 +1,11 @@
 import { useTableStore } from "../zustand/useTablesStore"
+import useCalendar from "./useCalendar";
 
 
 export function useNewRelease(){
    const { data, setData, selectedTable, categories  } = useTableStore();
-   class Release{
+   const { datesHandler } = useCalendar();
+    class Release{
       constructor(desc, categ, date, endDate = false, value){
          this.desc = desc
          this.categ = categ
@@ -19,7 +21,6 @@ export function useNewRelease(){
          })
       }
    }
-
 
    const releaseHandler  = {
       createNewRelease: function(e, type){
@@ -40,8 +41,8 @@ export function useNewRelease(){
          const newRelease = new Release(
             data.descricao, 
             categorie,
-            data.data,
-            data.dataFim,
+            datesHandler.dateConvert(data.data),
+            data.dataFim ? datesHandler.dateConvert(data.dataFim) : false,
             data.valor
          );
 

@@ -22,22 +22,24 @@ export function ButtonAdd({ title, clickEvent }) {
    )
 }
 
-export function ButtonClose(){
-   return(
+export function ButtonClose({ clickEvent }) {
+   return (
       <button onClick={() => clickEvent()}>
-         <span className="material-icons-outlined !text-xl !text-gray-500 !text-start hover:!text-gray-700 transition-all">cancel</span>
+         <span
+            className="material-icons !text-base text-gray-600 absolute top-1 right-2 cursor-pointer rounded-lg w-8 h-8 !leading-8 text-center hover:bg-gray-200"
+         >close</span>
       </button>
    )
 }
 
-export function ButtonSave({ clickEvent, type }){
-   return(
-      <button  type="submit"
-         className=" flex items-center justify-center text-sm gap-1 px-2 h-7 bg-gray-900  !text-gray-300 rounded-full  hover:!text-gray-400 transition-all" 
+export function ButtonSave({ clickEvent, type }) {
+   return (
+      <button type="submit"
+         className="flex items-center justify-center w-full text-sm gap-1 px-2 h-8 bg-gray-900  !text-gray-300 rounded-md  hover:!text-gray-400 transition-all"
          onClick={(e) => clickEvent(e, type)}
       >
          <span>Adicionar</span>
-         <span className="material-icons-outlined !text-sm !text-start">send</span>
+         <span className="material-icons-outlined !text-sm !text-start">playlist_add_check_circle</span>
       </button>
    )
 }

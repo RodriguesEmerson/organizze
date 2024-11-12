@@ -109,10 +109,11 @@ export default function useCalendar() {
       
       validateDate: function (date) {
          //Regex para validar o formato da data recebida.
+         console.log(date)
          const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/;
          if (!regex.test(date)) return false;
          
-         //Converte a data para o padrão aceito pelo js.
+         //Converte a data para o padrão aceito pelo js. 
          const convertedDate = this.dateConvert(date);
          //Valida a data.
          if (new Date(convertedDate) == 'Invalid Date') return false;
@@ -142,7 +143,6 @@ export default function useCalendar() {
       },
       
       dateConvert: function (date, format) {
-         console.log(date)
          if (format == "br") {
             if (date == '') return '';
             return new Date(date).toLocaleDateString('pt-br', { day: '2-digit', month: '2-digit', year: 'numeric' })

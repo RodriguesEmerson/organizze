@@ -2,10 +2,10 @@
 
 import { Table } from "@/app/components/Table";
 import { ButtonAdd } from "@/app/components/buttons";
-import { useModalsHidden } from "@/app/zustand/useModalsHidden";
+import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 
 export default function ExpenseTable(){
-   const { setShowAddReleaseModal, showAddReleaseModal } = useModalsHidden();
+   const { setShowAddReleaseModal, showAddReleaseModal } = useModalsHiddenStore();
    
    return(
       <div className="p-2 pb-0 rounded-md shadow-lg w-fit bg-white overflow-hidden">

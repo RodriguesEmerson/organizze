@@ -9,7 +9,7 @@ export function Select({ name }){
    return(
       <div className=" relative" >
          <div 
-            className="flex flex-row gap-1 items-center justify-between h-7 cursor-pointer w-32 pl-2 font-thin border border-gray-300 rounded-md"
+            className="flex flex-row gap-1 items-center justify-between h-8 cursor-pointer w-32 pl-2 font-thin border border-gray-300 rounded-md"
             onClick={()=> {setOpenSelect(!openSelect)}}
          >
             <input
