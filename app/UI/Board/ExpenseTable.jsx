@@ -19,7 +19,7 @@ export default function ExpenseTable(){
          </div>
          <div className="overflow-y-auto table-scroll-style">
             <div className="pr-2 pb-2"
-               style={{maxHeight: "calc(100vh - 110px)"}}
+               style={{maxHeight: "calc(100vh - 135px)"}}
             >
                <Table table={'expenses'}/>   
             </div>

@@ -7,7 +7,6 @@ export function usePage() {
 
    useEffect(() => {
       const getDta = async () => {
-      
          try {
             const res = await fetch("/api")
             const resolve = await res.json();

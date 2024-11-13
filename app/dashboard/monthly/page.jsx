@@ -14,6 +14,7 @@ export default function MonthlyDashBoard() {
    const { tableHandler } = useTable();
    const table = tableHandler.getSelectedMonthData();
    const { showAddReleaseModal, setHiddenAllModals } = useModalsHiddenStore();
+   let initialClick = false;
 
    if (!data) return <Spinner />
    return (
@@ -24,10 +25,14 @@ export default function MonthlyDashBoard() {
          {showAddReleaseModal &&
             <div 
                className=" absolute flex justify-center items-center bg-black bg-opacity-75 top-0 left-0 h-full w-full z-[11]"
-               onClick={(e)=> {
-                  !e.target.closest(".modal") &&
-                  setHiddenAllModals()}
-               }
+               onMouseDown={(e)=> {
+                  initialClick = e.target.closest(".modal");
+               }}
+               onMouseUp={(e)=> {
+                  if(!e.target.closest(".modal") && !initialClick){
+                     setHiddenAllModals();
+                  }
+               }}
             >
                <ModalNewRelease title={"Despesa"}/>
             </div>

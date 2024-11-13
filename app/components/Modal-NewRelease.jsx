@@ -7,7 +7,7 @@ import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
 import { FloatNotification } from "./FloatNotification";
 
 export function ModalNewRelease({ title }) {
-   const { releaseHandler } = useNewRelease();
+   const { releaseHandler, releaseMensage } = useNewRelease();
    const { setHiddenReleaseModal } = useModalsHiddenStore();
    const type = 'expenses'
 
@@ -30,7 +30,6 @@ export function ModalNewRelease({ title }) {
                      name="descricao"
                      placeholder="Descrição. . ."
                      autoFocus
-                     required
                      maxLength={50}
                   />
                </div>
@@ -54,7 +53,7 @@ export function ModalNewRelease({ title }) {
                            onChange={()=> setFixedRelease(!fixedRelease)}
                            id={`${title}-fixedReleaseCheckbox`}
                         />
-                        <label  htmlFor={`${title}-fixedReleaseCheckbox`}>Despesa fixa</label>
+                        <label  htmlFor={`${title}-fixedReleaseCheckbox`}>{`${title} fixa`}</label>
                      </div>
                   </div>
                </div>
@@ -72,8 +71,12 @@ export function ModalNewRelease({ title }) {
                   <ButtonSave clickEvent={releaseHandler.createNewRelease} type="expenses"/>
                </div>
             </form>
-         </div>
-         <FloatNotification />
+         </div> 
+         {releaseMensage &&
+            <div className="absolute -right-2 top-0 transition-all">
+               <FloatNotification releaseMensage={releaseMensage}/>   
+            </div>  
+         }
       </div>
    )
 }

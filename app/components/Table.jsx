@@ -7,7 +7,7 @@ export function Table({ table }){
 
    if(!data) return <Spinner />
    return (
-      <table className="text-gray-600 text-sm w-96">
+      <table className="text-gray-600 text-sm w-96 overflow-x-hidden">
          <colgroup>
             <col style={{width: "120px"}} />
             <col style={{width: "30px"}} />
