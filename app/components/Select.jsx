@@ -1,8 +1,7 @@
 import { useState } from "react"
 import { useTableStore } from "../zustand/useTablesStore";
 
-export function Select({ name }){
-   const { categories } = useTableStore()
+export function Select({ name, categories }){
    
    const [option, setOption]  = useState('Casa');
    const [openSelect, setOpenSelect] = useState(false);

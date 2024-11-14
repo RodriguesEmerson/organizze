@@ -4,7 +4,7 @@ import useCalendar from "./useCalendar";
 
 
 export function useNewRelease(){
-   const { data, setData, selectedTable, categories  } = useTableStore();
+   const { data, setData, selectedTable, categories, newReleaseType, months  } = useTableStore();
    const { datesHandler } = useCalendar();
    const [releaseMensage, setReleaseMensage] = useState(false);
 
@@ -36,13 +36,12 @@ export function useNewRelease(){
 
          //Select the categorie icon in categories;
          let categorie;
-         categories.forEach(element => {
+         categories[newReleaseType.type].forEach(element => {
             if(element.categ == data.categoria) categorie = element.icon;
          });
          let value = data.valor 
             ? data.valor.replace(".", "").replace(",", ".")
             : false;
-         console.log(value)
          
          //Create a new Release
          const newRelease = new Release(
@@ -64,6 +63,12 @@ export function useNewRelease(){
 
       updateData: function(newRelease, type){
          const updatedData =  {...data};
+         const newReleaseYear = new Date(newRelease.date).toLocaleDateString('en-US', {year: 'numeric'});
+         const newReleaseMonth = new Date(newRelease.date).toLocaleDateString('pt-br', {month: 'long'});
+         const hasNewReleaseYearInBD = updatedData[newReleaseYear]
+         const hasNewReleaseMonsthInBD = updatedData[newReleaseYear].months[newReleaseMonth]
+         console.log(hasNewReleaseYearInBD)
+         console.log(hasNewReleaseMonsthInBD);
 
          updatedData[selectedTable.year].months[selectedTable.month][type].push(newRelease);
          setData(updatedData);
@@ -71,7 +76,7 @@ export function useNewRelease(){
       
       validateRelease: function(newRelease){
          
-         const categoriesIcons =  categories.map(item => item.icon);
+         const categoriesIcons =  categories[newReleaseType.type].map(item => item.icon);
          const isDescOK = newRelease.desc.length > 0 && newRelease.desc.length < 51;
          const isCategOK = categoriesIcons.includes(newRelease.categ);
          const isDateOK = datesHandler.isValidDate(newRelease.date);
@@ -80,6 +85,13 @@ export function useNewRelease(){
          
          !newRelease.endDate && (isEndDateOK = true);
          if(isDescOK && isCategOK && isDateOK && isEndDateOK && isValueOK) return true;
+      },
+
+      createNewYearTable: function(){
+
+      },
+      createNewMonthTable: function(){
+
       }
    }
    

@@ -5,17 +5,19 @@ import { useNewRelease } from "../hooks/useNewRelease";
 import { Calendar } from "./Caledar";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
 import { FloatNotification } from "./FloatNotification";
+import { useTableStore } from "../zustand/useTablesStore";
 
-export function ModalNewRelease({ title }) {
+export function ModalNewRelease() {
    const { releaseHandler, releaseMensage } = useNewRelease();
    const { setHiddenReleaseModal } = useModalsHiddenStore();
-   const type = 'expenses'
+   const { newReleaseType, categories } = useTableStore();
+   // const type = 'expenses'
 
    const [fixedRelease, setFixedRelease] = useState(false);
    return (
       <div className="modal flex flex-col justify-between relative h-fit w-96 bg-white rounded-xl shadow-lg py-2 px-3">
          <div className="text-center h-8 leading-7 text-sm border-b mb-3">
-            <h4>{`Adicionar nova ${title}`}</h4>
+            <h4>{`Adicionar nova ${newReleaseType.title}`}</h4>
             <div className="absolute h-5 w-5 top-0 right-0">
                <ButtonClose clickEvent={setHiddenReleaseModal}/>
             </div>
@@ -36,7 +38,7 @@ export function ModalNewRelease({ title }) {
                <div className="flex flex-row gap-1 mb-3">
                   <div className="flex flex-col gap-[2px]">
                      <label className="pl-1">Categoria *</label>
-                     <Select name={"categoria"}/>
+                     <Select name={"categoria"} categories={categories[newReleaseType.type]}/>
                   </div>
 
                   <div className="relative flex flex-col gap-[2px]">
@@ -51,9 +53,9 @@ export function ModalNewRelease({ title }) {
                            type="checkbox"
                            name="fixa"
                            onChange={()=> setFixedRelease(!fixedRelease)}
-                           id={`${title}-fixedReleaseCheckbox`}
+                           id={`${newReleaseType.title}-fixedReleaseCheckbox`}
                         />
-                        <label  htmlFor={`${title}-fixedReleaseCheckbox`}>{`${title} fixa`}</label>
+                        <label  htmlFor={`${newReleaseType.title}-fixedReleaseCheckbox`}>{`${newReleaseType.title} fixa`}</label>
                      </div>
                   </div>
                </div>

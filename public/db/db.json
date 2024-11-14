@@ -3,7 +3,7 @@
       "headers": ["Descrição", "Categ.", "Data", "Valor"],
       "id": "te5432193",
       "months": {
-        "Janeiro": {
+        "janeiro": {
           "expenses":[
             { "desc": "Compra Mercado do Mes Mercado", "categ": "food", "date": "2024/01/04", "value": "123.45", "id": 1, "endDate": false },
             { "desc": "Conta de Luz", "categ": "house", "date": "2024/01/03", "value": "200.00", "id": 2, "endDate": false },
@@ -31,7 +31,7 @@
             { "desc": "Dividendos", "categ": "investments", "date": "2024/01/05", "value": "300.00", "id": 7, "endDate": false }
           ]
         },
-        "Fevereiro": {
+        "fevereiro": {
           "expenses":[
             { "desc": "Compra Mercado do Mes Mercado", "categ": "food", "date": "2024/02/04", "value": "123.45", "id": 1, "endDate": false },
             { "desc": "Conta de Luz", "categ": "house", "date": "2024/02/03", "value": "200.00", "id": 2, "endDate": false },

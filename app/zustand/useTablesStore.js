@@ -1,12 +1,11 @@
 import { create } from "zustand";
-const tables = {
-   2024: ['Novembro', 'Dezembro'],
-}
 
 export const useTableStore = create((set) =>({
-   tables: tables,
-   selectedTable: {year: 2024, month: 'Janeiro'},
+   tables: null,
+   selectedTable: {year: 2024, month: 'janeiro'},
+   newReleaseType: null,
    data: null,
+   categories: null,
    changeTable: (year, month) => set((state) => (
       {
          selectedTable: {...state.tables, year: year, month: month}
@@ -15,16 +14,22 @@ export const useTableStore = create((set) =>({
    setData: (data) => set((state) => (
       {data: data}
    )),
-   categories: [
-      {categ: "Casa", icon: "house"},
-      {categ: "Transporte", icon: "transport"},
-      {categ: "Alimentação", icon: "food"},
-      {categ: "Saúde", icon: "health"},
-      {categ: "Educação", icon: "education"},
-      {categ: "Pessoal", icon: "self"},
-      {categ: "Lazer", icon: "leisure"},
-      {categ: "Pets", icon: "pets"},
+   setCategories: (categoriesDB) => set((state) =>(
+      {
+         categories: categoriesDB
+      }
+   )),
+   setNewReleaseType: (type) => set((state) => (
+      {
+         newReleaseType: type
+      }
+   )),
+   months: [
+      'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+      'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
    ]
+
+
 
 
    // addYearTable: (newYear) => set((state) => ({tables: {...state.tables, newYear}})),
