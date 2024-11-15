@@ -4,6 +4,7 @@ import { useTableStore } from "@/app/zustand/useTablesStore";
 import { useSideBar } from "@/app/hooks/useSideBar";
 import { Spinner } from "../spinner";
 import { useState, memo } from "react";
+import { useUtils } from "@/app/hooks/useUtils";
 
 export default function SideBar() { 
    const [openSideBar, setOpenSideBar] = useState(false);
@@ -42,6 +43,7 @@ const TablesList = memo(() =>{
 function TablesListMonths({ year, tables }) {
    const [expandUlYear, setExpandUlYear] = useState(false);
    const { changeTable } = useTableStore();
+   const { toUpperFirstLeter } = useUtils();
 
    return (
       <li
@@ -65,7 +67,7 @@ function TablesListMonths({ year, tables }) {
                   className="cursor-pointer transition-all w-fit px-2 rounded-md hover:bg-gray-200"
                   onClick={()=> {changeTable(year, month)}}
                >
-                  <span>{month}</span>
+                  <span>{toUpperFirstLeter(month)}</span>
                </li>
             ))}
          </ul>

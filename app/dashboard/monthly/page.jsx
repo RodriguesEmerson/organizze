@@ -7,13 +7,15 @@ import { useTableStore } from "@/app/zustand/useTablesStore";
 import { usePage } from "/app/hooks/usePage";
 import ExpenseTable from "/app/UI/Board/ExpenseTable";
 import IncomeTable from "/app/UI/Board/IncomeTable";
+import { useUtils } from "@/app/hooks/useUtils";
 
 export default function MonthlyDashBoard() {
    const { data } = usePage();
    const { selectedTable } = useTableStore();
    const { tableHandler } = useTable();
-   const table = tableHandler.getSelectedMonthData();
    const { showAddReleaseModal, setHiddenAllModals } = useModalsHiddenStore();
+   const table = tableHandler.getSelectedMonthData();
+   const { toUpperFirstLeter } = useUtils();
    let initialClick = false;
 
    if (!data) return <Spinner />
@@ -39,7 +41,7 @@ export default function MonthlyDashBoard() {
          }
 
          <div className="border-b-[1px] border-b-gray-300 h-8 bg-white text-gray-900 -mt-3 -ml-5 mb-2 text-center leading-8">
-            {`${selectedTable?.month} de ${selectedTable?.year}`}
+            {`${toUpperFirstLeter(selectedTable?.month)} de ${selectedTable?.year}`}
          </div>
          {!table 
             ?

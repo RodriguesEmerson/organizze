@@ -8,11 +8,11 @@ export default function useCalendar() {
    const { monthEndYear, setMonthEndYear, yearMonths } = useCalendarStore();
    const { selectedTable } = useTableStore();
    const [currentCalendar, setCurrentCalendar] = useState();
-   
    useEffect(() => {
       !monthEndYear && setMonthEndYear({month: yearMonths.indexOf(selectedTable.month), year: selectedTable.year})
       setCurrentCalendar(datesHandler.calendar(monthEndYear?.month, monthEndYear?.year));
    }, [monthEndYear]);
+
    
    const datesHandler = {
       checkDeadline: function (period) {
@@ -38,6 +38,7 @@ export default function useCalendar() {
          return ({ prevMonth: daysNumberInTheLastMonth, currMonth: daysNumberCurrentMonth, nextMonth: dayNumberNextMonth });
       },
       calendar: function (month, year) {
+
          //Dia da semana que foi o primeiro dia do mês.
          const firsWeekDayOfMonth = (new Date(year, month, 1).getDay());
          

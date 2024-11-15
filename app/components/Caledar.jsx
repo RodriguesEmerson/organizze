@@ -2,12 +2,14 @@
 import { useEffect, useState } from "react";
 import useCalendar from "../hooks/useCalendar";
 import { useCalendarStore } from "../zustand/useCalendarStore";
+import { useUtils } from "../hooks/useUtils";
 
 export function Calendar({name, status}) {
    const { weekDays, yearMonths } = useCalendarStore();
    const { datesHandler, monthEndYear, currentCalendar } = useCalendar();
    const [openCalendar, setOpenCalendar] = useState(false);
    const [inputValue, setInputValue] = useState('');
+   const { toUpperFirstLeter } = useUtils();
    useEffect(()=>{
       status && setInputValue('')
    },[status])
@@ -51,9 +53,12 @@ export function Calendar({name, status}) {
                      onClick={() => datesHandler.handleChangeMonth('previous')}
                   >chevron_left
                   </span>
+
                   <p className="text-xs font-semibold cursor-default">
-                     {`${yearMonths[monthEndYear.month]} de ${monthEndYear.year}`}
+                     {/**Gets the month by index */}
+                     {`${toUpperFirstLeter(yearMonths[monthEndYear.month])} de ${monthEndYear.year}`}
                   </p>
+
                   <span
                      className="material-icons h-7 w-7 pt-[2px] text-center hover:bg-gray-200 cursor-pointer rounded"
                      onClick={() => datesHandler.handleChangeMonth('next')}
