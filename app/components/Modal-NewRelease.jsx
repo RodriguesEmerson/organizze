@@ -70,7 +70,7 @@ export function ModalNewRelease() {
                   />
                </div>
                <div className="flex justify-center mt-3">
-                  <ButtonSave clickEvent={releaseHandler.createNewRelease} type="expenses"/>
+                  <ButtonSave clickEvent={releaseHandler.createNewRelease} type={newReleaseType.type}/>
                </div>
             </form>
          </div> 

@@ -1,7 +1,16 @@
 import { ButtonAdd } from "@/app/components/buttons"
 import { Table } from "@/app/components/Table"
+import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
+import { useTableStore } from "@/app/zustand/useTablesStore";
 
 export default function IncomeTable() {
+
+   const { setShowAddReleaseModal, showAddReleaseModal } = useModalsHiddenStore();
+   const { setNewReleaseType } = useTableStore();
+   function handleAddReleaseType(){
+      setNewReleaseType({title: 'Receita', type: 'incomes'})
+      setShowAddReleaseModal();
+   }
    return (
       <div className="p-2 pb-0 rounded-md shadow-lg w-fit bg-white overflow-hidden">
          <div
@@ -9,7 +18,7 @@ export default function IncomeTable() {
          >
             <h3>Receitas</h3>
             <div className="absolute top-0 right-2">
-               <ButtonAdd title={'Receita'}/>
+               <ButtonAdd clickEvent={handleAddReleaseType} title={"Receita"}/>
             </div>
          </div>
 

@@ -23,8 +23,6 @@ export function useNewRelease(){
    //Set the current monht on calendar.
    useEffect(()=> {setMonthEndYear({month: yearMonths.indexOf(selectedTable.month), year: selectedTable.year})},[])
    
-   
-
    const releaseHandler  = {
       createNewRelease: function(e, type){
          e.preventDefault();

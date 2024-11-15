@@ -27,7 +27,7 @@ export function Table({ table }){
          </thead>
          <tbody>
             {data[table].map(item => (
-               <tr key={item.id} className="h-8 border-t-[1px] border-t-gray-300 text-[13px] hover:bg-gray-100 transition-all cursor-pointer">
+               <tr key={item.id} className="h-8 border-t-[1px] border-t-gray-300 text-[13px] hover:bg-gray-200 transition-all cursor-pointer">
                   <td className="pl-1 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis">{item.desc}</td>
                   <td className="flex items-center justify-center pt-[6px]">
                      <img 

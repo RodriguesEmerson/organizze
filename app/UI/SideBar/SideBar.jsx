@@ -10,7 +10,7 @@ export default function SideBar() {
    const [openSideBar, setOpenSideBar] = useState(false);
 
    return (
-      <section className={`absolute z-10 bg-white shadow-xl left-0 top-12 p-2 transition-all text-sm ${!openSideBar ? "w-12" : "w-44"}`} style={{ height: 'calc(100% - 48px' }}>
+      <section className={`absolute z-10 bg-gray-900 shadow-xl left-0 top-12 p-2 transition-all text-sm ${!openSideBar ? "w-12" : "w-44"}`} style={{ height: 'calc(100% - 48px' }}>
          <div className="absolute flex items-center justify-center -right-3 top-4 h-7 w-7 bg-white rounded-full border border-gray-gray-200 cursor-pointer transition-all hover:bg-gray-200"
             onClick={() => setOpenSideBar(!openSideBar)}
          >
@@ -30,7 +30,7 @@ const TablesList = memo(() =>{
    
    if(!tables) return <Spinner />
    return (
-      <div className="mt-10">
+      <div className="mt-10 bg-gray-700 text-white rounded-md">
          <ul className="flex flex-col gap-[2px]">
             {Object.keys(tables).map((year) => (
                <TablesListMonths key={year} tables={tables} year={year} />
@@ -51,7 +51,7 @@ function TablesListMonths({ year, tables }) {
          className={`w-full overflow-hidden transition-max-height duration-200 ease-in-out`}
          style={{ maxHeight: !expandUlYear ? '24px' : `${tables[year].length * 24 + 24}px` }}
       >
-         <div className="flex flex-row h-6 gap-1 items-center mb-1 cursor-pointer rounded-md hover:bg-gray-200 transition-all"
+         <div className="flex flex-row h-6 gap-1 items-center mb-1 cursor-pointer rounded-md hover:bg-gray-600 transition-all"
             onClick={() => setExpandUlYear(!expandUlYear)}
          >
             <span className={`material-icons-outlined !text-lg transition-all ${expandUlYear && "rotate-180"}`}>
@@ -60,11 +60,11 @@ function TablesListMonths({ year, tables }) {
             <h3 className="font-semibold">{year}</h3>
             
          </div>
-         <ul className="ml-4 pl-1 border-l border-l-gray-400">
+         <ul className="ml-4 pl-1 pb-1 border-l border-l-gray-400">
             {tables[year].map((month, index) => (
                <li 
                   key={index}   
-                  className="cursor-pointer transition-all w-fit px-2 rounded-md hover:bg-gray-200"
+                  className="cursor-pointer transition-all w-fit px-2 rounded-md hover:bg-gray-600"
                   onClick={()=> {changeTable(year, month)}}
                >
                   <span>{toUpperFirstLeter(month)}</span>

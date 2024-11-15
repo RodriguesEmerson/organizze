@@ -3,7 +3,7 @@ import { useTableStore } from "../zustand/useTablesStore";
 
 export function Select({ name, categories }){
    
-   const [option, setOption]  = useState('Casa');
+   const [option, setOption]  = useState("*Selecione*");
    const [openSelect, setOpenSelect] = useState(false);
    return(
       <div className=" relative" >

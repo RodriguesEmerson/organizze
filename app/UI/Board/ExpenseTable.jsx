@@ -20,7 +20,7 @@ export default function ExpenseTable(){
          >
             <h3>Despesas</h3>
             <div className="absolute top-0 right-2">
-               <ButtonAdd clickEvent={handleAddReleaseType}/>
+               <ButtonAdd clickEvent={handleAddReleaseType} title={"Despesa"}/>
             </div>
          </div>
          <div className="overflow-y-auto overflow-x-hidden table-scroll-style">
