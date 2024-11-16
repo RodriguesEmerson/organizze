@@ -9,6 +9,7 @@ import ExpenseTable from "/app/UI/Board/ExpenseTable";
 import IncomeTable from "/app/UI/Board/IncomeTable";
 import { useUtils } from "@/app/hooks/useUtils";
 import { ExpesesGraphic } from "@/app/UI/Board/ExpensesGraphic";
+import { IncomesGraphic } from "@/app/UI/Board/IncomesGraphic";
 
 export default function MonthlyDashBoard() {
    const { data } = usePage();
@@ -61,7 +62,11 @@ export default function MonthlyDashBoard() {
                   <div className="flex items-center justify-center border-b border-b-gray-400 mb-3 mr-2">
                      <h2 className="text-2xl font-extrabold text-gray-500">Gráficos</h2> 
                   </div>
-                  <ExpesesGraphic />
+
+                  <div className="flex flex-row gap-2">
+                     <ExpesesGraphic />
+                     <IncomesGraphic />
+                  </div>
                </div>
             </div>
          }
