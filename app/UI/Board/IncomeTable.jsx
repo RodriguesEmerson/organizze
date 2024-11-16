@@ -12,7 +12,7 @@ export default function IncomeTable() {
       setShowAddReleaseModal();
    }
    return (
-      <div className="p-2 pb-0 rounded-md shadow-lg w-fit bg-white overflow-hidden">
+      <div className="p-2 pb-0 rounded-md shadow-lg w-fit h-fit bg-white overflow-hidden">
          <div
             className="relative text-center text-sm font-thin h-7 border-b-1 border-b-gray-200"
          >

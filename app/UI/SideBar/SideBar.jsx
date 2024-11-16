@@ -10,7 +10,7 @@ export default function SideBar() {
    const [openSideBar, setOpenSideBar] = useState(false);
 
    return (
-      <section className={`absolute z-10 bg-gray-900 shadow-xl left-0 top-12 p-2 transition-all text-sm ${!openSideBar ? "w-12" : "w-44"}`} style={{ height: 'calc(100% - 48px' }}>
+      <section className={`fixed z-[12] bg-gray-900 shadow-xl left-0 top-12 p-2 transition-all text-sm ${!openSideBar ? "w-12" : "w-44"}`} style={{ height: 'calc(100% - 48px' }}>
          <div className="absolute flex items-center justify-center -right-3 top-4 h-7 w-7 bg-white rounded-full border border-gray-gray-200 cursor-pointer transition-all hover:bg-gray-200"
             onClick={() => setOpenSideBar(!openSideBar)}
          >

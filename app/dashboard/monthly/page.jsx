@@ -23,11 +23,11 @@ export default function MonthlyDashBoard() {
    return (
       <section
          className="ml-9 pl-5 pt-3 bg-gray-200"
-         style={{ height: "calc(100vh - 48px)" }}
+         style={{ height: "calc(100% - 48px)" }}
       >
          {showAddReleaseModal &&
             <div 
-               className=" absolute flex justify-center items-center bg-black bg-opacity-75 top-0 left-0 h-full w-full z-[11]"
+               className=" absolute flex justify-center items-center bg-black bg-opacity-75 top-0 left-0 h-full w-full z-[30]"
                onMouseDown={(e)=> {
                   initialClick = e.target.closest(".modal");
                }}
@@ -41,26 +41,29 @@ export default function MonthlyDashBoard() {
             </div>
          }
 
-         <div className="border-b-[1px] border-b-gray-300 h-8 bg-white text-gray-900 -mt-3 -ml-5 mb-2 text-center leading-8">
+         <div className="sticky top-12 z-[11] border-b-[1px] border-b-gray-300 h-8 bg-white text-gray-900 -mt-3 -ml-5 mb-2 text-center leading-8">
             {`${toUpperFirstLeter(selectedTable?.month)} de ${selectedTable?.year}`}
          </div>
          {!table 
             ?
-            <div className="flex items-center justify-center h-[95%] text-gray-900">
+            <div className=" flex items-center justify-center h-[95%] text-gray-900">
                <span className="text-3xl font-bold">404</span>
                <span className="inline-block h-12 w-[2px] mx-2 bg-gray-900"></span>
                <p>{`As finanças de ${selectedTable.month} de ${selectedTable.year} não foram encontradas!`}</p>
             </div>
             :
-            <div className="flex flex-row gap-2 items-start">
-            <ExpenseTable />
-            <div>
-               <IncomeTable />
+            <div className="flex flex-col gap-2 pb-3">
+               <div className="flex flex-row gap-2">
+                  <ExpenseTable />
+                  <IncomeTable />
+               </div>
+               <div className="w-full h-full">
+                  <div className="flex items-center justify-center border-b border-b-gray-400 mb-3 mr-2">
+                     <h2 className="text-2xl font-extrabold text-gray-500">Gráficos</h2> 
+                  </div>
+                  <ExpesesGraphic />
+               </div>
             </div>
-            <div>
-               <ExpesesGraphic />
-            </div>
-         </div>
          }
          
       </section>
