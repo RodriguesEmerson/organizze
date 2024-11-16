@@ -8,6 +8,7 @@ import { usePage } from "/app/hooks/usePage";
 import ExpenseTable from "/app/UI/Board/ExpenseTable";
 import IncomeTable from "/app/UI/Board/IncomeTable";
 import { useUtils } from "@/app/hooks/useUtils";
+import { ExpesesGraphic } from "@/app/UI/Board/ExpensesGraphic";
 
 export default function MonthlyDashBoard() {
    const { data } = usePage();
@@ -55,6 +56,9 @@ export default function MonthlyDashBoard() {
             <ExpenseTable />
             <div>
                <IncomeTable />
+            </div>
+            <div>
+               <ExpesesGraphic />
             </div>
          </div>
          }
