@@ -12,7 +12,7 @@ import { ExpesesGraphic } from "@/app/UI/Board/ExpensesGraphic";
 import { IncomesGraphic } from "@/app/UI/Board/IncomesGraphic";
 
 export default function MonthlyDashBoard() {
-   const { data } = usePage();
+   const { data, getTotalExpenses, getTotalIncomes, getBalance  } = usePage();
    const { selectedTable } = useTableStore();
    const { tableHandler } = useTable();
    const { showAddReleaseModal, setHiddenAllModals } = useModalsHiddenStore();
@@ -54,19 +54,47 @@ export default function MonthlyDashBoard() {
             </div>
             :
             <div className="flex flex-col gap-2 pb-3">
-               <div className="flex flex-row gap-2">
-                  <ExpenseTable />
-                  <IncomeTable />
-               </div>
+              
                <div className="w-full h-full">
-                  <div className="flex items-center justify-center border-b border-b-gray-400 mb-3 mr-2">
-                     <h2 className="text-2xl font-extrabold text-gray-500">Gráficos</h2> 
-                  </div>
+                  
 
                   <div className="flex flex-row gap-2">
                      <ExpesesGraphic />
                      <IncomesGraphic />
+                     <div>
+                        <div className="flex flex-col gap-2">
+                           <div className="h-28 w-48 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-md pt-3">
+                              <h4 className="text-sm text-center ">Total Despesas</h4>
+                              <div className="h-[70%] flex items-center justify-center">
+                                 <p className="text-3xl font-extrabold">{getTotalExpenses()}</p>
+                              </div>
+                           </div>
+                           <div className="h-28 w-48 bg-gradient-to-r from-green-800 to-green-900 text-white rounded-md pt-3">
+                              <h4 className="text-sm text-center ">Total Receitas</h4>
+                              <div className="h-[70%] flex items-center justify-center">
+                                 <p className="text-3xl font-extrabold">{getTotalIncomes()}</p>
+                              </div>
+                           </div>
+                           <div className="h-28 w-48 bg-gradient-to-r from-blue-900 to-blue-800 text-white rounded-md pt-3">
+                              <h4 className="text-sm text-center ">Saldo</h4>
+                              <div className="h-[70%] flex items-center justify-center">
+                                 <p className="text-3xl font-extrabold">{getBalance()}</p>
+                              </div>
+                           </div>
+                        </div>
+                        <div>
+
+                        </div>
+                     </div>
                   </div>
+
+                  <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">
+                     <h2 className="text-2xl font-extrabold text-gray-500 mt-2">Tabelas</h2> 
+                  </div>
+               </div>
+               <div className="flex flex-row gap-2">
+                  <ExpenseTable />
+                  <IncomeTable />
                </div>
             </div>
          }
