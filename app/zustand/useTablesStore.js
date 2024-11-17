@@ -8,7 +8,7 @@ export const useTableStore = create((set) =>({
    categories: null,
    changeTable: (year, month) => set((state) => (
       {
-         selectedTable: {...state.tables, year: year, month: month}
+         selectedTable: {year: year, month: month}
       }
    )),
    setData: (data) => set((state) => (

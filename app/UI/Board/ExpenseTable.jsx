@@ -6,10 +6,10 @@ import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { useTableStore } from "@/app/zustand/useTablesStore";
 
 export default function ExpenseTable(){
-   const { setShowAddReleaseModal, showAddReleaseModal } = useModalsHiddenStore();
-   const { setNewReleaseType } = useTableStore();
+   const  setShowAddReleaseModal  = useModalsHiddenStore((state) => state.setShowAddReleaseModal);
+   const  setNewReleaseType  = useTableStore((state) => state.setNewReleaseType);
    function handleAddReleaseType(){
-      setNewReleaseType({title: 'Despesa', type: 'expenses'})
+      setNewReleaseType({title: 'Despesa', type: 'expenses'});
       setShowAddReleaseModal();
    }
    

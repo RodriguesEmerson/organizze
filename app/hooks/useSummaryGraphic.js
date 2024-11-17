@@ -1,47 +1,28 @@
-import { useCallback, useEffect, useMemo } from "react";
-import { useTable } from "./useTable";
+import { usePage } from "./usePage";
 
-export function useIncomesGraphic() {
+export function useSummaryGraphic() {
 
-   const { tableHandler } = useTable();
-   const data = tableHandler.getSelectedMonthData().incomes ;
-   const graphicData = getIncomesData();
+   const { getTotalExpenses, getTotalIncomes } = usePage();
+   const totalExpenses = (getTotalExpenses(true));
+   const totalIncomes = (getTotalIncomes(true));
 
-   function getIncomesData() {
-      if (data) { 
-         const incomesData = {};
-         data.forEach(income => {
-            incomesData[income.categ]
-               ? incomesData[income.categ] = Number(incomesData[income.categ]) + Number(income.value)
-               : incomesData[income.categ] = Number(income.value);
-         });
-         const categoriesNames = Object.keys(incomesData);
-         const categoriesValues = Object.values(incomesData);
-
-         return { categoriesNames: categoriesNames, categoriesValues: categoriesValues };
-      }
-   }
-
-   useEffect(() => {
-      getIncomesData();
-   }, [data])
-
-   const incomesGraphicConfig = {
-      type: 'doughnut',
+   const summaryGraphicConfig = {
+      type: 'pie',
       data: {
-         labels: graphicData.categoriesNames,
+         labels: ['Despesas', 'Receitas'],
          datasets: [{
-            label: 'Receitas por Categoria',
-            data: graphicData.categoriesValues,
+            label: 'Resumo',
+            data: [totalExpenses, totalIncomes],
             backgroundColor: [
-               // '#D91136',
-               '#025259',
-               '#29A632',
-               '#F2BB13',
-               '#932BD9',
-               '#F28B0C',
-               '#049DD9',
-               '#400039'
+               '#D91136',
+               // '#025259',
+               // '#29A632',
+               // '#F2BB13',
+               // '#932BD9',
+               // '#F28B0C',
+               // '#049DD9',
+               // '#400039'
+               '#1d5313'
             ],
          }]
 
@@ -123,5 +104,5 @@ export function useIncomesGraphic() {
       ]
    }
 
-   return { getIncomesData, incomesGraphicConfig };
+   return { summaryGraphicConfig };
 }

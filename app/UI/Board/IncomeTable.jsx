@@ -5,8 +5,8 @@ import { useTableStore } from "@/app/zustand/useTablesStore";
 
 export default function IncomeTable() {
 
-   const { setShowAddReleaseModal, showAddReleaseModal } = useModalsHiddenStore();
-   const { setNewReleaseType } = useTableStore();
+   const setShowAddReleaseModal = useModalsHiddenStore((state) => state.setShowAddReleaseModal);
+   const  setNewReleaseType  = useTableStore((state) => state.setNewReleaseType);
    function handleAddReleaseType(){
       setNewReleaseType({title: 'Receita', type: 'incomes'})
       setShowAddReleaseModal();

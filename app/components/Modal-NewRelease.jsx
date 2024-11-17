@@ -4,8 +4,10 @@ import { Select } from "./Select";
 import { useNewRelease } from "../hooks/useNewRelease";
 import { Calendar } from "./Caledar";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
-import { FloatNotification } from "./FloatNotification";
+import { FloatNotification } from "./FloatNotification"; 
 import { useTableStore } from "../zustand/useTablesStore";
+
+
 
 export function ModalNewRelease() {
    const { releaseHandler, releaseMensage } = useNewRelease();
@@ -15,6 +17,7 @@ export function ModalNewRelease() {
 
    const [fixedRelease, setFixedRelease] = useState(false);
    return (
+      
       <div className="modal flex flex-col justify-between relative h-fit w-96 bg-white rounded-xl shadow-lg py-2 px-3">
          <div className="text-center h-8 leading-7 text-sm border-b mb-3">
             <h4>{`Adicionar nova ${newReleaseType.title}`}</h4>

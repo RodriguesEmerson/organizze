@@ -3,8 +3,11 @@ import { useState, useEffect } from "react";
 import { useTableStore } from "../zustand/useTablesStore";
 
 export function usePage() {
-   const { data, setData, setCategories, selectedTable } = useTableStore();
-   // ?year=${selectedTable.year}&month=${selectedTable.month}
+   const data = useTableStore((state) => state.data);
+   const setData = useTableStore((state) => state.setData);
+   const setCategories = useTableStore((state) => state.setCategories);
+   const selectedTable = useTableStore((state) => state.selectedTable);
+   
    useEffect(() => {
       const getDta = async () => {
          try {
@@ -13,7 +16,7 @@ export function usePage() {
             if(!resolve) throw new Error ("Falha ao buscar os dados!")
             
             setData(resolve.years);
-           setCategories(resolve.categories);
+            setCategories(resolve.categories);
          } catch (error) {
             
          }

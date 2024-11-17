@@ -10,13 +10,19 @@ import IncomeTable from "/app/UI/Board/IncomeTable";
 import { useUtils } from "@/app/hooks/useUtils";
 import { ExpesesGraphic } from "@/app/UI/Board/ExpensesGraphic";
 import { IncomesGraphic } from "@/app/UI/Board/IncomesGraphic";
+import { SummaryGraphic } from "@/app/UI/Board/SummaryGraphic";
+import { useCallback } from "react";
 
 export default function MonthlyDashBoard() {
    const { data, getTotalExpenses, getTotalIncomes, getBalance  } = usePage();
-   const { selectedTable } = useTableStore();
    const { tableHandler } = useTable();
-   const { showAddReleaseModal, setHiddenAllModals } = useModalsHiddenStore();
+
+   const selectedTable  = useTableStore((state) => state.selectedTable);
+   const showAddReleaseModal = useModalsHiddenStore((state) => state.showAddReleaseModal);
+   const setHiddenAllModals = useModalsHiddenStore((state) => state.setHiddenAllModals);
+   
    const table = tableHandler.getSelectedMonthData();
+
    const { toUpperFirstLeter } = useUtils();
    let initialClick = false;
 
@@ -38,7 +44,7 @@ export default function MonthlyDashBoard() {
                   }
                }}
             >
-               <ModalNewRelease title={"Despesa"}/>
+               <ModalNewRelease />
             </div>
          }
 
@@ -63,18 +69,21 @@ export default function MonthlyDashBoard() {
                      <IncomesGraphic />
                      <div>
                         <div className="flex flex-col gap-2">
+
                            <div className="h-28 w-48 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-md pt-3">
                               <h4 className="text-sm text-center ">Total Despesas</h4>
                               <div className="h-[70%] flex items-center justify-center">
                                  <p className="text-3xl font-extrabold">{getTotalExpenses()}</p>
                               </div>
                            </div>
+
                            <div className="h-28 w-48 bg-gradient-to-r from-green-800 to-green-900 text-white rounded-md pt-3">
                               <h4 className="text-sm text-center ">Total Receitas</h4>
                               <div className="h-[70%] flex items-center justify-center">
                                  <p className="text-3xl font-extrabold">{getTotalIncomes()}</p>
                               </div>
                            </div>
+
                            <div className="h-28 w-48 bg-gradient-to-r from-blue-900 to-blue-800 text-white rounded-md pt-3">
                               <h4 className="text-sm text-center ">Saldo</h4>
                               <div className="h-[70%] flex items-center justify-center">
@@ -86,6 +95,7 @@ export default function MonthlyDashBoard() {
 
                         </div>
                      </div>
+                     <SummaryGraphic />
                   </div>
 
                   <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">
