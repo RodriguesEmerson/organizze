@@ -6,18 +6,23 @@ import { Calendar } from "./Caledar";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
 import { FloatNotification } from "./FloatNotification"; 
 import { useTableStore } from "../zustand/useTablesStore";
+import { ModalBackGround } from "./ModalBackGround";
 
 
 
 export function ModalNewRelease() {
    const { releaseHandler, releaseMensage } = useNewRelease();
-   const { setHiddenReleaseModal } = useModalsHiddenStore();
-   const { newReleaseType, categories } = useTableStore();
-   // const type = 'expenses'
+   const showAddReleaseModal = useModalsHiddenStore((state) => state.showAddReleaseModal);
+   const setHiddenReleaseModal = useModalsHiddenStore((state) => state.setHiddenReleaseModal);
+
+   const newReleaseType = useTableStore((state) => state.newReleaseType);
+   const categories = useTableStore((state) => state.categories);
 
    const [fixedRelease, setFixedRelease] = useState(false);
+
+   if(!showAddReleaseModal) return <></>;
    return (
-      
+      <ModalBackGround >
       <div className="modal flex flex-col justify-between relative h-fit w-96 bg-white rounded-xl shadow-lg py-2 px-3">
          <div className="text-center h-8 leading-7 text-sm border-b mb-3">
             <h4>{`Adicionar nova ${newReleaseType.title}`}</h4>
@@ -83,5 +88,6 @@ export function ModalNewRelease() {
             </div>  
          }
       </div>
+      </ModalBackGround>
    )
 }
