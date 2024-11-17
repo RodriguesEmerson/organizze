@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export function useChartBar(){
-   const [ chartData, setchartData ] = useState({labels: [], values: []});
+   const [ chartData, setchartData ] = useState({labels: [], values: [], colors: ['#D91136']});
    
    const chartBarConfig = {
       type: 'bar',
@@ -10,16 +10,7 @@ export function useChartBar(){
          datasets: [{
             label: 'Despesas por Categoria',
             data: chartData.values,
-            backgroundColor: [
-               '#D91136',
-               // '#932BD9',
-               // '#29A632',
-               // '#F2BB13',
-               // '#025259',
-               // '#F28B0C',
-               // '#049DD9',
-               // '#400039'
-            ],
+            backgroundColor:chartData.colors
          }]
          
       },

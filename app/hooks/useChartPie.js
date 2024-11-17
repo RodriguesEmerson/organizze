@@ -13,13 +13,6 @@ export function useChartPie(){
             data: chartData.values,
             backgroundColor: [
                '#D91136',
-               // '#025259',
-               // '#29A632',
-               // '#F2BB13',
-               // '#932BD9',
-               // '#F28B0C',
-               // '#049DD9',
-               // '#400039'
                '#1d5313'
             ],
          }]

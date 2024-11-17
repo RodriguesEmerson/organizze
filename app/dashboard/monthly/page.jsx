@@ -25,13 +25,13 @@ export default function MonthlyDashBoard() {
    if (!data) return <Spinner />
    return (
       <section
-         className="ml-9 pl-5 pt-3 bg-gray-200"
+         className="ml-44 pl-5 pt-3"
          style={{ height: "calc(100% - 48px)" }}
       >
 
          <ModalNewRelease />
 
-         <div className="sticky top-12 z-[11] border-b-[1px] border-b-gray-300 h-8 bg-white text-gray-900 -mt-3 -ml-5 mb-2 text-center leading-8">
+         <div className="sticky top-12 z-[11] border-b-[1px] border-b-gray-300 border-t-gray-300 h-8 bg-gray-800 text-white -mt-3  mb-2 text-center leading-8 -ml-[200px]" style={{ width: '100vw' }}>
             {`${toUpperFirstLeter(selectedTable?.month)} de ${selectedTable?.year}`}
          </div>
          {!table
@@ -49,24 +49,33 @@ export default function MonthlyDashBoard() {
                   <div>
                      <div className="flex flex-row gap-2 mb-2">
 
-                        <div className="h-28 w-72 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-md pt-3">
-                           <h4 className="text-sm text-center ">Total Despesas</h4>
-                           <div className="h-[70%] flex items-center justify-center">
-                              <p className="text-3xl font-extrabold">{getTotalExpenses()}</p>
+                        <div className="flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
+                           <div className="w-9">
+                              <img src="/icons/expenses.png" alt="expenses-icon" />
+                           </div>
+                           <div className="h-[70%] flex flex-col items-start justify-center">
+                              <p className="text-3xl font-extrabold text-gray-600">{getTotalExpenses()}</p>
+                              <h4 className="text-sm text-center -mt-1 text-red-800">Despesas totais</h4>
                            </div>
                         </div>
 
-                        <div className="h-28 w-72 bg-gradient-to-r from-green-800 to-green-900 text-white rounded-md pt-3">
-                           <h4 className="text-sm text-center ">Total Receitas</h4>
-                           <div className="h-[70%] flex items-center justify-center">
-                              <p className="text-3xl font-extrabold">{getTotalIncomes()}</p>
+                        <div className="flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
+                           <div className="w-9">
+                              <img src="/icons/incomes.png" alt="incomes-icon" />
+                           </div>
+                           <div className="h-[70%] flex flex-col items-start justify-center">
+                              <p className="text-3xl font-extrabold text-gray-600">{getTotalIncomes()}</p>
+                              <h4 className="text-sm text-center -mt-1 text-green-800">Total Receitas</h4>
                            </div>
                         </div>
 
-                        <div className="h-28 w-72 bg-gradient-to-r from-blue-900 to-blue-800 text-white rounded-md pt-3">
-                           <h4 className="text-sm text-center ">Saldo</h4>
-                           <div className="h-[70%] flex items-center justify-center">
-                              <p className="text-3xl font-extrabold">{getBalance()}</p>
+                        <div className="flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
+                           <div className="w-9">
+                              <img src="/icons/balance.png" alt="balance-icon" />
+                           </div>
+                           <div className="h-[70%] flex flex-col items-start justify-center">
+                              <p className="text-3xl font-extrabold text-gray-600">{getBalance()}</p>
+                              <h4 className="text-sm text-center -mt-1 text-blue-800">Saldo</h4>
                            </div>
                         </div>
                      </div>
@@ -75,7 +84,6 @@ export default function MonthlyDashBoard() {
                   <div className="w-full flex flex-row gap-2 pr-2">
                      <ExpesesGraphic />
                      <IncomesGraphic />
-                     <SummaryGraphic />
                   </div>
 
                   <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">

@@ -37,10 +37,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-br">
       <body
-        className={`${roboto.className} ${geistMono.variable} antialiased`}
+        className={`${roboto.className} ${geistMono.variable} antialiased  bg-gray-200 overflow-x-hidden`}
       >
-      <Header />
-      <SideBar />
+        <Header />
+        <SideBar />
         {children}
       </body>
     </html>

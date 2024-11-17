@@ -1,9 +1,16 @@
 import { useState } from "react";
-
+   // '#D91136',
+   // '#025259',
+   // '#29A632',
+   // '#F2BB13',
+   // '#932BD9',
+   // '#F28B0C',
+   // '#049DD9',
+   // '#400039'
 
 export function useChartDoughnut(){
 
-   const [ chartData, setchartData ] = useState({labels: [], values: []});
+   const [ chartData, setchartData ] = useState({labels: [], values: [], colors: [ '#D91136','#29A632']});
 
    const chartDoughnutConfig = {
       type: 'doughnut',
@@ -12,16 +19,7 @@ export function useChartDoughnut(){
          datasets: [{
             label: 'Receitas por Categoria',
             data: chartData.values,
-            backgroundColor: [
-               // '#D91136',
-               '#025259',
-               '#29A632',
-               '#F2BB13',
-               '#932BD9',
-               '#F28B0C',
-               '#049DD9',
-               '#400039'
-            ],
+            backgroundColor: chartData.colors,
          }]
 
       },
@@ -63,7 +61,8 @@ export function useChartDoughnut(){
                      ).toFixed(2); // Calcula a porcentagem com 2 casas decimais
 
                      // Retorna o texto personalizado
-                     return `${label}: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)} - (${percentage}%)`;
+                     // ${label}:
+                     return ` ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)} - (${percentage}%)`;
                   },
                   labelPointStyle: function (context) {
                      return {
