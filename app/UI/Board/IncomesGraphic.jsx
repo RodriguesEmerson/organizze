@@ -34,7 +34,7 @@ export const IncomesGraphic = memo (() => {
                   </p>
                </div>
                <div className="w-[200px] h-[200px]">
-                  <ChartDoughnut data={{ labels: ['Despesas Totais'], values: [totalIncomes, totalExpenses], colors: ['#316628', '#D3D3D370']}}  size={{w: '200', h: '200'}}/>
+                  <ChartDoughnut data={{ labels: ['Receitas Totais'], values: [totalIncomes, totalExpenses], colors: ['#316628', '#D3D3D370']}}  size={{w: '200', h: '200'}}/>
                </div>
             </div>
          </div>

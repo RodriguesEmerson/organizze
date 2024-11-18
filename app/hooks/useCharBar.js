@@ -78,6 +78,9 @@ export function useChartBar(){
                   // console.log(chart.getDatasetMeta(0).data[index].width);
 
                   const value = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dataset.data[index]);
+                  const rowValue = dataset.data[index];
+                  const barWidth = chart.getDatasetMeta(0).data[index].width;
+
                   ctx.save();
                   ctx.fillStyle = chartData.orientation == 'x' ? '#61727C' : '#1a202c'; // Cor do texto
                   ctx.font = '9px Arial'; // Estilo da fonte
@@ -87,9 +90,9 @@ export function useChartBar(){
                   if(chartData.orientation == 'x'){
                      ctx.fillText(value,  bar.x, bar.y - 5); // Adiciona o texto acima das barras
                   }else{
-                     ctx.fillText(value, dataset.data[index] >= 0 
+                     ctx.fillText(value, rowValue >= 0 
                         ? bar.x : 
-                        bar.x + chart.getDatasetMeta(0).data[index].width, bar.y
+                        bar.x + barWidth, bar.y
                      ); // Adiciona o texto no interior das barras
                   }
                   

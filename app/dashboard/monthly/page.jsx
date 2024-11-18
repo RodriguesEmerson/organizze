@@ -31,7 +31,6 @@ export default function MonthlyDashBoard() {
       </div>
    ) 
    const monthlyGoal = data[selectedTable.year].monthlyGoal
-   console.log(totalIncomes - totalExpenses, monthlyGoal)
    return (
       <section
          className="relative ml-44 pl-5 pt-3"
@@ -91,7 +90,7 @@ export default function MonthlyDashBoard() {
                            </div>
                         </div>
 
-                        <div className="z-[5] flex pl-1  h-28 shadow-md w-72 bg-white text-white rounded-md overflow-hidden">
+                        <div className="relative z-[5] flex pl-1  h-28 shadow-md w-72 bg-white text-white rounded-md overflow-hidden">
                            <div className="w-[280px] h-[130px]">
                               {/*Labels, values, colors, orientation*/}
                               <ChartBar 
@@ -108,7 +107,15 @@ export default function MonthlyDashBoard() {
                                     }} 
                               />
                            </div>
-                           <span className=" text-gray-50">50%</span>
+                           <div className="absolute flex flex-row text-center w-10 right-7 top-11 text-gray-500">
+                              <span className="text-xl font-semibold">
+                                 {totalIncomes - totalExpenses >= 0 
+                                    ?  `${((totalIncomes - totalExpenses) / monthlyGoal * 100).toFixed(0)}%`
+                                    : '0%'
+                                 }
+                              </span>
+                              <span className="text-xs rotate-90 -ml-7">Concluídos</span>
+                           </div>
                         </div>
                      </div>
                   </div>

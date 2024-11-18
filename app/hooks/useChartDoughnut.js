@@ -17,7 +17,7 @@ export function useChartDoughnut(){
       data: {
          labels: chartData.labels,
          datasets: [{
-            label: 'Receitas por Categoria',
+            label: '',
             data: chartData.values,
             backgroundColor: chartData.colors,
          }]
@@ -62,6 +62,7 @@ export function useChartDoughnut(){
 
                      // Retorna o texto personalizado
                      // ${label}:
+                     
                      return ` ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)} - (${percentage}%)`;
                   },
                   labelPointStyle: function (context) {
@@ -79,8 +80,15 @@ export function useChartDoughnut(){
             afterDatasetDraw(chart) {
                const { ctx, data, chartArea } = chart;
                const dataset = chart.data.datasets[0];
+               const chartLabels = data.labels;
+               let tooltipLength = false;
+               if(chartLabels.length == 1) {tooltipLength = 1};
 
                chart.getDatasetMeta(0).data.forEach((slice, index) => {
+
+                  //Evita criar uma tooltip para uma label que não foi enviada.
+                  if(tooltipLength--  == 0) return;
+
                   const { x, y } = slice.tooltipPosition(); // Posição central da fatia
                   const value = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.datasets[0].data[index]);
                   ctx.save();
