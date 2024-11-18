@@ -15,14 +15,20 @@ export const IncomesGraphic = memo (() => {
 
    return (
       <div className="!min-w-[636px] h-[300px] flex flex-col items-center p-1 pr-2 bg-white shadow-md rounded-md overflow-hidden">
-         <div className="flex items-center justify-center text-white text-xs w-[105%] -mt-1 mb-1 bg-green-800 h-8">
+         <div className="flex items-center justify-center text-gray-900 text-xs w-[105%] mb-1 h-8">
             <h2>Receitas por Categoria</h2>
          </div>
 
          <div className="flex flex-row p-2">
             <ChartBar data={{...getIncomesData(), colors: ['#316628']}} />
-            <span className="h-[85%] mt-[2px] w-1 rounded-sm mx-2 bg-green-900"></span>
-            <div className="pt-8">
+            
+            <span className="h-[85%] mt-[2px] !w-[1px] rounded-sm mx-2 bg-gray-400"></span>
+            <div className="relative pt-8">
+               <div className="absolute top-[43%] left-[29%]">
+                  <p className="font-bold w-[85px] text-center text-xl leading-7">
+                     {`${(totalIncomes / (totalExpenses + totalIncomes) * 100).toFixed(2)}%`}
+                  </p>
+               </div>
                <div className="w-[200px] h-[200px]">
                   <ChartDoughnut data={{ labels: ['Despesas Totais'], values: [totalIncomes, totalExpenses], colors: ['#316628', '#D3D3D370']}}  size={{w: '200', h: '200'}}/>
                </div>

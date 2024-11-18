@@ -25,15 +25,18 @@ export default function MonthlyDashBoard() {
    if (!data) return <Spinner />
    return (
       <section
-         className="ml-44 pl-5 pt-3"
+         className="relative ml-44 pl-5 pt-3"
          style={{ height: "calc(100% - 48px)" }}
       >
 
          <ModalNewRelease />
 
-         <div className="sticky top-12 z-[11] border-b-[1px] border-b-gray-300 border-t-gray-300 h-8 bg-gray-800 text-white -mt-3  mb-2 text-center leading-8 -ml-[200px]" style={{ width: '100vw' }}>
+         <div className="sticky top-12 z-[11]  border-t-gray-300 h-8 bg-gray-900 text-white -mt-3  mb-2 text-center leading-8 -ml-[200px]" style={{ width: '100vw' }}>
             {`${toUpperFirstLeter(selectedTable?.month)} de ${selectedTable?.year}`}
          </div>
+
+         <div className="absolute top-0 -left-44 h-24 w-[100vw] bg-gray-900 !z-[0]"></div>
+
          {!table
             ?
             <div className=" flex items-center justify-center h-[95%] text-gray-900">
@@ -49,7 +52,7 @@ export default function MonthlyDashBoard() {
                   <div>
                      <div className="flex flex-row gap-2 mb-2">
 
-                        <div className="flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
+                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
                            <div className="w-9">
                               <img src="/icons/expenses.png" alt="expenses-icon" />
                            </div>
@@ -59,7 +62,7 @@ export default function MonthlyDashBoard() {
                            </div>
                         </div>
 
-                        <div className="flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
+                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
                            <div className="w-9">
                               <img src="/icons/incomes.png" alt="incomes-icon" />
                            </div>
@@ -69,7 +72,7 @@ export default function MonthlyDashBoard() {
                            </div>
                         </div>
 
-                        <div className="flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
+                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
                            <div className="w-9">
                               <img src="/icons/balance.png" alt="balance-icon" />
                            </div>
