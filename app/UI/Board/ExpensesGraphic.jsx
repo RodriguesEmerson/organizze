@@ -17,8 +17,11 @@ export const ExpesesGraphic = memo(() => {
             <h2>Despesas por Categoria</h2>
          </div>
          <div className="flex flex-row p-2">
-            <ChartBar data={{ ...getExpensesData(), colors: ['#D91136'] }} />
 
+            <div className="w-[400px] h-[300px] pt-4">
+               {/*Labels, values, colors, orientation*/}
+               <ChartBar data={{ ...getExpensesData(), colors: ['#D91136'], orientation: 'x' }} />
+            </div>
             <span className="h-[85%] mt-[2px] w-[1px] rounded-sm mx-2 bg-gray-400"></span>
             <div className=" relative pt-8">
                <div className="absolute top-[43%] left-[29%]">

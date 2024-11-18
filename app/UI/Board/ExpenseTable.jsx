@@ -14,7 +14,7 @@ export default function ExpenseTable(){
    }
    
    return(
-      <div className="p-2 pb-0 rounded-md shadow-lg w-fit h-fit min-w-[400px] bg-white overflow-hidden">
+      <div className="p-2 pb-0 rounded-md shadow-lg w-fit h-fit min-w-[527px] bg-white overflow-hidden">
          <div
             className="relative text-center text-sm font-thin h-7 border-b-1 border-b-gray-200"
          >

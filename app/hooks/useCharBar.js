@@ -1,11 +1,12 @@
 import { useState } from "react";
 
 export function useChartBar(){
-   const [ chartData, setchartData ] = useState({labels: [], values: [], colors: ['#D91136']});
+   const [ chartData, setchartData ] = useState({labels: [], values: [], colors: ['#D91136'], orientation: 'x'});
    
    const chartBarConfig = {
       type: 'bar',
       data: {
+         axis: 'y',
          labels: chartData.labels,
          datasets: [{
             label: 'Despesas por Categoria',
@@ -15,6 +16,7 @@ export function useChartBar(){
          
       },
       options: {
+         indexAxis: chartData.orientation,
          scales: {
             y: {
                beginAtZero: true,
@@ -38,13 +40,19 @@ export function useChartBar(){
                callbacks: {
                   label: function (context) {
                      let label = context.dataset.label || '';
-
                      if (label) {
                         // label += ': ';
-                        label = ' '; //Remove o texto da tooltip flutuante.
+                        label = ' '; //Remove o texto da tooltip flutuante
                      }
-                     if (context.parsed.y !== null) {
+
+                     //Tooltip do gráfico no exito no 'deitado'.
+                     if (context.parsed.y !== null && chartData.orientation == 'x') {
                         label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y);
+                     }
+
+                     //Tooltip do gráfico no exito no 'em pé'.
+                     if (context.parsed.x !== null && chartData.orientation == 'y') {
+                        label = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.x);
                      }
                      return label;
                   },
@@ -65,13 +73,26 @@ export function useChartBar(){
                const dataset = chart.data.datasets[0];
 
                chart.getDatasetMeta(0).data.forEach((bar, index) => {
+
+                  //Largura em pixels de cada barra.
+                  // console.log(chart.getDatasetMeta(0).data[index].width);
+
                   const value = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dataset.data[index]);
                   ctx.save();
-                  ctx.fillStyle = '#61727C'; // Cor do texto
+                  ctx.fillStyle = chartData.orientation == 'x' ? '#61727C' : '#1a202c'; // Cor do texto
                   ctx.font = '9px Arial'; // Estilo da fonte
-                  ctx.textAlign = 'center'; // Centraliza o texto horizontalmente
+                  ctx.textAlign = chartData.orientation == 'x' ? 'center' : 'end'; // posição do texto horizontalmente
                   ctx.textBaseline = 'middle'; // Centraliza verticalmente
-                  ctx.fillText(value, bar.x, bar.y - 5); // Adiciona o texto acima das barras
+
+                  if(chartData.orientation == 'x'){
+                     ctx.fillText(value,  bar.x, bar.y - 5); // Adiciona o texto acima das barras
+                  }else{
+                     ctx.fillText(value, dataset.data[index] >= 0 
+                        ? bar.x : 
+                        bar.x + chart.getDatasetMeta(0).data[index].width, bar.y
+                     ); // Adiciona o texto no interior das barras
+                  }
+                  
                   ctx.restore();
                });
             }

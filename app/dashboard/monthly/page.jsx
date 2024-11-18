@@ -10,11 +10,14 @@ import { useUtils } from "@/app/hooks/useUtils";
 import { ExpesesGraphic } from "@/app/UI/Board/ExpensesGraphic";
 import { IncomesGraphic } from "@/app/UI/Board/IncomesGraphic";
 import { SummaryGraphic } from "@/app/UI/Board/SummaryGraphic";
+import { ChartBar } from "@/app/components/ChartBar";
+import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
 
 export default function MonthlyDashBoard() {
    const { data, getTotalExpenses, getTotalIncomes, getBalance } = usePage();
    const { tableHandler } = useTable();
-   console.log('Renderizou')
+   const { totalExpenses, totalIncomes } = useSummaryGraphic();
+
 
    const selectedTable = useTableStore((state) => state.selectedTable);
 
@@ -22,7 +25,13 @@ export default function MonthlyDashBoard() {
 
    const { toUpperFirstLeter } = useUtils();
 
-   if (!data) return <Spinner />
+   if (!data) return(
+      <div className="flex items-center justify-center h-[95vh]">
+         <Spinner />
+      </div>
+   ) 
+   const monthlyGoal = data[selectedTable.year].monthlyGoal
+   console.log(totalIncomes - totalExpenses, monthlyGoal)
    return (
       <section
          className="relative ml-44 pl-5 pt-3"
@@ -45,12 +54,12 @@ export default function MonthlyDashBoard() {
                <p>{`As finanças de ${selectedTable.month} de ${selectedTable.year} não foram encontradas!`}</p>
             </div>
             :
-            <div className="flex flex-col gap-2 pb-3">
+            <div className="flex flex-col gap-2 pb-3 ">
 
-               <div className="w-full h-full">
+               <div className="w-[98%] h-full">
 
                   <div>
-                     <div className="flex flex-row gap-2 mb-2">
+                     <div className="flex flex-row gap-2 mb-2 justify-between">
 
                         <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
                            <div className="w-9">
@@ -68,7 +77,7 @@ export default function MonthlyDashBoard() {
                            </div>
                            <div className="h-[70%] flex flex-col items-start justify-center">
                               <p className="text-3xl font-extrabold text-gray-600">{getTotalIncomes()}</p>
-                              <h4 className="text-sm text-center -mt-1 text-green-800">Total Receitas</h4>
+                              <h4 className="text-sm text-center -mt-1 text-green-800">Receitas totais</h4>
                            </div>
                         </div>
 
@@ -81,10 +90,30 @@ export default function MonthlyDashBoard() {
                               <h4 className="text-sm text-center -mt-1 text-blue-800">Saldo</h4>
                            </div>
                         </div>
+
+                        <div className="z-[5] flex pl-1  h-28 shadow-md w-72 bg-white text-white rounded-md overflow-hidden">
+                           <div className="w-[280px] h-[130px]">
+                              {/*Labels, values, colors, orientation*/}
+                              <ChartBar 
+                                 data={{ 
+                                    labels: ['Meta', 'Atual'], 
+                                    values: [monthlyGoal, totalIncomes - totalExpenses], 
+                                    colors: ['#0099a3', 
+                                       (totalIncomes - totalExpenses) >= monthlyGoal 
+                                       ? "#316628" 
+                                       : (totalIncomes - totalExpenses) < monthlyGoal ? '#D91136'
+                                       : "#a4a4a4"
+                                    ], 
+                                    orientation: 'y' 
+                                    }} 
+                              />
+                           </div>
+                           <span className=" text-gray-50">50%</span>
+                        </div>
                      </div>
                   </div>
 
-                  <div className="w-full flex flex-row gap-2 pr-2">
+                  <div className="w-full flex flex-row gap-2 justify-between">
                      <ExpesesGraphic />
                      <IncomesGraphic />
                   </div>

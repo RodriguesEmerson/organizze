@@ -7,7 +7,7 @@ export function usePage() {
    const setData = useTableStore((state) => state.setData);
    const setCategories = useTableStore((state) => state.setCategories);
    const selectedTable = useTableStore((state) => state.selectedTable);
-   
+
    useEffect(() => {
       const getDta = async () => {
          try {
@@ -17,6 +17,7 @@ export function usePage() {
             
             setData(resolve.years);
             setCategories(resolve.categories);
+            
          } catch (error) {
             
          }
@@ -25,6 +26,7 @@ export function usePage() {
    }, [])
 
    function getTotalExpenses(onlyValue){
+      if(!data)  return;
       const expenses = data[selectedTable.year].months[selectedTable.month].expenses;
       const expensesValues = [];
 
@@ -32,12 +34,15 @@ export function usePage() {
          expensesValues.push(Number(expense.value))
       });
 
+      
+
       const totalExpenses = expensesValues.reduce((prev, curr) => prev + curr, 0);
       if(onlyValue) return totalExpenses;
 
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalExpenses);
    }
    function getTotalIncomes(onlyValue){
+      if(!data) return;
       const incomes = data[selectedTable.year].months[selectedTable.month].incomes;
       const incomesValues = [];
 

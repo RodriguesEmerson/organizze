@@ -2,6 +2,7 @@
     "2024": {
       "headers": ["Descrição", "Categ.", "Data", "Valor"],
       "id": "te5432193",
+      "monthlyGoal": 4500,
       "months": {
         "janeiro": {
           "expenses":[
@@ -73,15 +74,15 @@
       {"categ": "Lazer", "icon": "leisure"},
       {"categ": "Pets", "icon": "pets"}
       
-   ],
-   "incomes":[
-      {"categ": "Salário", "icon": "salary"},
-      {"categ": "Freelance", "icon": "others"},
-      {"categ": "Vendas", "icon": "sales"},
-      {"categ": "Investimentos", "icon": "investments"},
-      {"categ": "Renda Extra", "icon": "others"},
-      {"categ": "Vale", "icon": "salary"},
-      {"categ": "Dividendos", "icon": "investments"}
-   ]
+    ],
+    "incomes":[
+        {"categ": "Salário", "icon": "salary"},
+        {"categ": "Freelance", "icon": "others"},
+        {"categ": "Vendas", "icon": "sales"},
+        {"categ": "Investimentos", "icon": "investments"},
+        {"categ": "Renda Extra", "icon": "others"},
+        {"categ": "Vale", "icon": "salary"},
+        {"categ": "Dividendos", "icon": "investments"}
+    ]
   }
 }
