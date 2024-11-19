@@ -12,7 +12,7 @@ export default function IncomeTable() {
       setShowAddReleaseModal();
    }
    return (
-      <div className="p-2 pb-0 rounded-md shadow-lg w-fit min-w-[527px] h-fit bg-white overflow-hidden">
+      <div className="p-2 pb-0 rounded-md shadow-lg w-fit min-w-[527px] h-fit bg-white">
          <div
             className="relative text-center text-sm font-thin h-7 border-b-1 border-b-gray-200"
          >
@@ -22,9 +22,9 @@ export default function IncomeTable() {
             </div>
          </div>
 
-         <div className="overflow-y-auto table-scroll-style">
+         <div className=" table-scroll-style">
             <div className="pr-2 pb-2"
-               style={{ maxHeight: "calc(100vh - 110px)" }}
+               // style={{ maxHeight: "calc(100vh - 110px)" }}
             >
                <Table table={'incomes'} />
             </div>
