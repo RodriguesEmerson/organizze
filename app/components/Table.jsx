@@ -1,7 +1,6 @@
 
 import { useTable } from "../hooks/useTable";
 import { Spinner } from "../UI/spinner";
-import { TooltipInfo } from "@/app/components/TooltipInfo";
 import { useUtilsStore } from "../zustand/useUtilsStore";
 
 
@@ -12,13 +11,6 @@ export function Table({ table }) {
    if (!data) return <Spinner />
    return (
       <>
-         <div
-            className="cateorie_tooltip absolute w-[145px] z-30"
-            style={{ top: '500px', left: '205px', opacity: .5 }}
-         >
-            <TooltipInfo text={'categ'} />
-         </div>
-
          <table className="text-gray-600 text-sm w-[500px] overflow-x-hidden">
             <colgroup>
                <col style={{ width: "150px" }} />
@@ -44,7 +36,9 @@ export function Table({ table }) {
                      className="h-8 border-t-[1px] border-t-gray-200 text-[13px] hover:bg-gray-200 transition-all cursor-pointer"
                   >
                      <td className="pl-1 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis">{item.desc}</td>
+
                      <TdCategories icon={`/icons/c-${item.categ}.png`} categ={item.categ} />
+
                      <td className="text-center">
                         {`${new Date(item.date).toLocaleDateString('pt-br', { day: "2-digit", month: "short" })}`}
                      </td>
@@ -66,11 +60,11 @@ function TdCategories({ icon, categ }) {
    return (
       <td
          className="relative"
-      >
+         >
          <img
             src={icon} alt="icone categ"
             className="max-w-5"
-            onMouseEnter={() => setTooltipInfoText(categ)}
+            onMouseEnter={(e) => setTooltipInfoText({categ: categ, e: e})}
          />
 
       </td>

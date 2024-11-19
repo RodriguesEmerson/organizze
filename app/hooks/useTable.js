@@ -5,11 +5,6 @@ import { useTableStore } from "../zustand/useTablesStore"
 
 export function useTable() {
 
-   useEffect(()=>{
-      const expensesTooltip = document.querySelector('.expenses_table .cateorie_tooltip');
-      
-   },[])
-
    //Causa re-renderização no componente se qualquer uma das variaveis for alterada.
    // const [ data, selectedTable ] = useTableStore((state) => [state.data, state.selectedTable]);
    

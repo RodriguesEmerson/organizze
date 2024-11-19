@@ -12,6 +12,8 @@ import { IncomesGraphic } from "@/app/UI/Board/IncomesGraphic";
 import { SummaryGraphic } from "@/app/UI/Board/SummaryGraphic";
 import { ChartBar } from "@/app/components/ChartBar";
 import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
+import { TooltipInfo } from "@/app/components/TooltipInfo";
+
 
 export default function MonthlyDashBoard() {
    const { data, getTotalExpenses, getTotalIncomes, getBalance } = usePage();
@@ -25,11 +27,11 @@ export default function MonthlyDashBoard() {
 
    const { toUpperFirstLeter } = useUtils();
 
-   if (!data) return(
+   if (!data) return (
       <div className="flex items-center justify-center h-[95vh]">
          <Spinner />
       </div>
-   ) 
+   )
    const monthlyGoal = data[selectedTable.year].monthlyGoal
    return (
       <section
@@ -93,24 +95,24 @@ export default function MonthlyDashBoard() {
                         <div className="relative z-[5] flex pl-1  h-28 shadow-md w-72 bg-white text-white rounded-md overflow-hidden">
                            <div className="w-[280px] h-[130px]">
                               {/*Labels, values, colors, orientation*/}
-                              <ChartBar 
-                                 data={{ 
-                                    labels: ['Meta', 'Atual'], 
-                                    values: [monthlyGoal, totalIncomes - totalExpenses], 
-                                    colors: ['#0099a3', 
-                                       (totalIncomes - totalExpenses) >= monthlyGoal 
-                                       ? "#316628" 
-                                       : (totalIncomes - totalExpenses) < monthlyGoal ? '#D91136'
-                                       : "#a4a4a4"
-                                    ], 
-                                    orientation: 'y' 
-                                    }} 
+                              <ChartBar
+                                 data={{
+                                    labels: ['Meta', 'Atual'],
+                                    values: [monthlyGoal, totalIncomes - totalExpenses],
+                                    colors: ['#0099a3',
+                                       (totalIncomes - totalExpenses) >= monthlyGoal
+                                          ? "#316628"
+                                          : (totalIncomes - totalExpenses) < monthlyGoal ? '#D91136'
+                                             : "#a4a4a4"
+                                    ],
+                                    orientation: 'y'
+                                 }}
                               />
                            </div>
                            <div className="absolute flex flex-row text-center w-10 right-7 top-11 text-gray-500">
                               <span className="text-xl font-semibold">
-                                 {totalIncomes - totalExpenses >= 0 
-                                    ?  `${((totalIncomes - totalExpenses) / monthlyGoal * 100).toFixed(0)}%`
+                                 {totalIncomes - totalExpenses >= 0
+                                    ? `${((totalIncomes - totalExpenses) / monthlyGoal * 100).toFixed(0)}%`
                                     : '0%'
                                  }
                               </span>
@@ -129,13 +131,20 @@ export default function MonthlyDashBoard() {
                      <h2 className="text-2xl font-extrabold text-gray-500 mt-2">Tabelas</h2>
                   </div>
                </div>
-               <div className="flex flex-row gap-2">
-                  <ExpenseTable />
-                  <IncomeTable />
-               </div>
+               <Tables />
             </div>
          }
 
       </section>
+   )
+}
+
+function Tables() {
+   return (
+      <div className="tables !relative flex flex-row gap-2">
+         <TooltipInfo />
+         <ExpenseTable />
+         <IncomeTable />
+      </div>
    )
 }

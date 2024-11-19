@@ -2,8 +2,8 @@ import { create } from "zustand";
 
 export const useUtilsStore = create((set) =>({
    tooltipInfoText: false,
-   setTooltipInfoText: () => set((state) =>({
-      tooltipInfoText: !state.tooltipInfoText 
+   setTooltipInfoText: (iconInfos) => set((state) =>({
+      tooltipInfoText: iconInfos 
    })),
 }));
 
