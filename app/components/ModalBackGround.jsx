@@ -1,8 +1,10 @@
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
+import { useTableStore } from "../zustand/useTablesStore";
 
 
 export function ModalBackGround({ children }) {
    const setHiddenAllModals = useModalsHiddenStore((state) => state.setHiddenReleaseModal);
+   const setEditingRelease = useTableStore((state) => state.setEditingRelease);
    let initialClick = false;
 
    return (
@@ -15,6 +17,7 @@ export function ModalBackGround({ children }) {
             onMouseUp={(e) => {
                if (!e.target.closest(".modal") && !initialClick) {
                   setHiddenAllModals();
+                  setEditingRelease(false);
                }
             }}
          >

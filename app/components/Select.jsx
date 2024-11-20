@@ -1,10 +1,11 @@
 import { useState } from "react"
 import { useTableStore } from "../zustand/useTablesStore";
 
-export function Select({ name, categories }){
+export function Select({ name, categories, defaultValue }){
    
-   const [option, setOption]  = useState("*Selecione*");
+   const [option, setOption]  = useState(!!defaultValue ? defaultValue : "*Selecione*");
    const [openSelect, setOpenSelect] = useState(false);
+
    return(
       <div className=" relative" >
          <div 

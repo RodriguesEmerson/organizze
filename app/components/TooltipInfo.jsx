@@ -13,7 +13,8 @@ export function TooltipInfo() {
             style={{ 
                top: `${iconTd.offsetTop - 25}px`, 
                left: `${iconTd.offsetLeft + 10}px`, 
-               opacity: tooltipInfoText ? ".7" : 0 
+               opacity: tooltipInfoText.show ? .9 : 0,
+               zIndex: tooltipInfoText.show ? 10 : -1
             }}
          >
             <svg className=" w-[145px] h-[32px]">

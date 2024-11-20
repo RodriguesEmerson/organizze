@@ -1,12 +1,16 @@
 
 import { useTable } from "../hooks/useTable";
 import { Spinner } from "../UI/spinner";
+import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
+import { useTableStore } from "../zustand/useTablesStore";
 import { useUtilsStore } from "../zustand/useUtilsStore";
 
 
 export function Table({ table }) {
    const { tableHandler, tablesHeaders } = useTable();
    const data = tableHandler.getSelectedMonthData();
+   const setEditingRelease = useTableStore((state) => state.setEditingRelease);
+   const setShowAddReleaseModal = useModalsHiddenStore((state) => state.setShowAddReleaseModal);
 
    if (!data) return <Spinner />
    return (
@@ -34,6 +38,10 @@ export function Table({ table }) {
                   <tr
                      key={item.id}
                      className="h-8 border-t-[1px] border-t-gray-200 text-[13px] hover:bg-gray-200 transition-all cursor-pointer"
+                     onClick={()=> {
+                        setEditingRelease({...item, type: table, title: table == "expenses" ? "Despesa" : "Receita"});
+                        setShowAddReleaseModal();
+                     }}
                   >
                      <td className="pl-1 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis">{item.desc}</td>
 
@@ -64,7 +72,8 @@ function TdCategories({ icon, categ }) {
          <img
             src={icon} alt="icone categ"
             className="max-w-5"
-            onMouseEnter={(e) => setTooltipInfoText({categ: categ, e: e})}
+            onMouseEnter={(e) => setTooltipInfoText({categ: categ, e: e, show: true})}
+            onMouseOut={(e) => setTooltipInfoText({categ: categ, e: e, show: false})}
          />
 
       </td>

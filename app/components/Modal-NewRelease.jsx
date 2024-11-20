@@ -15,17 +15,31 @@ export function ModalNewRelease() {
    const showAddReleaseModal = useModalsHiddenStore((state) => state.showAddReleaseModal);
    const setHiddenReleaseModal = useModalsHiddenStore((state) => state.setHiddenReleaseModal);
 
+   //Dados do item em edição.
+   const editingRelease = useTableStore((state) => state.editingRelease);
+
+   //EDITANDO AQUI///////*********************************** */
+   const editingReleaseCopy = {...editingRelease};
+
    const newReleaseType = useTableStore((state) => state.newReleaseType);
    const categories = useTableStore((state) => state.categories);
 
-   const [fixedRelease, setFixedRelease] = useState(false);
+   const releaseType = !!editingRelease ? editingRelease?.type : newReleaseType?.type;
+   const releaseTitle = !!editingRelease ? editingRelease?.title : newReleaseType?.title;
+
+   const [fixedRelease, setFixedRelease] = useState(!!editingRelease?.endDate ? true : false);
 
    if(!showAddReleaseModal) return <></>;
+
    return (
       <ModalBackGround >
-      <div className="modal flex flex-col justify-between relative h-fit w-96 bg-white rounded-xl shadow-lg py-2 px-3">
+      <div className="relative modal flex flex-col justify-between h-fit w-96 bg-white rounded-xl shadow-lg py-2 px-3">
          <div className="text-center h-8 leading-7 text-sm border-b mb-3">
-            <h4>{`Adicionar nova ${newReleaseType.title}`}</h4>
+
+            {!!editingRelease && <span className="absolute top-2 left-2 material-icons">edit</span>}
+
+            {!!editingRelease && <h4>{`Editando ${releaseTitle}`}</h4>}
+            {!!!editingRelease && <h4>{`Adicionar nova ${releaseTitle}`}</h4>}
             <div className="absolute h-5 w-5 top-0 right-0">
                <ButtonClose clickEvent={setHiddenReleaseModal}/>
             </div>
@@ -39,6 +53,7 @@ export function ModalNewRelease() {
                      type="text" 
                      name="descricao"
                      placeholder="Descrição. . ."
+                     defaultValue={!!editingRelease ? editingRelease.desc : ''}
                      autoFocus
                      maxLength={50}
                   />
@@ -46,24 +61,28 @@ export function ModalNewRelease() {
                <div className="flex flex-row gap-1 mb-3">
                   <div className="flex flex-col gap-[2px]">
                      <label className="pl-1">Categoria *</label>
-                     <Select name={"categoria"} categories={categories[newReleaseType.type]}/>
+                        <Select 
+                           name={"categoria"} 
+                           categories={categories[releaseType]} 
+                           defaultValue={editingRelease?.categ}
+                        />
                   </div>
 
                   <div className="relative flex flex-col gap-[2px]">
                      <label className="pl-1">Data *</label>
                      <div className="flex flex-row gap-1 w-full">
-                        <Calendar name="data" status={false}/>
-                        <Calendar name="dataFim" status={!fixedRelease ? true : false}/>
+                        <Calendar name="data" status={false} defaultValue={editingRelease?.date}/>
+                        <Calendar name="dataFim" status={!fixedRelease ? true : false} defaultValue={editingRelease?.endDate}/>
                      </div>
                      <div className="absolute right-[10px] h-5 flex flex-row items-center gap-[4px]">
                         <input
                            className="h-4"
                            type="checkbox"
                            name="fixa"
-                           onChange={()=> setFixedRelease(!fixedRelease)}
-                           id={`${newReleaseType.title}-fixedReleaseCheckbox`}
+                           onChange={()=> {setFixedRelease(!fixedRelease);}}
+                           id={`${releaseType}-fixedReleaseCheckbox`}
                         />
-                        <label  htmlFor={`${newReleaseType.title}-fixedReleaseCheckbox`}>{`${newReleaseType.title} fixa`}</label>
+                        <label  htmlFor={`${releaseType}-fixedReleaseCheckbox`}>{`${releaseTitle} fixa`}</label>
                      </div>
                   </div>
                </div>
@@ -74,11 +93,18 @@ export function ModalNewRelease() {
                      type="text" 
                      name="valor"
                      placeholder="0,00"
+                     defaultValue={
+                        !!editingRelease && Number(editingRelease.value).toLocaleString('pt-BR', { style: "currency", currency: "BRL"}).slice(2,)
+                     }
                      required
                   />
                </div>
                <div className="flex justify-center mt-3">
-                  <ButtonSave clickEvent={releaseHandler.createNewRelease} type={newReleaseType.type}/>
+                  <ButtonSave 
+                     clickEvent={releaseHandler.createNewRelease} 
+                     type={releaseType} 
+                     text={!!!editingRelease ? "Adicionar" : "Salvar alteraçôes"}
+                  />
                </div>
             </form>
          </div> 

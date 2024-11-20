@@ -4,14 +4,19 @@ import useCalendar from "../hooks/useCalendar";
 import { useCalendarStore } from "../zustand/useCalendarStore";
 import { useUtils } from "../hooks/useUtils";
 
-export function Calendar({name, status}) {
+export function Calendar({name, status, defaultValue}) {
    const { weekDays, yearMonths } = useCalendarStore();
    const { datesHandler, monthEndYear, currentCalendar } = useCalendar();
    const [openCalendar, setOpenCalendar] = useState(false);
-   const [inputValue, setInputValue] = useState('');
    const { toUpperFirstLeter } = useUtils();
+
+   const [inputValue, setInputValue] = useState(
+      !!defaultValue ? new Date(defaultValue).toLocaleDateString('pt-BR', {day: '2-digit', month: "2-digit", year: 'numeric'}) : ""
+   );
+   
    useEffect(()=>{
-      status && setInputValue('')
+      !!status && setInputValue('')
+      !!defaultValue && setInputValue(defaultValue);
    },[status])
 
    if (!currentCalendar) return <></>
