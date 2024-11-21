@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ButtonClose, ButtonSave } from "./buttons"
 import { Select } from "./Select";
 import { useNewRelease } from "../hooks/useNewRelease";
-import { Calendar } from "./Caledar";
+import { Calendar } from "./Calendar";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
 import { FloatNotification } from "./FloatNotification"; 
 import { useTableStore } from "../zustand/useTablesStore";
@@ -17,9 +17,8 @@ export function ModalNewRelease() {
 
    //Dados do item em edição.
    const editingRelease = useTableStore((state) => state.editingRelease);
+   const setEditingRelease = useTableStore((state) => state.setEditingRelease);
 
-   //EDITANDO AQUI///////*********************************** */
-   const editingReleaseCopy = {...editingRelease};
 
    const newReleaseType = useTableStore((state) => state.newReleaseType);
    const categories = useTableStore((state) => state.categories);
@@ -27,7 +26,7 @@ export function ModalNewRelease() {
    const releaseType = !!editingRelease ? editingRelease?.type : newReleaseType?.type;
    const releaseTitle = !!editingRelease ? editingRelease?.title : newReleaseType?.title;
 
-   const [fixedRelease, setFixedRelease] = useState(!!editingRelease?.endDate ? true : false);
+   const [fixedRelease, setFixedRelease] = useState(false);
 
    if(!showAddReleaseModal) return <></>;
 
@@ -36,13 +35,15 @@ export function ModalNewRelease() {
       <div className="relative modal flex flex-col justify-between h-fit w-96 bg-white rounded-xl shadow-lg py-2 px-3">
          <div className="text-center h-8 leading-7 text-sm border-b mb-3">
 
-            {!!editingRelease && <span className="absolute top-2 left-2 material-icons">edit</span>}
+            {!!editingRelease && <span className="absolute top-2 left-2 material-icons !text-green-800">edit</span>}
 
             {!!editingRelease && <h4>{`Editando ${releaseTitle}`}</h4>}
             {!!!editingRelease && <h4>{`Adicionar nova ${releaseTitle}`}</h4>}
+
             <div className="absolute h-5 w-5 top-0 right-0">
-               <ButtonClose clickEvent={setHiddenReleaseModal}/>
+               <ButtonClose onClick={()=> {setHiddenReleaseModal(); setEditingRelease(false)}}/>
             </div>
+
          </div>
          <div>
             <form className="text-[13px] text-gray-700" id="new-release-form">
@@ -68,17 +69,18 @@ export function ModalNewRelease() {
                         />
                   </div>
 
-                  <div className="relative flex flex-col gap-[2px]">
+                  <div className="relative flex flex-col gap-[2px]"> 
                      <label className="pl-1">Data *</label>
                      <div className="flex flex-row gap-1 w-full">
                         <Calendar name="data" status={false} defaultValue={editingRelease?.date}/>
-                        <Calendar name="dataFim" status={!fixedRelease ? true : false} defaultValue={editingRelease?.endDate}/>
+                        <Calendar name="dataFim" status={!!!editingRelease?.endDate ? true : false} defaultValue={editingRelease?.endDate}/>
                      </div>
                      <div className="absolute right-[10px] h-5 flex flex-row items-center gap-[4px]">
                         <input
                            className="h-4"
                            type="checkbox"
                            name="fixa"
+                           defaultChecked={editingRelease?.endDate ? true : false}
                            onChange={()=> {setFixedRelease(!fixedRelease);}}
                            id={`${releaseType}-fixedReleaseCheckbox`}
                         />
@@ -94,14 +96,14 @@ export function ModalNewRelease() {
                      name="valor"
                      placeholder="0,00"
                      defaultValue={
-                        !!editingRelease && Number(editingRelease.value).toLocaleString('pt-BR', { style: "currency", currency: "BRL"}).slice(2,)
+                        !!editingRelease && Number(editingRelease?.value).toLocaleString('pt-BR', { style: "currency", currency: "BRL"}).slice(2,)
                      }
                      required
                   />
                </div>
                <div className="flex justify-center mt-3">
                   <ButtonSave 
-                     clickEvent={releaseHandler.createNewRelease} 
+                     clickEvent={!!!editingRelease ? releaseHandler.createNewRelease : releaseHandler.updateRelease} 
                      type={releaseType} 
                      text={!!!editingRelease ? "Adicionar" : "Salvar alteraçôes"}
                   />

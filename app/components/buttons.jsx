@@ -1,19 +1,3 @@
-export function ButtonDeleteItem() {
-   return (
-
-      <button className="h-5 overflow-hidden hover:text-red-800 transition-all">
-         <span className="material-icons-outlined !text-lg h-4 !text-start -mt-1">delete</span>
-      </button>
-   )
-}
-export function ButtonEditItem() {
-   return (
-      <button className="h-5 overflow-hidden hover:text-green-800 transition-all">
-         <span className="material-icons-outlined !text-xl h-4 !text-start -mt-1">edit_note</span>
-      </button>
-   )
-}
-
 export function ButtonAdd({ title, clickEvent }) {
    return (
       <button onClick={() => clickEvent()} title={`Adicionar nova ${title}`}>
@@ -22,9 +6,9 @@ export function ButtonAdd({ title, clickEvent }) {
    )
 }
 
-export function ButtonClose({ clickEvent }) {
+export function ButtonClose( props ) {
    return (
-      <button onClick={() => clickEvent()}>
+      <button {...props} >
          <span
             className="material-icons !text-base text-gray-600 absolute top-1 right-2 cursor-pointer rounded-lg w-8 h-8 !leading-8 text-center hover:bg-gray-200"
          >close</span>
