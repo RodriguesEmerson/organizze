@@ -5,7 +5,7 @@ import { useCalendarStore } from "../zustand/useCalendarStore";
 
 
 export function useNewRelease() {
-   const { data, setData, categories, newReleaseType, months, selectedTable } = useTableStore();
+   const { data, setData, categories, newReleaseType, months, selectedTable, editingRelease } = useTableStore();
    const { datesHandler } = useCalendar();
    const [releaseMensage, setReleaseMensage] = useState(false);
    const { setMonthEndYear, yearMonths } = useCalendarStore();
@@ -41,7 +41,7 @@ export function useNewRelease() {
          //Check if all datas is OK, validating.
          if (releaseHandler.validateRelease(newRelease)) {
             //If everything is OK, creates a new release.
-            releaseHandler.saveRelease(newRelease, type);
+            releaseHandler.saveRelease(newRelease);
 
             // form.reset();
             //Hide the error mensage.
@@ -51,11 +51,12 @@ export function useNewRelease() {
          setReleaseMensage({ type: 'error', noti: 'Verifique os dados e tente novamente!' });
       },
 
-      updateRelease: function (e, release, type, releaseID) {
+      updateRelease: function (e) {
          e.preventDefault();
+         const releaseID = editingRelease.id;
          const formData = releaseHandler.getFormData();
          
-         //Instantiates a new Release
+         //Instantiates the chagend Release
          const ChangedRelease = new Release(
             formData.descricao,
             formData.categoria,
@@ -64,12 +65,11 @@ export function useNewRelease() {
             formData.valor,
             releaseID
          );
-         console.log(ChangedRelease)
 
          //Check if all datas is OK, validating.
          if (releaseHandler.validateRelease(ChangedRelease)) {
-            //If everything is OK, creates a new release.
-            releaseHandler.saveRelease(release, type, true, releaseID);
+            //If everything is OK, update the release.
+            releaseHandler.saveRelease(ChangedRelease, true);
 
             // form.reset();
             //Hide the error mensage.
@@ -79,17 +79,17 @@ export function useNewRelease() {
          setReleaseMensage({ type: 'error', noti: 'Verifique os dados e tente novamente!' });
       },
 
-      saveRelease: function (release, type, update) {
+      saveRelease: function (release, update) {
          const updatedData = { ...data };
          const releaseYear = new Date(release.date).toLocaleDateString('en-US', { year: 'numeric' });
          const releaseMonth = new Date(release.date).toLocaleDateString('pt-br', { month: 'long' });
 
          //Check if it has the selected year in db. If it doesn't have, create it.
-         const hasReleaseYearInBD = updatedData[releaseYear]
+         const hasReleaseYearInBD = updatedData[releaseYear];
          if (!hasReleaseYearInBD) {
             this.createNewYearTable(updatedData, releaseYear);
          }
-
+         
          //Check if it has the selected month in db. If it doesn't have, create it.
          const hasReleaseMonsthInBD = updatedData[releaseYear].months[releaseMonth];
          if (!hasReleaseMonsthInBD) {
@@ -97,12 +97,24 @@ export function useNewRelease() {
             this.sortMonths(updatedData, releaseYear);
          }
 
+         //Table where the release will be placed
+         const table = updatedData[releaseYear].months[releaseMonth][newReleaseType.type];
+
          //Insert new release into the data.
-         !update && updatedData[releaseYear].months[releaseMonth][type].push(release);
+         !update && table.push(release);
 
          if(update){
             if(hasReleaseYearInBD && hasReleaseMonsthInBD){
-               //Criar função para adicionar o item altedao na base de dados.
+               //Check if it has the release in selected month
+               //Gets the ids in the selected month.
+               const monthReleasesID = table.map(item => item.id);
+               //Gets the relase index.
+               const releaseIndex = monthReleasesID.indexOf(editingRelease.id);
+               //Check the release index.
+               if(table[releaseIndex].id == editingRelease.id){
+                  console.log('aui')
+                  //Criar função para inserir a release alterada na tabela.
+               }
             }
          }
 
@@ -119,7 +131,6 @@ export function useNewRelease() {
          categories[newReleaseType.type].forEach(element => {
             (element.categ == data.categoria) && (data.categoria = element.icon);
          });
-            console.log(data)
 
          //Converts the "data.valor" to a numeric value. (1.234,56 => 1234.56)
          data.valor ? data.valor = data.valor.replace(".", "").replace(",", ".")
@@ -129,7 +140,7 @@ export function useNewRelease() {
 
       },
 
-      validateRelease: function (newRelease) {
+      validateRelease: function (newRelease, type) {
 
          const categoriesIcons = categories[newReleaseType.type].map(item => item.icon);
          const isDescOK = newRelease.desc.length > 0 && newRelease.desc.length < 51;

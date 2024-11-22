@@ -10,6 +10,7 @@ export function Table({ table }) {
    const { tableHandler, tablesHeaders } = useTable();
    const data = tableHandler.getSelectedMonthData();
    const setEditingRelease = useTableStore((state) => state.setEditingRelease);
+   const setNewReleaseType = useTableStore((state) => state.setNewReleaseType);
    const setShowAddReleaseModal = useModalsHiddenStore((state) => state.setShowAddReleaseModal);
 
    if (!data) return <Spinner />
@@ -39,7 +40,8 @@ export function Table({ table }) {
                      key={item.id}
                      className="h-8 border-t-[1px] border-t-gray-200 text-[13px] hover:bg-gray-200 transition-all cursor-pointer"
                      onClick={()=> {
-                        setEditingRelease({...item, type: table, title: table == "expenses" ? "Despesa" : "Receita"});
+                        setEditingRelease({...item});
+                        setNewReleaseType({ title: table == "expenses" ? "Despesa" : "Receita", type: table });
                         setShowAddReleaseModal();
                      }}
                   >

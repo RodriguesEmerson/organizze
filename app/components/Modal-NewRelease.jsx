@@ -23,10 +23,10 @@ export function ModalNewRelease() {
    const newReleaseType = useTableStore((state) => state.newReleaseType);
    const categories = useTableStore((state) => state.categories);
 
-   const releaseType = !!editingRelease ? editingRelease?.type : newReleaseType?.type;
-   const releaseTitle = !!editingRelease ? editingRelease?.title : newReleaseType?.title;
-
+   
    const [fixedRelease, setFixedRelease] = useState(false);
+   const releaseType = newReleaseType?.type;
+   const releaseTitle = newReleaseType?.title;
 
    if(!showAddReleaseModal) return <></>;
 
@@ -102,11 +102,12 @@ export function ModalNewRelease() {
                   />
                </div>
                <div className="flex justify-center mt-3">
-                  <ButtonSave 
-                     clickEvent={!!!editingRelease ? releaseHandler.createNewRelease : releaseHandler.updateRelease} 
-                     type={releaseType} 
-                     text={!!!editingRelease ? "Adicionar" : "Salvar alteraçôes"}
-                  />
+                  {!!!editingRelease && (
+                     <ButtonSave onClick={(e) => releaseHandler.createNewRelease(e, releaseType)} text="Adicionar"/>
+                  )}
+                  {!!editingRelease && (
+                     <ButtonSave onClick={(e) => releaseHandler.updateRelease(e, releaseType)} text="Salvar alteraçôes"/>
+                  )}
                </div>
             </form>
          </div> 
