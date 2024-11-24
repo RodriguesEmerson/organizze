@@ -24,10 +24,10 @@ export function useNewRelease() {
    useEffect(() => { setMonthEndYear({ month: yearMonths.indexOf(selectedTable.month), year: selectedTable.year }) }, [])
 
    const releaseHandler = {
-      createNewRelease: function (e, type) {
+      createNewRelease: function (e) {
          e.preventDefault();
          const formData = releaseHandler.getFormData();
-         
+
          //Instantiates a new Release
          const newRelease = new Release(
             formData.descricao,
@@ -36,14 +36,12 @@ export function useNewRelease() {
             formData.dataFim ? datesHandler.dateConvert(formData.dataFim) : false,
             formData.valor
          );
-         console.log(newRelease)
 
          //Check if all datas is OK, validating.
          if (releaseHandler.validateRelease(newRelease)) {
             //If everything is OK, creates a new release.
             releaseHandler.saveRelease(newRelease);
 
-            // form.reset();
             //Hide the error mensage.
             setReleaseMensage(false);
             return;
@@ -55,9 +53,9 @@ export function useNewRelease() {
          e.preventDefault();
          const releaseID = editingRelease.id;
          const formData = releaseHandler.getFormData();
-         
+
          //Instantiates the chagend Release
-         const ChangedRelease = new Release(
+         const modifiedRelease = new Release(
             formData.descricao,
             formData.categoria,
             datesHandler.dateConvert(formData.data),
@@ -67,11 +65,10 @@ export function useNewRelease() {
          );
 
          //Check if all datas is OK, validating.
-         if (releaseHandler.validateRelease(ChangedRelease)) {
+         if (releaseHandler.validateRelease(modifiedRelease)) {
             //If everything is OK, update the release.
-            releaseHandler.saveRelease(ChangedRelease, true);
+            releaseHandler.saveRelease(modifiedRelease, true);
 
-            // form.reset();
             //Hide the error mensage.
             setReleaseMensage(false);
             return;
@@ -84,38 +81,42 @@ export function useNewRelease() {
          const releaseYear = new Date(release.date).toLocaleDateString('en-US', { year: 'numeric' });
          const releaseMonth = new Date(release.date).toLocaleDateString('pt-br', { month: 'long' });
 
-         //Check if it has the selected year in db. If it doesn't have, create it.
-         const hasReleaseYearInBD = updatedData[releaseYear];
-         if (!hasReleaseYearInBD) {
-            this.createNewYearTable(updatedData, releaseYear);
-         }
-         
-         //Check if it has the selected month in db. If it doesn't have, create it.
-         const hasReleaseMonsthInBD = updatedData[releaseYear].months[releaseMonth];
-         if (!hasReleaseMonsthInBD) {
-            this.createNewMonthTable(updatedData, releaseYear, releaseMonth);
-            this.sortMonths(updatedData, releaseYear);
-         }
+         // Helper function to ensure the year and month exist in the database.
+         this.ensureYearAndMonthExist(updatedData, releaseYear, releaseMonth);
 
          //Table where the release will be placed
-         const table = updatedData[releaseYear].months[releaseMonth][newReleaseType.type];
+         const destinationTable = updatedData[releaseYear].months[releaseMonth][newReleaseType.type];
+
+         //Source release table.
+         const sourceTable = updatedData[selectedTable.year].months[selectedTable.month][newReleaseType.type];
 
          //Insert new release into the data.
-         !update && table.push(release);
+         !update && destinationTable.push(release);
 
-         if(update){
-            if(hasReleaseYearInBD && hasReleaseMonsthInBD){
-               //Check if it has the release in selected month
+         if (update) {
+            const sourceTableMonth = updatedData[selectedTable.year].months[selectedTable.month];
+            //Check if it has the release in selected month
+            if (releaseMonth == sourceTableMonth) {
                //Gets the ids in the selected month.
-               const monthReleasesID = table.map(item => item.id);
-               //Gets the relase index.
-               const releaseIndex = monthReleasesID.indexOf(editingRelease.id);
-               //Check the release index.
-               if(table[releaseIndex].id == editingRelease.id){
-                  console.log('aui')
-                  //Criar função para inserir a release alterada na tabela.
+               const monthReleasesID = destinationTable.map(item => item.id);
+
+               // Find the release in the destination table and update it
+               const releaseIndex = destinationTable.findIndex(item => item.id === editingRelease.id);
+               if (releaseIndex !== -1) {
+                  destinationTable[releaseIndex] = release;
                }
-            }
+               
+            }else{
+               //When release month modified is different from the source release month.
+               //Filter the source table, removing the modified release.
+               const filteredTable = sourceTable.filter(item => item.id != release.id);
+
+               //Update the source table.
+               updatedData[selectedTable.year].months[selectedTable.month][newReleaseType.type] = filteredTable;
+               
+               //Insert the entry into the destination table.
+               destinationTable.push(release)
+            };
          }
 
          setData(updatedData);
@@ -126,7 +127,7 @@ export function useNewRelease() {
          const form = document.querySelector("#new-release-form");
          const formData = new FormData(form);
          const data = Object.fromEntries(formData.entries());
-         
+
          //Select the categorie icon in categories;
          categories[newReleaseType.type].forEach(element => {
             (element.categ == data.categoria) && (data.categoria = element.icon);
@@ -134,14 +135,13 @@ export function useNewRelease() {
 
          //Converts the "data.valor" to a numeric value. (1.234,56 => 1234.56)
          data.valor ? data.valor = data.valor.replace(".", "").replace(",", ".")
-         : false;
+            : false;
 
+         form.reset();
          return data;
-
       },
 
-      validateRelease: function (newRelease, type) {
-
+      validateRelease: function (newRelease) {
          const categoriesIcons = categories[newReleaseType.type].map(item => item.icon);
          const isDescOK = newRelease.desc.length > 0 && newRelease.desc.length < 51;
          const isCategOK = categoriesIcons.includes(newRelease.categ);
@@ -151,6 +151,16 @@ export function useNewRelease() {
 
          !!!newRelease.endDate && (isEndDateOK = true);
          if (isDescOK && isCategOK && isDateOK && isEndDateOK && isValueOK) return true;
+      },
+
+      ensureYearAndMonthExist: function(updatedData, year, month){
+         if(!updatedData[year]){
+            this.createNewMonthTable(updatedData, year)
+         }
+         if(!updatedData[year].months[month]){
+            this.createNewMonthTable(updatedData, year, month);
+            this.sortMonths(updatedData, year);
+         }
       },
 
       createNewYearTable: function (updatedData, newReleaseYear) {

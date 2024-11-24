@@ -72,8 +72,22 @@ export function ModalNewRelease() {
                   <div className="relative flex flex-col gap-[2px]"> 
                      <label className="pl-1">Data *</label>
                      <div className="flex flex-row gap-1 w-full">
-                        <Calendar name="data" status={false} defaultValue={editingRelease?.date}/>
-                        <Calendar name="dataFim" status={!!!editingRelease?.endDate ? true : false} defaultValue={editingRelease?.endDate}/>
+                        <Calendar 
+                           name="data" 
+                           status={false} 
+                           defaultValue={editingRelease 
+                              ? new Date(editingRelease.date).toLocaleDateString('pt-bt', {day:"2-digit", month: '2-digit', year: 'numeric'}) 
+                              : ''
+                           }
+                        />
+                        <Calendar 
+                           name="dataFim" 
+                           status={!!!editingRelease?.endDate ? true : false} 
+                           defaultValue={editingRelease.endDate
+                              ? new Date(editingRelease.endDate).toLocaleDateString('pt-bt', {day:"2-digit", month: '2-digit', year: 'numeric'}) 
+                              : ''
+                           }
+                        />
                      </div>
                      <div className="absolute right-[10px] h-5 flex flex-row items-center gap-[4px]">
                         <input
