@@ -1,42 +1,29 @@
 'use client'
 import { useEffect, useState } from "react";
+import { tw_Merge } from 'tailwind-merge'
 import useCalendar from "../hooks/useCalendar";
 import { useCalendarStore } from "../zustand/useCalendarStore";
 import { useUtils } from "../hooks/useUtils";
 
-export function Calendar({name, status, defaultValue}) {
+export function Calendar({disabledCalendar, ...props}) {
    const { weekDays, yearMonths } = useCalendarStore();
    const { datesHandler, monthEndYear, currentCalendar } = useCalendar();
    const [openCalendar, setOpenCalendar] = useState(false);
    const { toUpperFirstLeter } = useUtils();
+   const status = true;
 
-   const [inputValue, setInputValue] = useState(
-      !!defaultValue ? new Date(defaultValue).toLocaleDateString('pt-BR', {day: '2-digit', month: "2-digit", year: 'numeric'}) : ""
-   );
-   
-   useEffect(()=>{
-      !!status && setInputValue('')
-      !!defaultValue && setInputValue(defaultValue);
-   },[status])
-
-   if (!currentCalendar) return <></>
    let { month, year } = monthEndYear;
    return (
       <div className="relative modal calendar">
          <div className="w-full flex flex-row">
             <input
-               className={`h-8 pl-3 w-full font-thin border border-gray-300 rounded-md focus-within:outline-1 focus-within:outline-gray-400 ${status ? "bg-gray-200" : "bg-white"}`}
-               type="text"
-               name={name}
-               value={inputValue}
-               disabled={status}
-               autoComplete="off"
-               onChange={(e)=> setInputValue(e.target.value)}
+               className={`h-8 pl-3 w-full font-thin border border-gray-300 rounded-md focus-within:outline-1 focus-within:outline-gray-400 ${disabledCalendar ? "bg-gray-200" : "bg-white"}`}
+               {...props}
             />
             <span 
-               className={`material-icons -ml-6 mt-[4px] cursor-pointer ${status ? "!text-gray-500 !cursor-default" : ''}`}
+               className={`material-icons -ml-6 mt-[4px] cursor-pointer ${disabledCalendar ? "!text-gray-500 !cursor-default" : ''}`}
                onClick={()=> {
-                  !status && setOpenCalendar(!openCalendar);
+                  !disabledCalendar && setOpenCalendar(!openCalendar);
                }}
             >calendar_month</span>
          </div>

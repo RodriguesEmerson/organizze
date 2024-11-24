@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { useTableStore } from "../zustand/useTablesStore";
 
-export function Select({ name, categories, defaultValue }){
+export function Select({ categories, defaultValue, name, value, setValue, formData }){
    
-   const [option, setOption]  = useState(!!defaultValue ? defaultValue : "*Selecione*");
+   const [option, setOption]  = useState();
    const [openSelect, setOpenSelect] = useState(false);
 
    return(
@@ -14,10 +14,11 @@ export function Select({ name, categories, defaultValue }){
          >
             <input
                className="outline-none w-[90%] bg-white max-w-full !cursor-pointer pointer-events-none"
-               value={option}
+               value={value}
                type="text"
                name={name}
-               onChange={()=> {}}
+               defaultValue={defaultValue}
+               onChange={()=>{}}
             />
             <span className="material-icons">keyboard_arrow_down</span>
          </div>
@@ -28,7 +29,7 @@ export function Select({ name, categories, defaultValue }){
                   <li 
                      className={`flex flow-row items-center cursor-pointer px-2 gap-2 h-7 hover:bg-gray-200 transition-all ${option == item.categ && "bg-gray-200"}`} 
                      key={item.categ}
-                     onClick={()=> {setOption(item.categ); setOpenSelect(false)}}
+                     onClick={()=> {setValue({...formData, categ: item.categ}); setOpenSelect(false)}}
                   >
                      <img className="w-5 h-5" src={`/icons/c-${item.icon}.png`} alt="" />
                      {item.categ}

@@ -94,13 +94,10 @@ export function useNewRelease() {
          !update && destinationTable.push(release);
 
          if (update) {
-            const sourceTableMonth = updatedData[selectedTable.year].months[selectedTable.month];
+            const sourceTableMonth = selectedTable.month;
             //Check if it has the release in selected month
-            if (releaseMonth == sourceTableMonth) {
-               //Gets the ids in the selected month.
-               const monthReleasesID = destinationTable.map(item => item.id);
-
-               // Find the release in the destination table and update it
+            if ((releaseMonth == selectedTable.month) && (releaseYear == selectedTable.year)) {
+               console.log('aqui')
                const releaseIndex = destinationTable.findIndex(item => item.id === editingRelease.id);
                if (releaseIndex !== -1) {
                   destinationTable[releaseIndex] = release;
@@ -137,7 +134,6 @@ export function useNewRelease() {
          data.valor ? data.valor = data.valor.replace(".", "").replace(",", ".")
             : false;
 
-         form.reset();
          return data;
       },
 
@@ -166,9 +162,11 @@ export function useNewRelease() {
       createNewYearTable: function (updatedData, newReleaseYear) {
          updatedData[newReleaseYear] = { id: this.UUID(), months: {} };
       },
+
       createNewMonthTable: function (updatedData, newReleaseYear, newReleaseMonth) {
          updatedData[newReleaseYear].months[newReleaseMonth] = { expenses: [], incomes: [] }
       },
+
       sortMonths: function (updatedData, newReleaseYear) {
          const sortedMonths = {}
          //Gets the months of newReleaseYear.
