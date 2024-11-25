@@ -5,6 +5,10 @@ export const useUtilsStore = create((set) =>({
    setTooltipInfoText: (iconInfos) => set((state) =>({
       tooltipInfoText: iconInfos 
    })),
+   showOkNotification: false,
+   setShowOkNotification: (status) => set(() =>({
+      showOkNotification: status
+   }))
 }));
 
 // setShowAddReleaseModal:() => set((state) =>({

@@ -1,22 +1,28 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { tw_Merge } from 'tailwind-merge'
 import useCalendar from "../hooks/useCalendar";
 import { useCalendarStore } from "../zustand/useCalendarStore";
 import { useUtils } from "../hooks/useUtils";
 
-export function Calendar({disabledCalendar, ...props}) {
+export function Calendar({disabledCalendar, formData, setFormData, formRef, ...props}) {
    const { weekDays, yearMonths } = useCalendarStore();
    const { datesHandler, monthEndYear, currentCalendar } = useCalendar();
    const [openCalendar, setOpenCalendar] = useState(false);
    const { toUpperFirstLeter } = useUtils();
-   const status = true;
+   const calendarInput = useRef(null);
+
+   const handleSetInputValue = ( value ) =>{
+      setFormData({...formData, [formRef]: value})
+   }
+
 
    let { month, year } = monthEndYear;
    return (
       <div className="relative modal calendar">
          <div className="w-full flex flex-row">
             <input
+            ref={calendarInput}
                className={`h-8 pl-3 w-full font-thin border border-gray-300 rounded-md focus-within:outline-1 focus-within:outline-gray-400 ${disabledCalendar ? "bg-gray-200" : "bg-white"}`}
                {...props}
             />
@@ -47,7 +53,7 @@ export function Calendar({disabledCalendar, ...props}) {
                   </span>
 
                   <p className="text-xs font-semibold cursor-default">
-                     {/**Gets the month by index */}
+                     {/**Gets month by index */}
                      {`${toUpperFirstLeter(yearMonths[monthEndYear.month])} de ${monthEndYear.year}`}
                   </p>
 
@@ -70,7 +76,7 @@ export function Calendar({disabledCalendar, ...props}) {
                         key={`mAnte${day}`}
                         className={`h-8 leading-8 rounded-[3px] text-[14px] text-center  hover:bg-blue-200 text-gray-400 cursor-pointer border border-white`}
                         onClick={() => {
-                           setInputValue(`${day}/${month < 1 ? "12" : month < 10 ? `0${month}` : month}/${month < 1 ? year -1 : year}`);
+                           handleSetInputValue(`${day}/${month < 1 ? "12" : month < 10 ? `0${month}` : month}/${month < 1 ? year -1 : year}`);
                            setOpenCalendar(false);
                         }}
                      >{day}</span>
@@ -83,7 +89,7 @@ export function Calendar({disabledCalendar, ...props}) {
                      ${(new Date().getDate() == day && monthEndYear.month == new Date().getMonth()) && "text-blue-600 font-bold border-b-[3px] border-b-blue-600"}
                   `}
                         onClick={() => {
-                           setInputValue(datesHandler.dateConvert(`${month + 1}/${day}/${year}`, 'br'));
+                           handleSetInputValue(datesHandler.dateConvert(`${month + 1}/${day}/${year}`, 'br'));
                            setOpenCalendar(false);
                         }}
                      >{day}</span>

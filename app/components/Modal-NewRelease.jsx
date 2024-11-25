@@ -4,7 +4,7 @@ import { Select } from "./Select";
 import { useNewRelease } from "../hooks/useNewRelease";
 import { Calendar } from "./Calendar";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
-import { FloatNotification } from "./FloatNotification";
+import { FloatAtentionNotification } from "./FloatAtentionNotification";
 import { useTableStore } from "../zustand/useTablesStore";
 import { ModalBackGround } from "./ModalBackGround";
 import useCalendar from "../hooks/useCalendar";
@@ -16,8 +16,7 @@ export function ModalNewRelease() {
    const { datesHandler } = useCalendar();
    const showAddReleaseModal = useModalsHiddenStore((state) => state.showAddReleaseModal);
    const setHiddenReleaseModal = useModalsHiddenStore((state) => state.setHiddenReleaseModal);
-   const [formData, setFormData] = useState({ desc: '', categ: '', date: '', endDate: '', value: '' });
-
+   const [formData, setFormData] = useState({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' });
 
    //Dados do item em edição.
    const editingRelease = useTableStore((state) => state.editingRelease);
@@ -33,25 +32,25 @@ export function ModalNewRelease() {
    const releaseTitle = newReleaseType?.title;
 
    useEffect(() => {
-      editingRelease && setFormData({
-         desc: editingRelease.desc,
-         categ: editingRelease.categ,
-         date: datesHandler.dateConvert(editingRelease.date, 'br'),
-         endDate: editingRelease.endDate ? datesHandler.dateConvert(editingRelease.endDate, 'br') : '',
-         value: new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(editingRelease.value).slice(3,),
-         id: editingRelease.id
-      });
+      setFormData( editingRelease 
+         ? {
+            desc: editingRelease.desc,
+            categ: editingRelease.categ,
+            date: datesHandler.dateConvert(editingRelease.date, 'br'),
+            endDate: editingRelease.endDate ? datesHandler.dateConvert(editingRelease.endDate, 'br') : '',
+            value: new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(editingRelease.value).slice(3,),
+            id: editingRelease.id
+         } : { desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }
+      );
       setFixedRelease(!!editingRelease?.endDate && true);
    }, [editingRelease])
 
 
    if (!showAddReleaseModal) return <></>;
-
    return (
       <ModalBackGround >
          <div className="relative modal flex flex-col justify-between h-fit w-96 bg-white rounded-xl shadow-lg py-2 px-3">
-            <div className="text-center h-8 leading-7 text-sm border-b mb-3">
-
+            <div className="text-center h-9 leading-7 w-[384px] rounded-t-xl -ml-3 -mt-2 text-sm pt-[6px] border-b mb-3 bg-gray-200">
                {!!editingRelease && <span className="absolute top-2 left-2 material-icons !text-green-800">edit</span>}
 
                {!!editingRelease && <h4>{`Editando ${releaseTitle}`}</h4>}
@@ -60,7 +59,6 @@ export function ModalNewRelease() {
                <div className="absolute h-5 w-5 top-0 right-0">
                   <ButtonClose onClick={() => { setHiddenReleaseModal(); setEditingRelease(false)}} />
                </div>
-
             </div>
             <div>
                <form className="text-[13px] text-gray-700" id="new-release-form">
@@ -96,14 +94,20 @@ export function ModalNewRelease() {
                               name="data"
                               value={formData.date}
                               disabled={false}
-                              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                               disabledCalendar={false}
+                              setFormData={setFormData}
+                              formData={formData}
+                              formRef = "date"
+                              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                            />
                            <Calendar
                               name="dataFim"
                               value={formData.endDate}
                               disabled={fixedRelease}
                               disabledCalendar={!fixedRelease}
+                              setFormData={setFormData}
+                              formData={formData}
+                              formRef = "endDate"
                               onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                            />
                         </div>
@@ -134,17 +138,23 @@ export function ModalNewRelease() {
                   </div>
                   <div className="flex justify-center mt-3">
                      {!!!editingRelease && (
-                        <ButtonSave onClick={(e) => releaseHandler.createNewRelease(e, releaseType)} text="Adicionar" />
+                        <ButtonSave 
+                           onClick={(e) => {releaseHandler.createNewRelease(e, releaseType); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' })}} 
+                           text="Adicionar" 
+                        />
                      )}
                      {!!editingRelease && (
-                        <ButtonSave onClick={(e) => releaseHandler.updateRelease(e, releaseType)} text="Salvar alteraçôes" />
+                        <ButtonSave 
+                           onClick={(e) => {releaseHandler.updateRelease(e, releaseType); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' })}} 
+                           text="Salvar alteraçôes" 
+                        />
                      )}
                   </div>
                </form>
             </div>
             {releaseMensage &&
                <div className="absolute -right-2 top-0 transition-all">
-                  <FloatNotification releaseMensage={releaseMensage} />
+                  <FloatAtentionNotification releaseMensage={releaseMensage} />
                </div>
             }
          </div>

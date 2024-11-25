@@ -1,4 +1,4 @@
-export function FloatNotification({ releaseMensage }){
+export function FloatAtentionNotification({ releaseMensage }){
    return(
       <div className="absolute bg-white p-2 rounded-md w-40 transition-all">
          <span className="material-icons !text-red-900 -ml-1 -mt-1">{releaseMensage.type}</span>

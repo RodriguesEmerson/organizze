@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useTableStore } from "../zustand/useTablesStore"
 import useCalendar from "./useCalendar";
 import { useCalendarStore } from "../zustand/useCalendarStore";
+import { useUtilsStore } from "../zustand/useUtilsStore";
 
 
 export function useNewRelease() {
    const { data, setData, categories, newReleaseType, months, selectedTable, editingRelease } = useTableStore();
+   const setShowOkNotification = useUtilsStore((state) => state.setShowOkNotification);
    const { datesHandler } = useCalendar();
    const [releaseMensage, setReleaseMensage] = useState(false);
    const { setMonthEndYear, yearMonths } = useCalendarStore();
@@ -117,6 +119,7 @@ export function useNewRelease() {
          }
 
          setData(updatedData);
+         setShowOkNotification(true);
       },
 
       getFormData: function () {

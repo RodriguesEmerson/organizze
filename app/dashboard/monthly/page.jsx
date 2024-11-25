@@ -13,6 +13,7 @@ import { SummaryGraphic } from "@/app/UI/Board/SummaryGraphic";
 import { ChartBar } from "@/app/components/ChartBar";
 import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
 import { TooltipInfo } from "@/app/components/TooltipInfo";
+import { FloatOkNotification } from "@/app/components/FloatOkNotification";
 
 
 export default function MonthlyDashBoard() {
@@ -40,6 +41,7 @@ export default function MonthlyDashBoard() {
       >
 
          <ModalNewRelease />
+         <FloatOkNotification />
 
          <div className="sticky top-12 z-[11]  border-t-gray-300 h-8 bg-gray-900 text-white -mt-3  mb-2 text-center leading-8 -ml-[200px]" style={{ width: '100vw' }}>
             {`${toUpperFirstLeter(selectedTable?.month)} de ${selectedTable?.year}`}
@@ -100,10 +102,9 @@ export default function MonthlyDashBoard() {
                                     labels: ['Meta', 'Atual'],
                                     values: [monthlyGoal, totalIncomes - totalExpenses],
                                     colors: ['#0099a3',
-                                       (totalIncomes - totalExpenses) >= monthlyGoal
-                                          ? "#316628"
-                                          : (totalIncomes - totalExpenses) < monthlyGoal ? '#D91136'
-                                             : "#a4a4a4"
+                                       (totalIncomes - totalExpenses) >= monthlyGoal 
+                                          ? "#316628" 
+                                          : (totalIncomes - totalExpenses) < 0 ? "#D91136" : "#a4a4a4" ,
                                     ],
                                     orientation: 'y'
                                  }}
