@@ -1,7 +1,12 @@
 export function ButtonAdd({ title, clickEvent }) {
    return (
-      <button onClick={() => clickEvent()} title={`Adicionar nova ${title}`}>
-         <span className="material-icons-outlined !text-xl !text-gray-500 h-4 !text-start -mt-1 hover:!text-gray-700 transition-all">add_circle</span>
+      <button 
+         className="flex flex-row items-center px-2 gap-1 text-xs bg-gray-900 hover:!text-gray-300 transition-all h-7 rounded-xl text-white"  
+         onClick={() => clickEvent()} 
+         title={`Adicionar nova ${title}`}
+      >
+         <span className="material-icons-outlined !text-xl !text-whit !text-start">add_circle</span>
+         <p>{`${title}`}</p>
       </button>
    )
 }

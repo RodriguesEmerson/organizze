@@ -20,20 +20,15 @@ export default function ExpenseTable() {
    return (
       <div className="table p-2 pb-0 rounded-md shadow-lg w-fit h-fit min-w-[527px] bg-white">
          <div
-            className="relative text-center text-sm font-thin h-7 border-b-1 border-b-gray-200"
+            className="relative text-center text-sm font-thin h-9 border-b-1 border-b-gray-200"
          >
-            <h3>Despesas</h3>
+            <h3 className="leading-9">Despesas</h3>
             <div className="absolute top-0 right-2">
                <ButtonAdd clickEvent={handleAddReleaseType} title={"Despesa"} />
             </div>
-         
-            
-
          </div>
          <div className="table-scroll-style">
-            <div className="pr-2 pb-2"
-               // style={{ maxHeight: "calc(100vh - 155px)" }} //135
-            >
+            <div className="pr-2 pb-2">
                <Table table={'expenses'} />
             </div>
 

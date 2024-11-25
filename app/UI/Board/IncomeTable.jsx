@@ -14,9 +14,9 @@ export default function IncomeTable() {
    return (
       <div className="p-2 pb-0 rounded-md shadow-lg w-fit min-w-[527px] h-fit bg-white">
          <div
-            className="relative text-center text-sm font-thin h-7 border-b-1 border-b-gray-200"
+            className="relative text-center text-sm font-thin h-9 border-b-1 border-b-gray-200"
          >
-            <h3>Receitas</h3>
+            <h3 className="leading-9">Receitas</h3>
             <div className="absolute top-0 right-2">
                <ButtonAdd clickEvent={handleAddReleaseType} title={"Receita"}/>
             </div>

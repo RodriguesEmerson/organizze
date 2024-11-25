@@ -101,9 +101,9 @@ export default function MonthlyDashBoard() {
                                  data={{
                                     labels: ['Meta', 'Atual'],
                                     values: [monthlyGoal, totalIncomes - totalExpenses],
-                                    colors: ['#0099a3',
+                                    colors: ['#047857',
                                        (totalIncomes - totalExpenses) >= monthlyGoal 
-                                          ? "#316628" 
+                                          ? "#6ee7b7" 
                                           : (totalIncomes - totalExpenses) < 0 ? "#D91136" : "#a4a4a4" ,
                                     ],
                                     orientation: 'y'

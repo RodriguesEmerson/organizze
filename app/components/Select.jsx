@@ -1,10 +1,14 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useTableStore } from "../zustand/useTablesStore";
 
 export function Select({ categories, defaultValue, name, value, setValue, formData }){
    
-   const [option, setOption]  = useState();
    const [openSelect, setOpenSelect] = useState(false);
+   const [dropDownHeight, setDropDownHeight] = useState(0);
+
+   useEffect(()=>{
+      setDropDownHeight(`${28 * categories.length + 2}px`);
+   },[categories])
 
    return(
       <div className=" relative" >
@@ -23,11 +27,14 @@ export function Select({ categories, defaultValue, name, value, setValue, formDa
             <span className="material-icons">keyboard_arrow_down</span>
          </div>
 
-         <div className={`absolute bg-white rounded-md shadow-xl mt-[1px] overflow-hidden transition-all ${!openSelect ? "h-0" : "h-[225px]"}`}>
+         <div className={`absolute bg-white rounded-md shadow-xl mt-[1px] overflow-hidden transition-all`}
+               style={{height: openSelect ? dropDownHeight : 0}}
+         >
             <ul>
                {categories.map(item =>(
                   <li 
-                     className={`flex flow-row items-center cursor-pointer px-2 gap-2 h-7 hover:bg-gray-200 transition-all ${option == item.categ && "bg-gray-200"}`} 
+                     className={`flex flow-row items-center cursor-pointer px-2 gap-2 h-7 hover:bg-gray-200 transition-all 
+                        ${value == item.categ && "bg-blue-900 text-white hover:bg-blue-900"}`} 
                      key={item.categ}
                      onClick={()=> {setValue({...formData, categ: item.categ}); setOpenSelect(false)}}
                   >

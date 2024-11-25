@@ -20,7 +20,7 @@ export function Table({ table }) {
             <colgroup>
                <col style={{ width: "150px" }} />
                <col style={{ width: "30px" }} />
-               <col style={{ width: "60px" }} />
+               <col style={{ width: "70px" }} />
                <col style={{ width: "60px" }} />
             </colgroup>
             <thead className="hidden">
@@ -38,19 +38,20 @@ export function Table({ table }) {
                {data[table].map(item => (
                   <tr
                      key={item.id}
-                     className="h-8 border-t-[1px] border-t-gray-200 text-[13px] hover:bg-gray-200 transition-all cursor-pointer"
+                     className="h-10 border-t-[1px] border-t-gray-200 text-[13px] hover:bg-gray-100 transition-all cursor-pointer"
                      onClick={()=> {
                         setEditingRelease({...item});
                         setNewReleaseType({ title: table == "expenses" ? "Despesa" : "Receita", type: table });
                         setShowAddReleaseModal();
                      }}
                   >
-                     <td className="pl-1 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis">{item.desc}</td>
+                     <td className="pl-1 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis font-semibold text-gray-900">{item.desc}</td>
 
                      <TdCategories icon={`/icons/c-${item.categ}.png`} categ={item.categ} />
 
-                     <td className="text-center">
+                     <td className="relative text-center">
                         {`${new Date(item.date).toLocaleDateString('pt-br', { day: "2-digit", month: "short" })}`}
+                        {item.endDate && <img className="absolute max-w-3 top-4 right-0" src="/icons/i-fixed.png"/>}
                      </td>
                      <td className="text-end pr-1 max-w-10">
                         {Number(item.value).toLocaleString('pt-BR', { style: "currency", currency: "BRL" })}
@@ -60,7 +61,6 @@ export function Table({ table }) {
             </tbody>
          </table>
       </>
-
    )
 }
 
@@ -73,7 +73,7 @@ function TdCategories({ icon, categ }) {
          >
          <img
             src={icon} alt="icone categ"
-            className="max-w-5"
+            className="max-w-5 m-auto"
             onMouseEnter={(e) => setTooltipInfoText({categ: categ, e: e, show: true})}
             onMouseOut={(e) => setTooltipInfoText({categ: categ, e: e, show: false})}
          />

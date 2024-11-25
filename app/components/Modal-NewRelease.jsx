@@ -9,8 +9,6 @@ import { useTableStore } from "../zustand/useTablesStore";
 import { ModalBackGround } from "./ModalBackGround";
 import useCalendar from "../hooks/useCalendar";
 
-
-
 export function ModalNewRelease() {
    const { releaseHandler, releaseMensage } = useNewRelease();
    const { datesHandler } = useCalendar();
@@ -22,16 +20,23 @@ export function ModalNewRelease() {
    const editingRelease = useTableStore((state) => state.editingRelease);
    const setEditingRelease = useTableStore((state) => state.setEditingRelease);
 
-
    const newReleaseType = useTableStore((state) => state.newReleaseType);
    const categories = useTableStore((state) => state.categories);
 
-
    const [fixedRelease, setFixedRelease] = useState(false);
+   const [editingIcon, setEditingIcon] = useState('/gif/edit.gif')
    const releaseType = newReleaseType?.type;
    const releaseTitle = newReleaseType?.title;
 
    useEffect(() => {
+      if(editingRelease){
+         setTimeout(() => {
+            setEditingIcon('/icons/edit.png')
+         }, 6000);
+      }else{
+         setEditingIcon('/gif/edit.gif')
+      }
+
       setFormData( editingRelease 
          ? {
             desc: editingRelease.desc,
@@ -45,13 +50,16 @@ export function ModalNewRelease() {
       setFixedRelease(!!editingRelease?.endDate && true);
    }, [editingRelease])
 
-
    if (!showAddReleaseModal) return <></>;
    return (
       <ModalBackGround >
          <div className="relative modal flex flex-col justify-between h-fit w-96 bg-white rounded-xl shadow-lg py-2 px-3">
             <div className="text-center h-9 leading-7 w-[384px] rounded-t-xl -ml-3 -mt-2 text-sm pt-[6px] border-b mb-3 bg-gray-200">
-               {!!editingRelease && <span className="absolute top-2 left-2 material-icons !text-green-800">edit</span>}
+               {!!editingRelease && 
+                  <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
+                     <img className="w-6 transition-all" src={editingIcon} />
+                  </div>
+               }
 
                {!!editingRelease && <h4>{`Editando ${releaseTitle}`}</h4>}
                {!!!editingRelease && <h4>{`Adicionar nova ${releaseTitle}`}</h4>}
@@ -139,13 +147,13 @@ export function ModalNewRelease() {
                   <div className="flex justify-center mt-3">
                      {!!!editingRelease && (
                         <ButtonSave 
-                           onClick={(e) => {releaseHandler.createNewRelease(e, releaseType); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' })}} 
+                           onClick={(e) => {releaseHandler.createNewRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' })}} 
                            text="Adicionar" 
                         />
                      )}
                      {!!editingRelease && (
                         <ButtonSave 
-                           onClick={(e) => {releaseHandler.updateRelease(e, releaseType); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' })}} 
+                           onClick={(e) => {releaseHandler.updateRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }); setHiddenReleaseModal(); setEditingRelease(false)}} 
                            text="Salvar alteraçôes" 
                         />
                      )}

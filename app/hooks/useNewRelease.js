@@ -26,17 +26,16 @@ export function useNewRelease() {
    useEffect(() => { setMonthEndYear({ month: yearMonths.indexOf(selectedTable.month), year: selectedTable.year }) }, [])
 
    const releaseHandler = {
-      createNewRelease: function (e) {
+      createNewRelease: function(e, formData) {
          e.preventDefault();
-         const formData = releaseHandler.getFormData();
-
+         
          //Instantiates a new Release
          const newRelease = new Release(
-            formData.descricao,
-            formData.categoria,
-            datesHandler.dateConvert(formData.data),
-            formData.dataFim ? datesHandler.dateConvert(formData.dataFim) : false,
-            formData.valor
+            formData.desc,
+            formData.categ,
+            datesHandler.dateConvert(formData.date),
+            formData.endDate ? datesHandler.dateConvert(formData.endDate) : false,
+            this.convertToNumericValue(formData.value)
          );
 
          //Check if all datas is OK, validating.
@@ -51,19 +50,17 @@ export function useNewRelease() {
          setReleaseMensage({ type: 'error', noti: 'Verifique os dados e tente novamente!' });
       },
 
-      updateRelease: function (e) {
+      updateRelease: function (e, formData) {
          e.preventDefault();
-         const releaseID = editingRelease.id;
-         const formData = releaseHandler.getFormData();
 
          //Instantiates the chagend Release
          const modifiedRelease = new Release(
-            formData.descricao,
-            formData.categoria,
-            datesHandler.dateConvert(formData.data),
-            formData.dataFim ? datesHandler.dateConvert(formData.dataFim) : false,
-            formData.valor,
-            releaseID
+            formData.desc,
+            formData.categ,
+            datesHandler.dateConvert(formData.date),
+            formData.endDate ? datesHandler.dateConvert(formData.endDate) : false,
+            this.convertToNumericValue(formData.value),
+            formData.id
          );
 
          //Check if all datas is OK, validating.
@@ -75,6 +72,7 @@ export function useNewRelease() {
             setReleaseMensage(false);
             return;
          };
+         console.log('nao foi')
          setReleaseMensage({ type: 'error', noti: 'Verifique os dados e tente novamente!' });
       },
 
@@ -96,10 +94,8 @@ export function useNewRelease() {
          !update && destinationTable.push(release);
 
          if (update) {
-            const sourceTableMonth = selectedTable.month;
             //Check if it has the release in selected month
             if ((releaseMonth == selectedTable.month) && (releaseYear == selectedTable.year)) {
-               console.log('aqui')
                const releaseIndex = destinationTable.findIndex(item => item.id === editingRelease.id);
                if (releaseIndex !== -1) {
                   destinationTable[releaseIndex] = release;
@@ -140,8 +136,14 @@ export function useNewRelease() {
          return data;
       },
 
+      convertToNumericValue: function(value){
+         if(!!!value) return false;
+         return value.replace(".", "").replace(",", ".");
+      },
+
       validateRelease: function (newRelease) {
-         const categoriesIcons = categories[newReleaseType.type].map(item => item.icon);
+
+         const categoriesIcons = categories[newReleaseType.type].map(item => item.categ);
          const isDescOK = newRelease.desc.length > 0 && newRelease.desc.length < 51;
          const isCategOK = categoriesIcons.includes(newRelease.categ);
          const isDateOK = datesHandler.isValidDate(newRelease.date);
