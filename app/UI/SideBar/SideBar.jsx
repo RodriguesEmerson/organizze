@@ -5,6 +5,7 @@ import { useSideBar } from "@/app/hooks/useSideBar";
 import { Spinner } from "../spinner";
 import { useState, memo } from "react";
 import { useUtils } from "@/app/hooks/useUtils";
+import { Select } from "@/app/components/selects/Select";
 
 export default function SideBar() { 
    const [openSideBar, setOpenSideBar] = useState(true);
@@ -18,6 +19,7 @@ export default function SideBar() {
          </div> */}
          {/* {openSideBar && */}
             <TablesList />
+            <FormNewTable />
          {/* } */}
       </section>
    )
@@ -35,7 +37,7 @@ const TablesList = memo(() =>{
       </div>
    )
    return (
-      <div className="mt-10 bg-gray-200 text-gray-900 rounded-md">
+      <div className="mt-8 bg-gray-200 text-gray-900 rounded-md">
          <ul className="flex flex-col gap-[2px]">
             {Object.keys(tables).map((year) => (
                <TablesListMonths key={year} tables={tables} year={year} />
@@ -81,5 +83,30 @@ function TablesListMonths({ year, tables }) {
          </ul>
       </li>
 
+   )
+}
+
+function FormNewTable(){
+   const months = useTableStore((state) => state.months);
+   const currentYear = new Date().getFullYear();
+   const years = [];
+
+   for(let i = 0; i < 11; i++){
+      years.push(currentYear - 5 + i)
+   }
+
+   return(
+      <div className="flex flex-col bg-gray-900 p-1 rounded-md">
+         
+         <form action="">
+            <div className="flex flex-row gap-1">
+               <Select options={months} width="87" label={"Mês"}/>
+               <Select options={years} width="67" label={"Ano"}/>
+            </div>
+            <button type="submit" className="bg-white text-gray-900 text-center p-1 rounded-md w-full mt-1 hover:text-gray-300 transition-all ">
+               Criar nova tabela
+            </button>
+         </form>
+      </div>
    )
 }

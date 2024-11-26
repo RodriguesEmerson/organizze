@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
-import { useTableStore } from "../zustand/useTablesStore";
 
-export function Select({ categories, defaultValue, name, value, setValue, formData }){
+export function CategorieSelect({ categories, defaultValue, name, value, setValue, formData }){
    
    const [openSelect, setOpenSelect] = useState(false);
    const [dropDownHeight, setDropDownHeight] = useState(0);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { ButtonClose } from "./buttons/ButtonClose"
 import { ButtonSave } from "./buttons/ButtonSave"
-import { Select } from "./Select";
+import { CategorieSelect } from "./selects/CategorieSelect";
 import { useNewRelease } from "../hooks/useNewRelease";
 import { Calendar } from "./Calendar";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
@@ -88,7 +88,7 @@ export function ModalNewRelease() {
                   <div className="flex flex-row gap-1 mb-3">
                      <div className="flex flex-col gap-[2px]">
                         <label className="pl-1">Categoria *</label>
-                        <Select
+                        <CategorieSelect
                            name={"categoria"}
                            categories={categories[releaseType]}
                            value={formData.categ}
