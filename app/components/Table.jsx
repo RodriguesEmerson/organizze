@@ -16,10 +16,10 @@ export function Table({ table }) {
    if (!data) return <Spinner />
    return (
       <>
-         <table className="text-gray-600 text-sm w-[500px] overflow-x-hidden">
+         <table className="text-gray-600 text-sm w-full overflow-x-hidden">
             <colgroup>
-               <col style={{ width: "150px" }} />
-               <col style={{ width: "30px" }} />
+               <col style={{ width: "40%" }} />
+               <col style={{ width: "10%" }} />
                <col style={{ width: "70px" }} />
                <col style={{ width: "60px" }} />
             </colgroup>
@@ -45,7 +45,7 @@ export function Table({ table }) {
                         setShowAddReleaseModal();
                      }}
                   >
-                     <td className="pl-1 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis font-semibold text-gray-900">{item.desc}</td>
+                     <td className="pl-2 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis font-semibold text-gray-900">{item.desc}</td>
 
                      <TdCategories icon={`/icons/c-${item.categ}.png`} categ={item.categ} />
 
@@ -53,7 +53,7 @@ export function Table({ table }) {
                         {`${new Date(item.date).toLocaleDateString('pt-br', { day: "2-digit", month: "short" })}`}
                         {item.endDate && <img className="absolute max-w-3 top-4 right-0" src="/icons/i-fixed.png"/>}
                      </td>
-                     <td className="text-end pr-1 max-w-10">
+                     <td className="text-end pr-2 max-w-10">
                         {Number(item.value).toLocaleString('pt-BR', { style: "currency", currency: "BRL" })}
                      </td>
                   </tr>
@@ -68,16 +68,13 @@ function TdCategories({ icon, categ }) {
    const setTooltipInfoText = useUtilsStore((state) => state.setTooltipInfoText);
 
    return (
-      <td
-         className="relative"
-         >
+      <td className="relative" >
          <img
             src={icon} alt="icone categ"
             className="max-w-5 m-auto"
             onMouseEnter={(e) => setTooltipInfoText({categ: categ, e: e, show: true})}
             onMouseOut={(e) => setTooltipInfoText({categ: categ, e: e, show: false})}
          />
-
       </td>
    )
 }

@@ -9,8 +9,7 @@ import IncomeTable from "/app/UI/Board/IncomeTable";
 import { useUtils } from "@/app/hooks/useUtils";
 import { ExpesesGraphic } from "@/app/UI/Board/ExpensesGraphic";
 import { IncomesGraphic } from "@/app/UI/Board/IncomesGraphic";
-import { SummaryGraphic } from "@/app/UI/Board/SummaryGraphic";
-import { ChartBar } from "@/app/components/ChartBar";
+import { ChartBar } from "@/app/components/charts/ChartBar";
 import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
 import { TooltipInfo } from "@/app/components/TooltipInfo";
 import { FloatOkNotification } from "@/app/components/FloatOkNotification";
@@ -21,25 +20,21 @@ export default function MonthlyDashBoard() {
    const { tableHandler } = useTable();
    const { totalExpenses, totalIncomes } = useSummaryGraphic();
 
-
    const selectedTable = useTableStore((state) => state.selectedTable);
-
    const table = tableHandler.getSelectedMonthData();
-
    const { toUpperFirstLeter } = useUtils();
-
+   
    if (!data) return (
       <div className="flex items-center justify-center h-[95vh]">
          <Spinner />
       </div>
    )
-   const monthlyGoal = data[selectedTable.year].monthlyGoal
+   const monthlyGoal = data[selectedTable.year].monthlyGoal;
    return (
       <section
-         className="relative ml-44 pl-5 pt-3"
+         className="relative ml-44 pl-5 pt-3 pr-3"
          style={{ height: "calc(100% - 48px)" }}
       >
-
          <ModalNewRelease />
          <FloatOkNotification />
 
@@ -59,7 +54,7 @@ export default function MonthlyDashBoard() {
             :
             <div className="flex flex-col gap-2 pb-3 ">
 
-               <div className="w-[98%] h-full">
+               <div className="w-full h-full">
 
                   <div>
                      <div className="flex flex-row gap-2 mb-2 justify-between">
@@ -129,7 +124,7 @@ export default function MonthlyDashBoard() {
                   </div>
 
                   <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">
-                     <h2 className="text-2xl font-extrabold text-gray-500 mt-2">Tabelas</h2>
+                     <h2 className="text-lg font-extrabold text-gray-500 mt-2">Tabelas</h2>
                   </div>
                </div>
                <Tables />
@@ -142,7 +137,7 @@ export default function MonthlyDashBoard() {
 
 function Tables() {
    return (
-      <div className="tables !relative flex flex-row gap-2">
+      <div className="tables !relative justify-stretch flex flex-row gap-2">
          <TooltipInfo />
          <ExpenseTable />
          <IncomeTable />

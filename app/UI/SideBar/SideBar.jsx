@@ -26,9 +26,14 @@ export default function SideBar() {
 const TablesList = memo(() =>{
    const { sideBarHandler } = useSideBar();
    const { data } = useTableStore((state) => state);
+ 
    const  tables = data ? sideBarHandler.getTables(data) : null;
    
-   if(!tables) return <Spinner />
+   if(!tables) return (
+      <div className="flex items-center justify-center h-full">
+         <Spinner />
+      </div>
+   )
    return (
       <div className="mt-10 bg-gray-200 text-gray-900 rounded-md">
          <ul className="flex flex-col gap-[2px]">
@@ -43,6 +48,7 @@ const TablesList = memo(() =>{
 function TablesListMonths({ year, tables }) {
    const [expandUlYear, setExpandUlYear] = useState(false);
    const { changeTable } = useTableStore();
+   const selectedTable = useTableStore((state) => state.selectedTable);
    const { toUpperFirstLeter } = useUtils();
 
    return (
@@ -60,11 +66,13 @@ function TablesListMonths({ year, tables }) {
             <h3 className="font-semibold">{year}</h3>
             
          </div>
-         <ul className="ml-4 pl-1 pb-1 border-l border-l-gray-400">
+         <ul className="ml-4 pl-1 pb-2 border-l border-l-gray-400">
             {tables[year].map((month, index) => (
                <li 
                   key={index}   
-                  className="cursor-pointer transition-all w-fit px-2 rounded-md hover:bg-gray-300"
+                  className={`cursor-pointer transition-all duration-200 w-fit px-2 rounded-md hover:bg-gray-300
+                     ${(selectedTable.year == year && selectedTable.month == month) && "!bg-gray-900 text-white"}
+                  `}
                   onClick={()=> {changeTable(year, month)}}
                >
                   <span>{toUpperFirstLeter(month)}</span>

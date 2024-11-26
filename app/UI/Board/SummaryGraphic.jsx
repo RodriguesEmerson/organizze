@@ -1,6 +1,6 @@
 import { memo } from "react"
 import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
-import { ChartPie } from "@/app/components/ChartPie";
+import { ChartPie } from "@/app/components/charts/ChartPie";
 
 export const SummaryGraphic = memo (() => {
 

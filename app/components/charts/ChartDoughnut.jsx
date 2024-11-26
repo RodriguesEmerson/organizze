@@ -1,5 +1,5 @@
+import { useChartDoughnut } from "@/app/hooks/useChartDoughnut";
 import { Chart, registerables } from "chart.js";
-import { useChartDoughnut } from "../hooks/useChartDoughnut";
 import { useEffect, useRef } from "react";
 
 //Registra todos os componentes e plugins necessários para o Chart.js funcionar corretamente.

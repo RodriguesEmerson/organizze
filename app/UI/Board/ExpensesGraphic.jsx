@@ -1,8 +1,8 @@
 import { memo } from "react"
 import { Chart, registerables } from "chart.js";
 import { useExpensesGraphic } from "@/app/hooks/useExpensesGraphic";
-import { ChartBar } from "@/app/components/ChartBar";
-import { ChartDoughnut } from "@/app/components/ChartDoughnut";
+import { ChartBar } from "@/app/components/charts/ChartBar";
+import { ChartDoughnut } from "@/app/components/charts/ChartDoughnut";
 import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
 
 //Registra todos os componentes e plugins necessários para o Chart.js funcionar corretamente.

@@ -1,29 +1,30 @@
-import { useRef, useEffect } from "react";
-import { useChartBar } from "../hooks/useCharBar";
+import { useChartPie } from "@/app/hooks/useChartPie";
 import { Chart, registerables } from "chart.js";
+import { useEffect, useRef } from "react";
 
 //Registra todos os componentes e plugins necessários para o Chart.js funcionar corretamente.
 Chart.register(...registerables);
 
-export function ChartBar({ data }){ 
+export function ChartPie({ data }) {
    const chartRef = useRef(null);
    const chartInstance = useRef(null);
 
-   const { chartBarConfig, setchartData } = useChartBar();
+   const { chartPiecConfig, setchartData } = useChartPie();
 
    useEffect(() => {
-      setchartData(data);
-
+      setchartData(data)
       const ctx = chartRef.current.getContext('2d');
-      chartInstance.current = new Chart(ctx, chartBarConfig);
+      chartInstance.current = new Chart(ctx, chartPiecConfig);
 
       // Cleanup para evitar problemas com múltiplos gráficos
       return () => {
          chartInstance.current.destroy();
       }
-   }, [chartBarConfig]);
+   }, [chartPiecConfig]);
 
    return (
-         <canvas ref={chartRef} width="520" height="300" className=""></canvas>
+      <div className="w-[250px] h-[250px]">
+         <canvas ref={chartRef} width="250" height="250" className=""></canvas>
+      </div>
    )
 }

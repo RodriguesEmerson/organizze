@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { ButtonClose, ButtonSave } from "./buttons"
+import { ButtonClose } from "./buttons/ButtonClose"
+import { ButtonSave } from "./buttons/ButtonSave"
 import { Select } from "./Select";
 import { useNewRelease } from "../hooks/useNewRelease";
 import { Calendar } from "./Calendar";
@@ -23,10 +24,11 @@ export function ModalNewRelease() {
    const newReleaseType = useTableStore((state) => state.newReleaseType);
    const categories = useTableStore((state) => state.categories);
 
-   const [fixedRelease, setFixedRelease] = useState(false);
-   const [editingIcon, setEditingIcon] = useState('/gif/edit.gif')
    const releaseType = newReleaseType?.type;
    const releaseTitle = newReleaseType?.title;
+
+   const [fixedRelease, setFixedRelease] = useState(false);
+   const [editingIcon, setEditingIcon] = useState('/gif/edit.gif');
 
    useEffect(() => {
       if(editingRelease){
@@ -34,7 +36,7 @@ export function ModalNewRelease() {
             setEditingIcon('/icons/edit.png')
          }, 6000);
       }else{
-         setEditingIcon('/gif/edit.gif')
+         setEditingIcon('/gif/edit.gif');
       }
 
       setFormData( editingRelease 
@@ -111,7 +113,7 @@ export function ModalNewRelease() {
                            <Calendar
                               name="dataFim"
                               value={formData.endDate}
-                              disabled={fixedRelease}
+                              disabled={!fixedRelease}
                               disabledCalendar={!fixedRelease}
                               setFormData={setFormData}
                               formData={formData}
