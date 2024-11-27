@@ -61,7 +61,62 @@
           ]
         }
       }
-    } 
+    },
+    "2025": {
+    "headers": ["Descrição", "Categ.", "Data", "Valor"],
+    "id": "te98765432",
+    "monthlyGoal": 5000,
+    "months": {
+      "janeiro": {
+        "expenses": [
+          { "desc": "Mercado Semanal", "categ": "Alimentação", "date": "2025/01/05", "value": "150.75", "id": 101, "endDate": false },
+          { "desc": "Conta de Água", "categ": "Casa", "date": "2025/01/03", "value": "80.00", "id": 102, "endDate": "2025/06/03" },
+          { "desc": "Táxi", "categ": "Transporte", "date": "2025/01/02", "value": "30.00", "id": 103, "endDate": false },
+          { "desc": "Prestação do Carro", "categ": "Casa", "date": "2025/01/01", "value": "600.00", "id": 104, "endDate": false },
+          { "desc": "Plano de Saúde", "categ": "Casa", "date": "2025/01/28", "value": "200.00", "id": 105, "endDate": false },
+          { "desc": "Jantar Fora", "categ": "Alimentação", "date": "2025/01/20", "value": "120.00", "id": 106, "endDate": false },
+          { "desc": "Spotify Premium", "categ": "Lazer", "date": "2025/01/15", "value": "19.90", "id": 107, "endDate": false },
+          { "desc": "Medicamentos", "categ": "Saúde", "date": "2025/01/10", "value": "60.00", "id": 108, "endDate": false },
+          { "desc": "Veterinário", "categ": "pets", "date": "2025/01/07", "value": "120.00", "id": 109, "endDate": false },
+          { "desc": "Pedágio", "categ": "Transporte", "date": "2025/01/02", "value": "18.00", "id": 110, "endDate": false },
+          { "desc": "Produtos de Higiene", "categ": "Casa", "date": "2025/01/18", "value": "45.00", "id": 111, "endDate": false },
+          { "desc": "Padaria", "categ": "Alimentação", "date": "2025/01/15", "value": "50.00", "id": 112, "endDate": false },
+          { "desc": "Teatro", "categ": "Lazer", "date": "2025/01/12", "value": "100.00", "id": 113, "endDate": false },
+          { "desc": "Compra de Livros", "categ": "Educação", "date": "2025/01/10", "value": "200.00", "id": 114, "endDate": false },
+          { "desc": "Sapatos Novos", "categ": "Pessoal", "date": "2025/01/06", "value": "250.00", "id": 115, "endDate": "2025/04/06" }
+        ],
+        "incomes": [
+          { "desc": "Salário Base", "categ": "Salário", "date": "2025/01/01", "value": "5200.00", "id": 201, "endDate": false },
+          { "desc": "Venda Online", "categ": "Vendas", "date": "2025/01/28", "value": "600.00", "id": 202, "endDate": false },
+          { "desc": "Lucros", "categ": "Investimentos", "date": "2025/01/25", "value": "300.00", "id": 203, "endDate": false },
+          { "desc": "Serviço Extra", "categ": "Outros", "date": "2025/01/22", "value": "500.00", "id": 204, "endDate": false },
+          { "desc": "Reembolso", "categ": "Outros", "date": "2025/01/18", "value": "250.00", "id": 205, "endDate": false },
+          { "desc": "Bônus", "categ": "Salário", "date": "2025/01/15", "value": "1000.00", "id": 206, "endDate": false },
+          { "desc": "Dividendos Ações", "categ": "Investimentos", "date": "2025/01/10", "value": "400.00", "id": 207, "endDate": false }
+        ]
+      },
+      "fevereiro": {
+        "expenses": [
+          { "desc": "Supermercado", "categ": "Alimentação", "date": "2025/02/04", "value": "180.00", "id": 301, "endDate": false },
+          { "desc": "Conta de Gás", "categ": "Casa", "date": "2025/02/02", "value": "50.00", "id": 302, "endDate": false },
+          { "desc": "Transporte Público", "categ": "Transporte", "date": "2025/02/01", "value": "75.00", "id": 303, "endDate": false },
+          { "desc": "Reparo na Casa", "categ": "Casa", "date": "2025/02/20", "value": "300.00", "id": 304, "endDate": false },
+          { "desc": "Streaming", "categ": "Lazer", "date": "2025/02/15", "value": "25.90", "id": 305, "endDate": false },
+          { "desc": "Pet Shop Banho", "categ": "pets", "date": "2025/02/14", "value": "40.00", "id": 306, "endDate": false },
+          { "desc": "Barbearia", "categ": "Pessoal", "date": "2025/02/12", "value": "30.00", "id": 307, "endDate": false },
+          { "desc": "Aula Particular", "categ": "Educação", "date": "2025/02/10", "value": "250.00", "id": 308, "endDate": false },
+          { "desc": "Almoço com Amigos", "categ": "Alimentação", "date": "2025/02/09", "value": "85.00", "id": 309, "endDate": false },
+          { "desc": "Gasolina", "categ": "Transporte", "date": "2025/02/08", "value": "200.00", "id": 310, "endDate": false }
+        ],
+        "incomes": [
+          { "desc": "Salário de Fevereiro", "categ": "Salário", "date": "2025/02/01", "value": "5300.00", "id": 401, "endDate": false },
+          { "desc": "Freelance de Design", "categ": "Outros", "date": "2025/02/15", "value": "700.00", "id": 402, "endDate": false },
+          { "desc": "Venda de Móveis", "categ": "Vendas", "date": "2025/02/10", "value": "1200.00", "id": 403, "endDate": false },
+          { "desc": "Investimentos Mensais", "categ": "Investimentos", "date": "2025/02/05", "value": "400.00", "id": 404, "endDate": false }
+        ]
+      }
+    }
+  }
   }, 
   "categories":{
     "expenses" : [

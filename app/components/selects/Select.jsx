@@ -1,26 +1,27 @@
 import { useState } from "react"
 
-export function Select({ options, width, label }){
+export function Select({ options, width, label, handleChangeTable }){
    const [currentOption, setCurrentOption] = useState('');
    const [isOpen, setIsOpen] = useState(false);
 
    return(
       <div 
-         className="relative text-xs w-fit transition-all" 
+         className={`relative text-xs w-fit transition-all`} 
          onClick={()=> setIsOpen(!isOpen)}
          style={{width: `${width}px`}}
       >
-         <span className="ml-1 font-semibold text-white">{label}</span>
-         <div className="flex flex-row mb-[2px] cursor-pointer border-2 border-gray-300 rounded-md p-1 w-full">
+         <span className="ml-1 font-semibold text-gray-900">{label}</span>
+         <div className="flex flex-row mb-[2px] h-6 cursor-pointer border border-gray-300 bg-gray-200 rounded-md p-1 w-full">
             <input
+               className="w-full outline-none caret-transparent cursor-pointer bg-transparent text-gray-900"
+               placeholder={label ? label : "*Selecione*"}
+               autoComplete="off"
                type="text"
-               placeholder={label}
-               name={label} 
-               className="w-full outline-none caret-transparent cursor-pointer bg-transparent text-white"
+               name={label}   
                value= {currentOption}
-               onChange={()=> {}}
+               readOnly
             />
-            <span className="material-icons !text-sm">keyboard_arrow_down</span>
+            <span className="material-icons !text-sm -mt-[2px]">keyboard_arrow_down</span>
          </div>
          <div 
            className="absolute bg-white shadow-xl border-gray-200 border overflow-hidden w-fit rounded-md transition-all"

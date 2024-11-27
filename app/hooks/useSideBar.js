@@ -9,7 +9,10 @@ export function useSideBar(){
             tables[year] = Object.keys(data[year].months)
          };
 
-         return (tables);
+         return tables;
+      },
+      getCurrentTable: function(){
+
       }
    }
 
