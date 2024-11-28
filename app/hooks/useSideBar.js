@@ -1,7 +1,9 @@
 'use client';
 import { useState } from "react";
+import { useTableStore } from "../zustand/useTablesStore";
 
 export function useSideBar(){
+   const data = useTableStore(state => state.data);
    const sideBarHandler = {
       getTables: function(data){
          const tables = {};
@@ -11,8 +13,11 @@ export function useSideBar(){
 
          return tables;
       },
-      getCurrentTable: function(){
+      getCurrentTable: function(CurrentYear){
+         const table = {};
+         table[CurrentYear] = Object.keys(data[CurrentYear].months)
 
+         return table;
       }
    }
 

@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export function Select({ options, width, label, handleChangeTable }){
+export function Select({ options, width, label, name, form, ...props }){
    const [currentOption, setCurrentOption] = useState('');
    const [isOpen, setIsOpen] = useState(false);
 
@@ -17,9 +17,11 @@ export function Select({ options, width, label, handleChangeTable }){
                placeholder={label ? label : "*Selecione*"}
                autoComplete="off"
                type="text"
-               name={label}   
+               name={name}   
                value= {currentOption}
                readOnly
+               {...props}
+               
             />
             <span className="material-icons !text-sm -mt-[2px]">keyboard_arrow_down</span>
          </div>
@@ -37,7 +39,10 @@ export function Select({ options, width, label, handleChangeTable }){
                         className={`h-5 cursor-pointer px-1 pt-[2px] hover:bg-gray-200 transition-all
                            ${currentOption == option && "bg-gray-900 text-white hover:bg-gray-900"}
                         `}
-                        onClick={()=> setCurrentOption(option)}
+                        onClick={()=> {
+                           setCurrentOption(option);
+                           form.setFormData({...form.formData, [name]: option})
+                        }}
                      >
                         {option}
                      </li>
