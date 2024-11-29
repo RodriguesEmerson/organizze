@@ -3,7 +3,7 @@
 import { useTableStore } from "@/app/zustand/useTablesStore";
 import { useSideBar } from "@/app/hooks/useSideBar";
 import { Spinner } from "../spinner";
-import { useState, memo, useCallback, useRef } from "react";
+import { useState, memo, useCallback, useRef, useEffect } from "react";
 import { useUtils } from "@/app/hooks/useUtils";
 import { Select } from "@/app/components/selects/Select";
 
@@ -70,14 +70,18 @@ function TablesListMonths({ year, tables }) {
    const selectedTable = useTableStore((state) => state.selectedTable);
    const { toUpperFirstLeter } = useUtils();
 
+   useEffect(()=>{
+      localStorage.setItem('storedExpandUl', expandUlYear)
+   },[expandUlYear])
+
    return (
       <li
          key={year}
          className={`w-full overflow-hidden transition-max-height duration-200 ease-in-out`}
-         style={{ maxHeight: !expandUlYear ? '24px' : `${tables[year].length * 24 + 27}px` }}
+         style={{ maxHeight: expandUlYear ? '24px' : `${tables[year].length * 24 + 27}px` }}
       >
          <div className="flex flex-row h-6 gap-1 items-center mb-1 cursor-pointer rounded-md hover:bg-gray-300 transition-all"
-            onClick={() => {setExpandUlYear(!expandUlYear); localStorage.setItem('storedExpandUl', !expandUlYear); console.log(localStorage.getItem('storedExpandUl'))}}
+            onClick={() => {setExpandUlYear(!expandUlYear); console.log(localStorage.getItem('storedExpandUl'))}}
          >
             <span className={`material-icons-outlined !text-lg transition-all ${expandUlYear && "rotate-180"}`}>
                expand_circle_down
