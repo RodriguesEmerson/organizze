@@ -1,6 +1,6 @@
-import { useRef, useEffect } from "react";
+import { useChartBar } from "@/app/hooks/charts/useCharBar";
 import { Chart, registerables } from "chart.js";
-import { useChartBar } from "@/app/hooks/useCharBar";
+import { useEffect, useRef } from "react";
 
 //Registra todos os componentes e plugins necessários para o Chart.js funcionar corretamente.
 Chart.register(...registerables);

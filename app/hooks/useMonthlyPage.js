@@ -25,7 +25,7 @@ export function useMonthlyPage() {
 
    function getTotalExpenses(onlyValue){
       if(!data)  return;
-      const expenses = data[selectedTable.year].months[selectedTable.month].expenses;
+      const expenses = data[selectedTable?.year].months[selectedTable.month]?.expenses;
       const expensesValues = [];
 
       expenses.forEach(expense => {

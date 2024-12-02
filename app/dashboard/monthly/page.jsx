@@ -107,10 +107,10 @@ export default function MonthlyDashBoard() {
                            </div>
                            <div className="absolute flex flex-row text-center w-10 right-7 top-11 text-gray-500">
                               <span className="text-xl font-semibold">
-                                 {totalIncomes - totalExpenses >= 0
-                                    ? `${((totalIncomes - totalExpenses) / monthlyGoal * 100).toFixed(0)}%`
-                                    : '0%'
-                                 }
+                                 {(totalIncomes && totalExpenses) && (totalIncomes - totalExpenses >= 0
+                                    ? `${((totalIncomes - totalExpenses) / monthlyGoal * 100).toFixed(0)}`
+                                    : '0')
+                                 }%
                               </span>
                               <span className="text-xs rotate-90 -ml-7">Concluídos</span>
                            </div>

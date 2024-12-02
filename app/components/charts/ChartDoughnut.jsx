@@ -1,4 +1,4 @@
-import { useChartDoughnut } from "@/app/hooks/useChartDoughnut";
+import { useChartDoughnut } from "@/app/hooks/charts/useChartDoughnut";
 import { Chart, registerables } from "chart.js";
 import { useEffect, useRef } from "react";
 
