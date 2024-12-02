@@ -137,7 +137,7 @@ export function useNewRelease() {
 
       ensureYearAndMonthExist: function(updatedData, year, month){
          if(!updatedData[year]){
-            this.createNewMonthTable(updatedData, year);
+            this.createNewYearTable(updatedData, year);
          }
          if(!updatedData[year].months[month]){
             this.createNewMonthTable(updatedData, year, month);
@@ -146,9 +146,9 @@ export function useNewRelease() {
       },
 
       createNewYearTable: function (updatedData, newReleaseYear) {
-         updatedData[newReleaseYear] = { id: this.UUID(), months: {} };
+         updatedData[newReleaseYear] = { id: this.UUID(), months: {}, monthlyGoal: 0 };
       },
-
+      
       createNewMonthTable: function (updatedData, newReleaseYear, newReleaseMonth) {
          updatedData[newReleaseYear].months[newReleaseMonth] = { expenses: [], incomes: [] }
       },

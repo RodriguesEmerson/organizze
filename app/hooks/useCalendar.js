@@ -6,29 +6,19 @@ import { useCalendarStore } from "../zustand/useCalendarStore";
 
 export default function useCalendar() {
    const { monthEndYear, setMonthEndYear, yearMonths } = useCalendarStore();
-   const { selectedTable } = useTableStore();
+   const selectedTable = useTableStore(state => state.selectedTable);
    const [currentCalendar, setCurrentCalendar] = useState();
+
    useEffect(() => {
       !monthEndYear && setMonthEndYear({month: yearMonths.indexOf(selectedTable.month), year: selectedTable.year})
       setCurrentCalendar(datesHandler.calendar(monthEndYear?.month, monthEndYear?.year));
    }, [monthEndYear]);
 
-   
+   useEffect(() => {
+      setMonthEndYear({month: yearMonths.indexOf(selectedTable.month), year: selectedTable.year})
+   }, [selectedTable]);
+
    const datesHandler = {
-      checkDeadline: function (period) {
-         const today = new Date(this.dateConvert(this.today())).getTime();
-         const term = new Date(period.fim).getTime();
-         if (period.status) return "bg-green-700 text-white pt-[5px] pr-[6px]";
-         if (term == today) return "bg-yellow-400 text-gray-700 pt-[5px] pr-[6px]";
-         if (term < today) return "bg-red-700 text-white pt-[5px] pr-[6px]";
-      },
-      
-      toggleStatus: function (period, cardInfos, setCardInfos) {
-         const currentStatus = period.status;
-         setCardInfos(
-            { ...cardInfos, periodo: { ...period, status: !currentStatus } }
-         )
-      },
       
       monthDays: function (month, year) {
          const daysNumberInTheLastMonth = new Date(year, month, 0).getDate();
@@ -37,8 +27,8 @@ export default function useCalendar() {
 
          return ({ prevMonth: daysNumberInTheLastMonth, currMonth: daysNumberCurrentMonth, nextMonth: dayNumberNextMonth });
       },
+      
       calendar: function (month, year) {
-
          //Dia da semana que foi o primeiro dia do mês.
          const firsWeekDayOfMonth = (new Date(year, month, 1).getDay());
          
@@ -80,34 +70,6 @@ export default function useCalendar() {
          return calendarDatas;
       },
       
-      isDateInAnalyzedPeriod: function (period, day, month, year) {
-         let analyzedYear = year
-         let analyzedMonth = month;
-         if (month > 12) {
-            analyzedYear++;
-            analyzedMonth = 1;
-         }
-         if (month < 1) {
-            analyzedYear--;
-            analyzedMonth = 12;
-         }
-
-         const startDate = new Date(period.inicio).getTime();
-         const endDate = new Date(period.fim).getTime();
-         const analyzedDay = (new Date(`${analyzedYear}/${analyzedMonth}/${day}`).getTime());
-         
-         //Verifica se as datas recebidas formam um período, com data de incio e fim.
-         if (!period.inicio || !period.fim) {
-            //Se tiver apenas a data de inicio
-            if (period.inicio && (analyzedDay == startDate)) return true;
-            //Se tiver a penas a data final.
-            if (period.fim && (analyzedDay == endDate)) return true;
-         };
-         
-         //Checa se dia está dentro do periodo analizado.
-         if (analyzedDay >= startDate && analyzedDay <= endDate) return true;
-      },
-      
       isValidDate: function (date) {
          //Regex para validar o formato da data recebida.
          const regex = /^(\d{4})\/(\d{2})\/(\d{2})$/;
@@ -118,18 +80,6 @@ export default function useCalendar() {
          if(isNaN(selectedDate.getTime())) return false;
          
          return true;
-      },
-      
-      isStartDateGreaterThanEndDate: function (date, endDate) {
-         //Checa se a data enviada é maior que a data final.
-         if (new Date(date).getTime() > new Date(endDate).getTime()) {
-            return true;
-         }
-         return false;
-      },
-
-      checkData: function(){
-         //Essa função checará a data
       },
       
       dateConvert: function (date, format) {
@@ -147,56 +97,11 @@ export default function useCalendar() {
          return `${year}/${month}/${day}`
       },
       
-      savePeriod: function () {
-         modalInfos.setCardInfos({
-            ...modalInfos.getCardInfos(),
-            periodo: period
-         })
-      },
-      
       today: function () {
          return new Date().toLocaleDateString('pt-br', { day: '2-digit', month: '2-digit', year: 'numeric' })
       },
       
       //*************************************************HANDLES***************************************************/
-      /************************************************************************************************************/
-      handleStartDate: function (date, endDate, removeStartDate) {
-         let newDate;
-         removeStartDate ? newDate = '' : newDate = this.validateDate(date);
-         let fim = endDate;
-         
-         if (!removeStartDate) {
-            if (!newDate) return console.log('Data inválida.');
-            //Se a data final for menor que a data adicionada, é removida.
-            if (this.isStartDateGreaterThanEndDate(newDate, this.dateConvert(endDate))) fim = '';
-         }
-         if(checkTwo){
-            setDateType(false);
-         }
-         
-         setPeriod({ ...period, inicio: newDate, fim: fim ? this.dateConvert(fim) : '' });
-      },
-      
-      handleEndDate: function (date, startDate, removeEndDate) {
-         let newDate;
-         removeEndDate ? newDate = "" : newDate = this.validateDate(date);
-         if (!removeEndDate) {
-            if (!newDate) return console.log('Data inválida.');
-            //Checa se a data inicial é maior que a final, se sim a data menor vai pra inicial.
-            if (this.isStartDateGreaterThanEndDate(this.dateConvert(startDate), newDate)) {
-               setPeriod({ ...period, inicio: newDate, fim: '' });
-               setDateType(false) 
-               return;
-            }
-            setPeriod({...period, inicio: startDate ? this.dateConvert(startDate) : '', fim: newDate})
-            setDateType(checkOne ? true : false)
-            return;
-         }
-         
-         setDateType(checkOne ? true : false);   
-         setPeriod({ ...period, inicio: startDate ? this.dateConvert(startDate) : '', fim: newDate });
-      },
-      
       handleChangeMonth: function (arrow) {
          if (arrow == 'next') {
             setMonthEndYear({
@@ -218,9 +123,6 @@ export default function useCalendar() {
          })
       }
    }
-   
-   //***********************************************************************************************************/
-   /************************************************************************************************************/
    return {
       datesHandler,
       monthEndYear,

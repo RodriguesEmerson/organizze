@@ -3,7 +3,7 @@ import { ModalNewRelease } from "@/app/components/Modal-NewRelease";
 import { useTable } from "@/app/hooks/useTable";
 import { Spinner } from "@/app/UI/spinner";
 import { useTableStore } from "@/app/zustand/useTablesStore";
-import { usePage } from "/app/hooks/usePage";
+import { useMonthlyPage } from "/app/hooks/useMonthlyPage";
 import ExpenseTable from "/app/UI/Board/ExpenseTable";
 import IncomeTable from "/app/UI/Board/IncomeTable";
 import { useUtils } from "@/app/hooks/useUtils";
@@ -16,7 +16,7 @@ import { FloatOkNotification } from "@/app/components/FloatOkNotification";
 
 
 export default function MonthlyDashBoard() {
-   const { data, getTotalExpenses, getTotalIncomes, getBalance } = usePage();
+   const { data, getTotalExpenses, getTotalIncomes, getBalance } = useMonthlyPage();
    const { tableHandler } = useTable();
    const { totalExpenses, totalIncomes } = useSummaryGraphic();
 

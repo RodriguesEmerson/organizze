@@ -6,9 +6,15 @@ import { Spinner } from "../spinner";
 import { useState, useEffect } from "react";
 import { useUtils } from "@/app/hooks/useUtils";
 import { Select } from "@/app/components/selects/Select";
+import { useMonthlyPage } from "@/app/hooks/useMonthlyPage";
+import Link from "next/link";
+import { useSearchParams } from 'next/navigation'
 
 export default function SideBar() {
    const [openSideBar, setOpenSideBar] = useState(true);
+
+   //Carrega os dados da db na useTableStore.
+  const { data } = useMonthlyPage();
 
    return (
       <section className={`fixed ml-2 mt-2 rounded-md z-[12] bg-white shadow-2xl left-0 top-12 p-2 transition-all text-sm border-t border-t-white ${!openSideBar ? "w-12" : "w-44"}`} style={{ height: 'calc(100% - 65px' }}>
@@ -65,8 +71,11 @@ function TablesListMonths({ year, tables }) {
    
    const [expandUlYear, setExpandUlYear] = useState(JSON.parse(localStorage.getItem('storedExpandUl')));
    const { changeTable } = useTableStore();
-   const selectedTable = useTableStore((state) => state.selectedTable);
+
    const { toUpperFirstLeter } = useUtils();
+   const searchParams = useSearchParams();
+   const yearURL = searchParams.get('year');
+   const monthURL = searchParams.get('month');
 
    useEffect(()=>{
       localStorage.setItem('storedExpandUl', JSON.stringify(expandUlYear));
@@ -92,11 +101,12 @@ function TablesListMonths({ year, tables }) {
                <li
                   key={index}
                   className={`cursor-pointer text-xs transition-all duration-200 w-fit px-2 py-[2px] rounded-md hover:bg-gray-300
-                     ${(selectedTable.year == year && selectedTable.month == month) && "!bg-gray-900 text-white"}
+                     ${(yearURL == year && monthURL == month) && "!bg-gray-900 text-white"}
                   `}
                   onClick={() => { changeTable(year, month) }}
                >
-                  <span>{toUpperFirstLeter(month)}</span>
+                  <Link href={`/dashboard/monthly?year=${year}&month=${month}`}><span>{toUpperFirstLeter(month)}</span></Link>
+                  
                </li>
             ))}
          </ul>
@@ -107,6 +117,7 @@ function TablesListMonths({ year, tables }) {
 
 function FormNewTable() {
    const { sideBarHandler } = useSideBar();
+   const selectedTable = useTableStore(state => state.selectedTable);
 
    //Anos já inseridos na base de dados.
    const data = useTableStore((state) => state.data);
@@ -130,25 +141,45 @@ function FormNewTable() {
    useEffect(() => {
       if(!data) return;
       setAvailableMonths(sideBarHandler.availableMonthsToNewTable(formData.year));
+
       //Reseta o mês ao mudar o ano selcionado.
       setFormData({...formData, month: ''});
-   }, [data, formData.year]);
+   }, [data, formData.year, selectedTable]);
+
+
    
    return (
       <div className="flex flex-col bg-gray-200 p-1 rounded-md mt-2">
-
+         <h3 className="text-xs mb-1 font-semibold">Criar nova tabela:</h3>
          <form action="">
             <div className="flex flex-row gap-1">
-               <Select options={availableMonths} value={formData.month} width="87" label={"Mês"} name="month" form={{ formData, setFormData }} />
-               <Select options={years} value={formData.year} width="67" label={"Ano"} name="year" form={{ formData, setFormData }} />
+               <Select 
+                  options={availableMonths} 
+                  value={formData.month} 
+                  width="87" 
+                  label={"Mês"} 
+                  name="month" 
+                  form={{ formData, setFormData }} 
+               />
+               <Select 
+                  options={years} 
+                  value={formData.year} 
+                  width="67" 
+                  label={"Ano"} 
+                  name="year" 
+                  form={{ formData, setFormData }} 
+               />
             </div>
-            <button 
-               type="submit" 
-               className="bg-white text-gray-900 text-center p-1 rounded-md w-full mt-1 hover:text-gray-300 transition-all"
-               onClick={(e) => {e.preventDefault(); sideBarHandler.creteNewTable(data, formData.year, formData.month); setFormData({...formData, month: ''})}}
+            <Link href={`/dashboard/monthly?year=${formData.year}&month=${formData.month}`}
+               className={`bg-gray-900 text-white text-center block p-1 rounded-md w-full mt-1 hover:bg-gray-950 transition-all
+                  ${(!!!formData.month || !!!formData.year) && "!bg-gray-400 hover:!bg-gray-400"}`}
+               onClick={(e) => { if(!!!formData.month || !!!formData.year) return e.preventDefault();
+                  sideBarHandler.creteNewTable(data, formData.year, formData.month); 
+                  setFormData({...formData, month: ''})}
+               }
             > 
                Criar
-            </button>
+            </Link>
          </form>
       </div>
    )

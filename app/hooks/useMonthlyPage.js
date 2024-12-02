@@ -2,27 +2,25 @@
 import { useState, useEffect } from "react";
 import { useTableStore } from "../zustand/useTablesStore";
 
-export function usePage() {
+export function useMonthlyPage() {
    const data = useTableStore((state) => state.data);
    const setData = useTableStore((state) => state.setData);
    const setCategories = useTableStore((state) => state.setCategories);
    const selectedTable = useTableStore((state) => state.selectedTable);
 
    useEffect(() => {
-      const getDta = async () => {
+      const getData = async () => {
          try {
-            const res = await fetch(`/api`)
+            const res = await fetch(`/api`);
             const resolve = await res.json();
             if(!resolve) throw new Error ("Falha ao buscar os dados!")
             
             setData(resolve.years);
             setCategories(resolve.categories);
-            
          } catch (error) {
-            
          }
       }
-      getDta();
+      getData();
    }, [])
 
    function getTotalExpenses(onlyValue){
