@@ -3,7 +3,7 @@
 import { useTableStore } from "@/app/zustand/useTablesStore";
 import { useSideBar } from "@/app/hooks/useSideBar";
 import { Spinner } from "../spinner";
-import { useState, memo, useCallback, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useUtils } from "@/app/hooks/useUtils";
 import { Select } from "@/app/components/selects/Select";
 
@@ -28,7 +28,7 @@ export default function SideBar() {
 function TablesList() {
    const { sideBarHandler } = useSideBar();
    const data = useTableStore((state) => state.data);
-   const selectedTable = useTableStore((store) => store.selectedTable)
+   const selectedTable = useTableStore((store) => store.selectedTable);
    const [formData, setFormData] = useState({ year: selectedTable?.year });
 
    const tables = data ? sideBarHandler.getTables(data) : null;
@@ -63,16 +63,14 @@ function TablesList() {
 
 function TablesListMonths({ year, tables }) {
    
-   const storedExpandUl = localStorage.getItem('storedExpandUl');
-   console.log(storedExpandUl)
-   const [expandUlYear, setExpandUlYear] = useState(storedExpandUl);
+   const [expandUlYear, setExpandUlYear] = useState(JSON.parse(localStorage.getItem('storedExpandUl')));
    const { changeTable } = useTableStore();
    const selectedTable = useTableStore((state) => state.selectedTable);
    const { toUpperFirstLeter } = useUtils();
 
    useEffect(()=>{
-      localStorage.setItem('storedExpandUl', expandUlYear)
-   },[expandUlYear])
+      localStorage.setItem('storedExpandUl', JSON.stringify(expandUlYear));
+   },[expandUlYear]);
 
    return (
       <li
@@ -81,7 +79,7 @@ function TablesListMonths({ year, tables }) {
          style={{ maxHeight: expandUlYear ? '24px' : `${tables[year].length * 24 + 27}px` }}
       >
          <div className="flex flex-row h-6 gap-1 items-center mb-1 cursor-pointer rounded-md hover:bg-gray-300 transition-all"
-            onClick={() => {setExpandUlYear(!expandUlYear); console.log(localStorage.getItem('storedExpandUl'))}}
+            onClick={() => {setExpandUlYear(!expandUlYear)}}
          >
             <span className={`material-icons-outlined !text-lg transition-all ${expandUlYear && "rotate-180"}`}>
                expand_circle_down
@@ -108,24 +106,47 @@ function TablesListMonths({ year, tables }) {
 }
 
 function FormNewTable() {
-   const months = useTableStore((state) => state.months);
+   const { sideBarHandler } = useSideBar();
+
+   //Anos já inseridos na base de dados.
+   const data = useTableStore((state) => state.data);
+   const [availableMonths, setAvailableMonths] = useState();
+
+   //Ano atual
    const currentYear = new Date().getFullYear();
+   //Meses do anos.
+   const months = useTableStore((state) => state.months);
+
+   //Anos que serão mostrados na select.
    const years = [];
-   const [formData, setFormData] = useState({ month: '', year: '' });
-
    for (let i = 0; i < 11; i++) {
-      years.push(currentYear - 5 + i)
+      years.push(`${currentYear - 5 + i}`);
    }
+   
+   //Dados do formulário.
+   const [formData, setFormData] = useState({ month: '', year: currentYear });
 
+   //Atualiza os meses diponíveis em cada ano selecionado na select.
+   useEffect(() => {
+      if(!data) return;
+      setAvailableMonths(sideBarHandler.availableMonthsToNewTable(formData.year));
+      //Reseta o mês ao mudar o ano selcionado.
+      setFormData({...formData, month: ''});
+   }, [data, formData.year]);
+   
    return (
       <div className="flex flex-col bg-gray-200 p-1 rounded-md mt-2">
 
          <form action="">
             <div className="flex flex-row gap-1">
-               <Select options={months} width="87" label={"Mês"} name="month" form={{ formData, setFormData }} />
-               <Select options={years} width="67" label={"Ano"} name="year" form={{ formData, setFormData }} />
+               <Select options={availableMonths} value={formData.month} width="87" label={"Mês"} name="month" form={{ formData, setFormData }} />
+               <Select options={years} value={formData.year} width="67" label={"Ano"} name="year" form={{ formData, setFormData }} />
             </div>
-            <button type="submit" className="bg-white text-gray-900 text-center p-1 rounded-md w-full mt-1 hover:text-gray-300 transition-all ">
+            <button 
+               type="submit" 
+               className="bg-white text-gray-900 text-center p-1 rounded-md w-full mt-1 hover:text-gray-300 transition-all"
+               onClick={(e) => {e.preventDefault(); sideBarHandler.creteNewTable(data, formData.year, formData.month); setFormData({...formData, month: ''})}}
+            > 
                Criar
             </button>
          </form>

@@ -72,7 +72,6 @@ export function useNewRelease() {
             setReleaseMensage(false);
             return;
          };
-         console.log('nao foi')
          setReleaseMensage({ type: 'error', noti: 'Verifique os dados e tente novamente!' });
       },
 
@@ -115,25 +114,7 @@ export function useNewRelease() {
          }
 
          setData(updatedData);
-         setShowOkNotification(true);
-      },
-
-      getFormData: function () {
-         //Gets form's data.
-         const form = document.querySelector("#new-release-form");
-         const formData = new FormData(form);
-         const data = Object.fromEntries(formData.entries());
-
-         //Select the categorie icon in categories;
-         categories[newReleaseType.type].forEach(element => {
-            (element.categ == data.categoria) && (data.categoria = element.icon);
-         });
-
-         //Converts the "data.valor" to a numeric value. (1.234,56 => 1234.56)
-         data.valor ? data.valor = data.valor.replace(".", "").replace(",", ".")
-            : false;
-
-         return data;
+         setShowOkNotification('Alterações salvas!', true);
       },
 
       convertToNumericValue: function(value){
@@ -156,7 +137,7 @@ export function useNewRelease() {
 
       ensureYearAndMonthExist: function(updatedData, year, month){
          if(!updatedData[year]){
-            this.createNewMonthTable(updatedData, year)
+            this.createNewMonthTable(updatedData, year);
          }
          if(!updatedData[year].months[month]){
             this.createNewMonthTable(updatedData, year, month);

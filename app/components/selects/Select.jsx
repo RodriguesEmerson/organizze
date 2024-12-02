@@ -1,9 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export function Select({ options, width, label, name, form, ...props }){
    const [currentOption, setCurrentOption] = useState('');
    const [isOpen, setIsOpen] = useState(false);
 
+   if(!options) return <></>
    return(
       <div 
          className={`relative text-xs w-fit transition-all`} 

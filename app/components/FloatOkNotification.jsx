@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useUtilsStore } from "../zustand/useUtilsStore";
 
-export function FloatOkNotification({ mensage }) {
+export function FloatOkNotification() {
    const showOkNotification = useUtilsStore((state) => state.showOkNotification);
    const setShowOkNotification = useUtilsStore((state) => state.setShowOkNotification);
 
@@ -9,13 +9,13 @@ export function FloatOkNotification({ mensage }) {
    const [barWidth, setBarWidth] = useState('0')
 
    useEffect(() => {
-      if (showOkNotification) {
+      if (showOkNotification.show) {
          setLeft('17px');
          setBarWidth('224px');
          setTimeout(() => {
             setLeft('-240px');
             setBarWidth('0');
-            setShowOkNotification(false);
+            setShowOkNotification(showOkNotification.mensage, false);
          }, 4000);
       }
    }, [showOkNotification]);
@@ -26,7 +26,7 @@ export function FloatOkNotification({ mensage }) {
          style={{ top: "calc(100vh - 80px)", left: left }}
       >
 
-         <p>Alterações salvas!</p>
+         <p>{showOkNotification.mensage}</p>
          <img className="max-w-9" src="/icons/i-saved.png" alt="saved-icon" />
          <span
             className={`absolute bottom-0 left-0 inline-block w-0 transition-all ease-linear h-1 rounded-sm bg-green-800 ${showOkNotification && "duration-[4s]"}`}
