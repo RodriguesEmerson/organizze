@@ -63,6 +63,12 @@ function TablesList() {
                <TablesListMonths key={year} tables={tables} year={year} />
             ))}
          </ul>
+         <Link 
+            href={`/dashboard?year=${formData.year}`} 
+            className="w-full mt-1 h-7 flex items-center justify-center text-white text-xs bg-gray-900 rounded-md"
+         >
+            <p>{`Relatório anual de ${formData.year}`}</p>
+         </Link>
       </div>
    )
 }

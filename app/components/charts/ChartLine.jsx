@@ -26,6 +26,6 @@ export function ChartLine({ data }){
    }, [chartLineConfig]);
 
    return (
-         <canvas ref={chartRef} width="520" height="300" className=""></canvas>
+         <canvas ref={chartRef} width="520" height="250" className=""></canvas>
    )
 }

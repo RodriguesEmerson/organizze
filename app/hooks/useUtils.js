@@ -4,5 +4,9 @@ export function useUtils() {
       return strSpliced.join("");
    }
 
-   return { toUpperFirstLeter }
+   function currencyFormat(value){
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+   }
+
+   return { toUpperFirstLeter, currencyFormat }
 }
