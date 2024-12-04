@@ -15,17 +15,19 @@ export default function YearlyDashBoard() {
          <div className="flex flex-row gap-2">
             <BoxInfos type="expenses" title="Despesas" color={'#D91136'} />
             <BoxInfos type="incomes" title="Receitas" color={'#008000'} />
+            <BoxInfos type="incomes" title="Saldo" color={'#1E90FF'}  sumary={true} />
          </div>
 
       </section>
    )
 }
 
-const BoxInfos = ({ type, title, color }) => {
+const BoxInfos = ({ type, title, color, sumary }) => {
    const { yearlyPageHandler } = useYearlyPage();
    const boxData = yearlyPageHandler.getInfos(type);
-   const { toUpperFirstLeter, currencyFormat } = useUtils();
 
+   const { toUpperFirstLeter, currencyFormat } = useUtils();
+   if(sumary) yearlyPageHandler.getYearlySumary()
    if (!boxData) {
       return <Spinner />
    }
@@ -44,7 +46,7 @@ const BoxInfos = ({ type, title, color }) => {
                alt="expenses icon"
             />
          </div>
-         <div className="flex flex-col gap-1">
+         <div className="flex flex-col gap-1 mt-1">
             <span className="text-xs font-thin">Mês com a maior {title.slice(0, -1)}: {toUpperFirstLeter(boxData.greaterValue.month)}</span>
             <span className="font-bold">{currencyFormat(boxData.greaterValue.value)}</span>
          </div>
