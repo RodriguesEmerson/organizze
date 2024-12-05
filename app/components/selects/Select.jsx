@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 export function Select({ options, width, label, name, form, ...props }){
-   const [currentOption, setCurrentOption] = useState('');
+   const [currentOption, setCurrentOption] = useState(props.value);
    const [isOpen, setIsOpen] = useState(false);
 
    if(!options) return <></>

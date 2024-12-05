@@ -43,26 +43,13 @@ export function useYearlyPage() {
 
          for (const month in expenses?.monthsData) {
             monthlyTotal[month] = Number(incomes.monthsData[month]) - Number(expenses.monthsData[month]);
-         }
-
-         const labels = Object.keys(monthlyTotal);
-         const shortLabels = labels.map(month => month = month.slice(0, 3));
-
-         const values = Object.values(monthlyTotal);
-
-         const greaterValue = { month: '', value: 0 }
-         for (const month in monthlyTotal) {
-            if (monthlyTotal[month] > greaterValue.value) {
-               greaterValue.month = month;
-               greaterValue.value = monthlyTotal[month];
-            }
          };
 
-         const total = this.reduceValues(values);
+         const boxData = this.createBoxData(monthlyTotal);
 
-         ///criando função para sumary
+         return boxData;
       },
-
+      
       createBoxData: function (monthsData) {
          //Cria um array com todos os meses encotrados no ano.
          const labels = Object.keys(monthsData);

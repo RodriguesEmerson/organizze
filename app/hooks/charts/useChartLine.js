@@ -38,6 +38,8 @@ export function useChartLine(){
                }
             }
          },
+         responsive: true, // Faz o gráfico se ajustar ao container
+         maintainAspectRatio: false, // Permite esticar o gráfico com base no container
          plugins: {
             legend: {
                display: false,

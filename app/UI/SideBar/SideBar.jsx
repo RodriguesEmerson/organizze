@@ -34,8 +34,11 @@ export default function SideBar() {
 function TablesList() {
    const { sideBarHandler } = useSideBar();
    const data = useTableStore((state) => state.data);
-   const selectedTable = useTableStore((store) => store.selectedTable);
-   const [formData, setFormData] = useState({ year: selectedTable?.year });
+   // const selectedTable = useTableStore((store) => store.selectedTable);
+   const searchParams = useSearchParams();
+   const yearURL = searchParams.get('year');
+   const monthURL = searchParams.get('month');
+   const [formData, setFormData] = useState({ year: yearURL });
 
    const tables = data ? sideBarHandler.getTables(data) : null;
    const currentTable = data ? sideBarHandler.getCurrentTable(formData.year) : null;
@@ -63,11 +66,15 @@ function TablesList() {
                <TablesListMonths key={year} tables={tables} year={year} />
             ))}
          </ul>
+         
          <Link 
             href={`/dashboard?year=${formData.year}`} 
-            className="w-full mt-1 h-7 flex items-center justify-center text-white text-xs bg-gray-900 rounded-md"
+            className={`w-full mt-1 h-7 flex items-center justify-center text-gray-900 text-xs bg-orange-400 rounded-md
+               ${(yearURL === formData.year && !monthURL) && " !bg-gray-900 text-white"}
+            `}
+            
          >
-            <p>{`Relatório anual de ${formData.year}`}</p>
+            <p>{`Ver relatório de ${formData.year}`}</p>
          </Link>
       </div>
    )
