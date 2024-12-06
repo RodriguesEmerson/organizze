@@ -2,18 +2,19 @@ import { useState } from "react";
 
 export function useChartBar(){
    const [ chartData, setchartData ] = useState({labels: [], values: [], colors: ['#D91136'], orientation: 'x'});
-   
+   console.log(typeof(chartData.datasets))
    const chartBarConfig = {
       type: 'bar',
       data: {
          axis: 'y',
          labels: chartData.labels,
-         datasets: [{
-            label: 'Despesas por Categoria',
+         datasets:  
+            chartData.datasets 
+            ? chartData.datasets 
+            : [{
             data: chartData.values,
             backgroundColor:chartData.colors
-         }]
-         
+            }]
       },
       options: {
          indexAxis: chartData.orientation,
@@ -27,6 +28,8 @@ export function useChartBar(){
                }
             }
          },
+         responsive: true, // Faz o gráfico se ajustar ao container
+         maintainAspectRatio: false, // Permite esticar o gráfico com base no container
          plugins: {
             legend: {
                display: false,
@@ -45,7 +48,7 @@ export function useChartBar(){
                         label = ' '; //Remove o texto da tooltip flutuante
                      }
 
-                     //Tooltip do gráfico no exito no 'deitado'.
+                     //Tooltip do gráfico no eixo 'x'.
                      if (context.parsed.y !== null && chartData.orientation == 'x') {
                         label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y);
                      }
@@ -73,6 +76,9 @@ export function useChartBar(){
                const dataset = chart.data.datasets[0];
 
                chart.getDatasetMeta(0).data.forEach((bar, index) => {
+
+                  //Remove os números no topo da coluna.
+                  // if(chartData.hiddenNumbers) return;
 
                   //Largura em pixels de cada barra.
                   // console.log(chart.getDatasetMeta(0).data[index].width);
