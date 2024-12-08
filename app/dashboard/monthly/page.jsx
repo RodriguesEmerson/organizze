@@ -13,12 +13,17 @@ import { ChartBar } from "@/app/components/charts/ChartBar";
 import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
 import { TooltipInfo } from "@/app/components/TooltipInfo";
 import { FloatOkNotification } from "@/app/components/FloatOkNotification";
+import { useSearchParams } from "next/navigation";
 
 
 export default function MonthlyDashBoard() {
    const { data, getTotalExpenses, getTotalIncomes, getBalance } = useMonthlyPage();
    const { tableHandler } = useTable();
    const { totalExpenses, totalIncomes } = useSummaryGraphic();
+
+   const searchParams = useSearchParams();
+   const yearURL = searchParams.get('year');
+   const monthURL = searchParams.get('month');
 
    const selectedTable = useTableStore((state) => state.selectedTable);
    const table = tableHandler.getSelectedMonthData();
@@ -29,7 +34,7 @@ export default function MonthlyDashBoard() {
          <Spinner />
       </div>
    )
-   const monthlyGoal = data[selectedTable.year].monthlyGoal;
+   const monthlyGoal = data[yearURL].monthlyGoal;
    return (
       <section
          className="relative ml-44 pl-5 pt-3 pr-3"
@@ -39,7 +44,7 @@ export default function MonthlyDashBoard() {
          <FloatOkNotification />
 
          <div className="sticky top-12 z-[11]  border-t-gray-300 h-8 bg-gray-900 text-white -mt-3  mb-2 text-center leading-8 -ml-[200px]" style={{ width: '100vw' }}>
-            {`${toUpperFirstLeter(selectedTable?.month)} de ${selectedTable?.year}`}
+            {`${toUpperFirstLeter(monthURL)} de ${yearURL}`}
          </div>
 
          <div className="absolute top-0 -left-44 h-24 w-[100vw] bg-gray-900 !z-[0]"></div>
@@ -59,7 +64,7 @@ export default function MonthlyDashBoard() {
                   <div>
                      <div className="flex flex-row gap-2 mb-2 justify-between">
 
-                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
+                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 flex-1 bg-white text-white rounded-md pt-3">
                            <div className="w-9">
                               <img src="/icons/expenses.png" alt="expenses-icon" />
                            </div>
@@ -69,7 +74,7 @@ export default function MonthlyDashBoard() {
                            </div>
                         </div>
 
-                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
+                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 flex-1 bg-white text-white rounded-md pt-3">
                            <div className="w-9">
                               <img src="/icons/incomes.png" alt="incomes-icon" />
                            </div>
@@ -79,7 +84,7 @@ export default function MonthlyDashBoard() {
                            </div>
                         </div>
 
-                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 bg-white text-white rounded-md pt-3">
+                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 flex-1 bg-white text-white rounded-md pt-3">
                            <div className="w-9">
                               <img src="/icons/balance.png" alt="balance-icon" />
                            </div>
@@ -89,8 +94,8 @@ export default function MonthlyDashBoard() {
                            </div>
                         </div>
 
-                        <div className="relative z-[5] flex pl-1  h-28 shadow-md w-72 bg-white text-white rounded-md overflow-hidden">
-                           <div className="w-[230px] h-[130px]">
+                        <div className="relative z-[5] flex pl-1  h-28 shadow-md w-72 bg-white flex-1 text-white rounded-md overflow-hidden">
+                           <div className="w-[250px] h-[130px]">
                               {/*Labels, values, colors, orientation*/}
                               <ChartBar
                                  data={{
@@ -124,7 +129,7 @@ export default function MonthlyDashBoard() {
                   </div>
 
                   <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">
-                     <h2 className="text-lg font-extrabold text-gray-500 mt-2">Tabelas</h2>
+                     <h2 className="text-sm font-extrabold text-gray-500 mt-2">Tabelas</h2>
                   </div>
                </div>
                <Tables />

@@ -25,30 +25,30 @@ export default function SideBar() {
             <span className="material-icons transition-all">{!openSideBar ? " chevron_right" : "chevron_left"}</span>
          </div> */}
          {/* {openSideBar && */}
-         {!yearURL && 
+         {!yearURL &&
             <div>
-                <p>Selecione a tabela que deseja vizualiar!</p>
-                {data && <TablesList yearURL={data && Object.keys(data)[0]}/>}
+               <p>Selecione a tabela que deseja vizualiar!</p>
+               {data && <TablesList yearURL={data && Object.keys(data)[0]} />}
             </div>
          }
          {yearURL &&
-         <>
-            <TablesList yearURL={yearURL}/>
-            <FormNewTable />
-         </>
+            <>
+               <TablesList yearURL={yearURL} />
+               <FormNewTable />
+            </>
          }
-        
+
       </section>
    )
 }
 
-function TablesList({yearURL}) {
+function TablesList({ yearURL }) {
    const { sideBarHandler } = useSideBar();
    const data = useTableStore((state) => state.data);
-   
+
    const searchParams = useSearchParams();
    const monthURL = searchParams.get('month');
-   
+
    const [formData, setFormData] = useState({ year: yearURL });
 
    const tables = data ? sideBarHandler.getTables(data) : null;
@@ -124,12 +124,15 @@ function TablesListMonths({ year, tables }) {
             {tables[year].map((month, index) => (
                <li
                   key={index}
-                  className={`cursor-pointer text-xs transition-all duration-200 w-fit px-2 py-[2px] rounded-md hover:bg-gray-300
+                  className={`cursor-pointer text-xs transition-all duration-200 w-fit  rounded-md hover:bg-gray-300
                      ${(yearURL == year && monthURL == month) && "!bg-gray-900 text-white"}
                   `}
                   onClick={() => { changeTable(year, month) }}
                >
-                  <Link href={`/dashboard/monthly?year=${year}&month=${month}`}><span>{toUpperFirstLeter(month)}</span></Link>
+                  <Link
+                     href={`/dashboard/monthly?year=${year}&month=${month}`}
+                     className="px-2 py-[2px] block"
+                  ><span>{toUpperFirstLeter(month)}</span></Link>
 
                </li>
             ))}
@@ -170,21 +173,23 @@ function FormNewTable() {
       setFormData({ ...formData, month: '' });
    }, [data, formData.year, selectedTable]);
 
-
-
    return (
       <div className="flex flex-col bg-gray-200 p-1 rounded-md mt-2">
          <h3 className="text-xs mb-1 font-semibold">Criar nova tabela:</h3>
+
+
          <form action="">
             <div className="flex flex-row gap-1">
-               <Select
-                  options={availableMonths}
-                  value={formData.month}
-                  width="87"
-                  label={"Mês"}
-                  name="month"
-                  form={{ formData, setFormData }}
-               />
+               {availableMonths?.length > 0 &&
+                  <Select
+                     options={availableMonths}
+                     value={formData.month}
+                     width="87"
+                     label={"Mês"}
+                     name="month"
+                     form={{ formData, setFormData }}
+                  />
+               }
                <Select
                   options={years}
                   value={formData.year}
@@ -194,9 +199,14 @@ function FormNewTable() {
                   form={{ formData, setFormData }}
                />
             </div>
+
+            {availableMonths?.length == 0 &&
+               <p className="text-xs">Já existem tabelas em todos os meses do ano selecionado.</p>
+            }
+
             <Link href={`/dashboard/monthly?year=${formData.year}&month=${formData.month}`}
                className={`bg-gray-900 text-white text-center block p-1 rounded-md w-full mt-1 hover:bg-gray-950 transition-all
-                  ${(!!!formData.month || !!!formData.year) && "!bg-gray-400 hover:!bg-gray-400"}`}
+                   ${(!!!formData.month || !!!formData.year) && "!bg-gray-400 hover:!bg-gray-400"}`}
                onClick={(e) => {
                   if (!!!formData.month || !!!formData.year) return e.preventDefault();
                   sideBarHandler.creteNewTable(data, formData.year, formData.month);
@@ -207,6 +217,7 @@ function FormNewTable() {
                Criar
             </Link>
          </form>
+
       </div>
    )
 }

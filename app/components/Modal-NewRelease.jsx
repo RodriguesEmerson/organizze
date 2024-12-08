@@ -31,14 +31,6 @@ export function ModalNewRelease() {
    const [editingIcon, setEditingIcon] = useState('/gif/edit.gif');
 
    useEffect(() => {
-      if(editingRelease){
-         setTimeout(() => {
-            setEditingIcon('/icons/edit.png')
-         }, 6000);
-      }else{
-         setEditingIcon('/gif/edit.gif');
-      }
-
       setFormData( editingRelease 
          ? {
             desc: editingRelease.desc,
@@ -59,7 +51,7 @@ export function ModalNewRelease() {
             <div className="text-center h-9 leading-7 w-[384px] rounded-t-xl -ml-3 -mt-2 text-sm pt-[6px] border-b mb-3 bg-gray-200">
                {!!editingRelease && 
                   <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
-                     <img className="w-6 transition-all" src={editingIcon} />
+                     <img className="w-6 transition-all" src={"/gif/edit.gif"} />
                   </div>
                }
 

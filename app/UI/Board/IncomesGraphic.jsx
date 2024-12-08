@@ -14,14 +14,13 @@ export const IncomesGraphic = memo(() => {
    const { totalExpenses, totalIncomes } = useSummaryGraphic();
 
    return (
-      <div className="!min-w-[636px] h-[300px] flex flex-col items-center p-1 pr-2 bg-white shadow-md rounded-md overflow-hidden">
+      <div className="!min-w-[636px] h-[300px] flex flex-1  flex-col items-center bg-white p-1 pr-2 shadow-md rounded-md overflow-hidden">
          <div className="flex items-center justify-center text-gray-900 text-xs w-[105%] mb-1 h-8">
             <h2>Receitas por Categoria</h2>
          </div>
 
-         <div className="flex flex-row p-2">
-
-            <div className="w-[400px] h-[250px] pt-4">
+         <div className="flex w-full flex-row p-2 ">
+            <div className="min-w-[400px] flex-1 h-[250px] pt-4">
                <ChartBar
                   data={{
                      labels: getIncomesData().labels,
