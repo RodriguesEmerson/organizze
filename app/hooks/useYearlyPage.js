@@ -69,7 +69,7 @@ export function useYearlyPage() {
 
          const total = this.reduceValues(values);
 
-         return { shortLabels, values, greaterValue, total };
+         return { labels, shortLabels, values, greaterValue, total };
       },
 
       reduceValues: function (values) {

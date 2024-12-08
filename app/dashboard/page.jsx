@@ -80,27 +80,37 @@ const BoxInfos = ({ type, title, color }) => {
 }
 
 function SumaryChart() {
+   const { yearlyPageHandler } = useYearlyPage();
+
+   const expensesData =  yearlyPageHandler.getInfos("expenses");
+   const incomesData =  yearlyPageHandler.getInfos("incomes");
+   const sumaryData = yearlyPageHandler.getYearlySumary();
+
    return (
       <div className="w-full h-[335px] rounded-md shadow-xl bg-white mt-2 p-2">
          <p className="text-sm text-center">Detalhes de cada mês</p>
          <div className="w-full h-72">
             <ChartBar data={{
-               labels: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out,', 'nov', 'dez'],
+               labels: sumaryData.labels,
                datasets: [
                   {
-                     data: [100, 200, 300, 400, 700, 300, 100, 200, 500, 400, 700, 300],
-                     backgroundColor: ['#D91136']
+                     label: 'Despesas',
+                     data: expensesData?.values,
+                     backgroundColor: ['#D9113699']
                   },
                   {
-                     data: [150, 230, 320, 500, 1000, 690, 230, 300, 600, 450, 765, 340],
-                     backgroundColor: ['#008000']
+                     label: 'Receitas',
+                     data: incomesData?.values ,
+                     backgroundColor: ['#00800099']
                   },
                   {
-                     data: [50, 30, 20, 100, 300, 390, 130, 100, 100, 50, 65, 40],
-                     backgroundColor: ['#1E90FF']
+                     label: 'Saldo',
+                     data: sumaryData?.values,
+                     backgroundColor: ['#1E90FF99']
                   },
                ],
                orientation: 'x',
+               showLabel: true,
                hiddenNumbers: true
             }}
                size={{ w: '500', h: '200' }}

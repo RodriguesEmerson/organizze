@@ -90,7 +90,7 @@ export default function MonthlyDashBoard() {
                         </div>
 
                         <div className="relative z-[5] flex pl-1  h-28 shadow-md w-72 bg-white text-white rounded-md overflow-hidden">
-                           <div className="w-[280px] h-[130px]">
+                           <div className="w-[230px] h-[130px]">
                               {/*Labels, values, colors, orientation*/}
                               <ChartBar
                                  data={{

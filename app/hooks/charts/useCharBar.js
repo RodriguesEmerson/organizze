@@ -2,7 +2,6 @@ import { useState } from "react";
 
 export function useChartBar(){
    const [ chartData, setchartData ] = useState({labels: [], values: [], colors: ['#D91136'], orientation: 'x'});
-   console.log(typeof(chartData.datasets))
    const chartBarConfig = {
       type: 'bar',
       data: {
@@ -44,8 +43,11 @@ export function useChartBar(){
                   label: function (context) {
                      let label = context.dataset.label || '';
                      if (label) {
-                        // label += ': ';
-                        label = ' '; //Remove o texto da tooltip flutuante
+                        if(chartData.showLabel){
+                           label += ': '; 
+                        }else{
+                           label = ' '; //Remove o texto da tooltip flutuante
+                        }
                      }
 
                      //Tooltip do gráfico no eixo 'x'.
@@ -78,7 +80,7 @@ export function useChartBar(){
                chart.getDatasetMeta(0).data.forEach((bar, index) => {
 
                   //Remove os números no topo da coluna.
-                  // if(chartData.hiddenNumbers) return;
+                  if(chartData.hiddenNumbers) return;
 
                   //Largura em pixels de cada barra.
                   // console.log(chart.getDatasetMeta(0).data[index].width);
@@ -95,7 +97,8 @@ export function useChartBar(){
 
                   if(chartData.orientation == 'x'){
                      ctx.fillText(value,  bar.x, bar.y - 5); // Adiciona o texto acima das barras
-                  }else{
+                  }
+                  if(chartData.orientation === "y"){
                      ctx.fillText(value, rowValue >= 0 
                         ? bar.x : 
                         bar.x + barWidth, bar.y

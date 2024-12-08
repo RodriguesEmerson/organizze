@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from "react";
 import { useTableStore } from "../zustand/useTablesStore"
 
 export function useTable() {

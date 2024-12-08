@@ -32,8 +32,6 @@ export function useMonthlyPage() {
          expensesValues.push(Number(expense.value))
       });
 
-      
-
       const totalExpenses = expensesValues.reduce((prev, curr) => prev + curr, 0);
       if(onlyValue) return totalExpenses;
 

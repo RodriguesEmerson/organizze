@@ -35,7 +35,7 @@ export const ExpesesGraphic = memo(() => {
             </div>
             <span className="h-[85%] mt-[2px] w-[1px] rounded-sm mx-2 bg-gray-400"></span>
             <div className=" relative pt-8">
-               <div className="absolute top-[43%] left-[29%]">
+               <div className="absolute top-[52%] left-[29%]">
                   <p className="font-bold w-[85px] text-center text-xl leading-7">
                      {totalExpenses && `${(totalExpenses / (totalExpenses + totalIncomes) * 100).toFixed(2)}%`}
                   </p>
