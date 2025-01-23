@@ -31,7 +31,7 @@ export function Select({ options, width, label, name, form, ...props }){
            style={{height: `${isOpen ? 20.3 * options.length : 0}px`, border: !isOpen && "none"}}
          >
             <ul className="flex flex-col"
-               style={{width: `${width}px`}}
+               style={{width: `${width}px`, height: height ? `${height}px` : "auto"}}
             >
                {
                   options.map(option => (
