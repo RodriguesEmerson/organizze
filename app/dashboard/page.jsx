@@ -1,13 +1,17 @@
 'use client';
 
-import { useYearlyPage } from "../hooks/useYearlyPage";
-import { ChartLine } from "../components/charts/ChartLine"
-import { Spinner } from "../UI/spinner";
-import { useUtils } from "../hooks/useUtils";
 import { useSearchParams } from "next/navigation";
 import { ChartBar } from "../components/charts/ChartBar";
+import { ChartLine } from "../components/charts/ChartLine";
+import { useUtils } from "../hooks/useUtils";
+import { useYearlyPage } from "../hooks/useYearlyPage";
+import { Spinner } from "../UI/spinner";
+import { useAuthGuard } from "../hooks/auth/useAuthGuard";
 
 export default function YearlyDashBoard() {
+   
+   useAuthGuard();
+
    const searchParams = useSearchParams();
    const yearURL = searchParams.get('year');
 

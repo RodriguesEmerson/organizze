@@ -8,12 +8,15 @@ import { useUtils } from "@/app/hooks/useUtils";
 import { Select } from "@/app/components/selects/Select";
 import { useMonthlyPage } from "@/app/hooks/useMonthlyPage";
 import Link from "next/link";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, usePathname } from 'next/navigation';
 
 export default function SideBar() {
    const [openSideBar, setOpenSideBar] = useState(true);
+   const pathName = usePathname();
    const searchParams = useSearchParams();
    const yearURL = searchParams.get('year');
+
+   if(pathName === '/signin') return;
 
    //Carrega os dados da db na useTableStore.
    const { data } = useMonthlyPage();
