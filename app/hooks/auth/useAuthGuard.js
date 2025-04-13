@@ -12,16 +12,19 @@ export function useAuthGuard(){
       const verifyToken = async () => {
          await fetch('http://localhost/organizze-bk/public/validatetoken.php', {
             method: 'POST',
-            // credentials: 'include',
-            // headers: {'Access-Control-Allow-Origin': 'http://localhost:3000', 'Content-Type': 'application/json'}
+            credentials: 'include',
          })
          .then(async response => {
-            const d = await response.json();
-            console.log(d);
+            const code = response.status;
+            const result = await response.json();
+            if(code === 200){
+               console.log(result);
+            }else{
+               window.location.href ='http://localhost:3000/signin';
+            }
          })
          .catch(error => {
-            // router.push('http://localhost:3000/signin')
-            console.log('Error: ' + error);
+            window.location.href ='http://localhost:3000/signin';
          })
       }
 
