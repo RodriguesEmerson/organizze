@@ -14,9 +14,13 @@ import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
 import { TooltipInfo } from "@/app/components/TooltipInfo";
 import { FloatOkNotification } from "@/app/components/FloatOkNotification";
 import { useSearchParams } from "next/navigation";
+import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
 
 
 export default function MonthlyDashBoard() {
+
+   useAuthGuard();
+
    const { data, getTotalExpenses, getTotalIncomes, getBalance } = useMonthlyPage();
    const { tableHandler } = useTable();
    const { totalExpenses, totalIncomes } = useSummaryGraphic();

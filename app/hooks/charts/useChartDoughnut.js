@@ -99,7 +99,7 @@ export function useChartDoughnut(){
                   ctx.shadowBlur = 10; // Nível de desfoque
                   ctx.shadowOffsetX = 5; // Deslocamento horizontal
                   ctx.shadowOffsetY = 5; // Deslocamento verticalF
-                  ctx.textAlign = 'top'; // Centraliza o texto horizontalmente
+                  // ctx.textAlign = 'top'; // Centraliza o texto horizontalmente
                   ctx.textBaseline = 'middle'; // Centraliza verticalmente
                   ctx.fillText(value, x - 30, y); // Adiciona o texto acima das barras
                   ctx.restore();

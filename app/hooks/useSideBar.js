@@ -20,12 +20,14 @@ export function useSideBar(){
 
          return tables;
       },
+
       getCurrentTable: function(CurrentYear){
          const table = {};
          table[CurrentYear] = Object.keys(data[CurrentYear].months)
 
          return table;
       },
+
       availableMonthsToNewTable: function(year){
          if(!data) return;
          if(!data[year]) return months;

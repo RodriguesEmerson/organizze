@@ -4,7 +4,6 @@ import 'material-icons/iconfont/material-icons.css';
 import "./globals.css";
 import Header from "./UI/Header/Header";
 import SideBar from "./UI/SideBar/SideBar";
-import { Footer } from "./UI/Footer/Footer";
 import { Poppins, Roboto } from "next/font/google"
 
 const poppins = Poppins({

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useTableStore } from "../zustand/useTablesStore";
 
-export function useMonthlyPage() {
+export function useMonthlyPage(year, month) {
    const data = useTableStore((state) => state.data);
    const setData = useTableStore((state) => state.setData);
    const setCategories = useTableStore((state) => state.setCategories);

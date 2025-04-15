@@ -1,10 +1,8 @@
 'use client';
 import { useAuthStatus } from "@/app/zustand/useAuthStatus";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export function useAuthGuard(){
-   const router = useRouter();
    const setAuth = useAuthStatus((state) => state.setAuth);
    const isAuthenticated = useAuthStatus((state) => state.isAuthenticated);
 
@@ -12,18 +10,18 @@ export function useAuthGuard(){
       const verifyToken = async () => {
          await fetch('http://localhost/organizze-bk/public/validatetoken.php', {
             method: 'POST',
-            credentials: 'include',
+            credentials: 'include'
          })
          .then(async response => {
-            const code = response.status;
-            const result = await response.json();
-            if(code === 200){
-               console.log(result);
+            if(response.status === 200){
+               setAuth(true);
             }else{
+               setAuth(false);
                window.location.href ='http://localhost:3000/signin';
             }
          })
          .catch(error => {
+            setAuth(false);
             window.location.href ='http://localhost:3000/signin';
          })
       }
@@ -32,5 +30,4 @@ export function useAuthGuard(){
          verifyToken();
       }
    });
-
 }
