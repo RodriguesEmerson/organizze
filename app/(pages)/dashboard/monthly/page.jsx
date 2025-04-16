@@ -15,37 +15,42 @@ import { TooltipInfo } from "@/app/components/TooltipInfo";
 import { FloatOkNotification } from "@/app/components/FloatOkNotification";
 import { useSearchParams } from "next/navigation";
 import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
+import { useGetEntries } from "@/app/hooks/monthlyPageHooks/useGetEntries";
+import { useEffect, useState } from "react";
 
 
 export default function MonthlyDashBoard() {
 
-   useAuthGuard();
+   useAuthGuard(); //Checks if the user is Authenticated;
 
-   const { data, getTotalExpenses, getTotalIncomes, getBalance } = useMonthlyPage();
-   const { tableHandler } = useTable();
-   const { totalExpenses, totalIncomes } = useSummaryGraphic();
-
+   const { gerarCUID } = useUtils()
    const searchParams = useSearchParams();
    const yearURL = searchParams.get('year');
    const monthURL = searchParams.get('month');
+   const { entriesData } = useGetEntries(yearURL, monthURL, gerarCUID());
+   console.log(entriesData)
 
-   const selectedTable = useTableStore((state) => state.selectedTable);
-   const table = tableHandler.getSelectedMonthData();
-   const { toUpperFirstLeter } = useUtils();
+   // const { tableHandler } = useTable();
+   // const { totalExpenses, totalIncomes } = useSummaryGraphic();
+   useEffect(() =>{
+   },[yearURL, monthURL])
+
+   // const table = tableHandler.getSelectedMonthData();
+   const { toUpperFirstLeter, currencyFormat } = useUtils();
    
-   if (!data) return (
+   if (!entriesData) return (
       <div className="flex items-center justify-center h-[95vh]">
          <Spinner />
       </div>
    )
-   const monthlyGoal = data[yearURL].monthlyGoal;
+   // const monthlyGoal = data[yearURL].monthlyGoal;
    return (
       <section
          className="relative ml-44 pl-5 pt-3 pr-3"
          style={{ height: "calc(100% - 48px)" }}
       >
-         <ModalNewRelease />
-         <FloatOkNotification />
+         {/* <ModalNewRelease />
+         <FloatOkNotification /> */}
 
          <div className="sticky top-12 z-[11]  border-t-gray-300 h-8 bg-gray-900 text-white -mt-3  mb-2 text-center leading-8 -ml-[200px]" style={{ width: '100vw' }}>
             {`${toUpperFirstLeter(monthURL)} de ${yearURL}`}
@@ -53,18 +58,16 @@ export default function MonthlyDashBoard() {
 
          <div className="absolute top-0 -left-44 h-24 w-[100vw] bg-gray-900 !z-[0]"></div>
 
-         {!table
+         {!entriesData
             ?
             <div className=" flex items-center justify-center h-[95%] text-gray-900">
                <span className="text-3xl font-bold">404</span>
                <span className="inline-block h-12 w-[2px] mx-2 bg-gray-900"></span>
-               <p>{`As finanças de ${selectedTable.month} de ${selectedTable.year} não foram encontradas!`}</p>
+               <p>{`As finanças de ${monthURL} de ${yearURL} não foram encontradas!`}</p>
             </div>
             :
             <div className="flex flex-col gap-2 pb-3 ">
-
                <div className="w-full h-full">
-
                   <div>
                      <div className="flex flex-row gap-2 mb-2 justify-between">
 
@@ -73,7 +76,9 @@ export default function MonthlyDashBoard() {
                               <img src="/icons/expenses.png" alt="expenses-icon" />
                            </div>
                            <div className="h-[70%] flex flex-col items-start justify-center">
-                              <p className="text-3xl font-extrabold text-gray-600">{getTotalExpenses()}</p>
+                              <p className="text-3xl font-extrabold text-gray-600">
+                                 {currencyFormat(entriesData.sum.expenses_sum)}
+                              </p>
                               <h4 className="text-sm text-center -mt-1 text-red-800">Despesas totais</h4>
                            </div>
                         </div>
@@ -83,7 +88,9 @@ export default function MonthlyDashBoard() {
                               <img src="/icons/incomes.png" alt="incomes-icon" />
                            </div>
                            <div className="h-[70%] flex flex-col items-start justify-center">
-                              <p className="text-3xl font-extrabold text-gray-600">{getTotalIncomes()}</p>
+                              <p className="text-3xl font-extrabold text-gray-600">
+                                 {currencyFormat(entriesData.sum.incomes_sum)}
+                              </p>
                               <h4 className="text-sm text-center -mt-1 text-green-800">Receitas totais</h4>
                            </div>
                         </div>
@@ -93,7 +100,9 @@ export default function MonthlyDashBoard() {
                               <img src="/icons/balance.png" alt="balance-icon" />
                            </div>
                            <div className="h-[70%] flex flex-col items-start justify-center">
-                              <p className="text-3xl font-extrabold text-gray-600">{getBalance()}</p>
+                              <p className="text-3xl font-extrabold text-gray-600">
+                                 {currencyFormat(entriesData.sum.balance)}
+                              </p>
                               <h4 className="text-sm text-center -mt-1 text-blue-800">Saldo</h4>
                            </div>
                         </div>
@@ -104,11 +113,11 @@ export default function MonthlyDashBoard() {
                               <ChartBar
                                  data={{
                                     labels: ['Meta', 'Atual'],
-                                    values: [monthlyGoal, totalIncomes - totalExpenses],
+                                    values: [4000, entriesData.sum.balance],
                                     colors: ['#047857',
-                                       (totalIncomes - totalExpenses) >= monthlyGoal 
+                                       (entriesData.sum.balance) >= 4000 
                                           ? "#6ee7b7" 
-                                          : (totalIncomes - totalExpenses) < 0 ? "#D91136" : "#a4a4a4" ,
+                                          : (entriesData.sum.balance) < 0 ? "#D91136" : "#a4a4a4" ,
                                     ],
                                     orientation: 'y'
                                  }}
@@ -116,8 +125,8 @@ export default function MonthlyDashBoard() {
                            </div>
                            <div className="absolute flex flex-row text-center w-10 right-7 top-11 text-gray-500">
                               <span className="text-xl font-semibold">
-                                 {(totalIncomes && totalExpenses) && (totalIncomes - totalExpenses >= 0
-                                    ? `${((totalIncomes - totalExpenses) / monthlyGoal * 100).toFixed(0)}`
+                                 {(entriesData.sum.incomes_sum && entriesData.sum.expenses_sum) && (entriesData.sum.balance >= 0
+                                    ? `${((entriesData.sum.balance) / 4000 * 100).toFixed(0)}`
                                     : '0')
                                  }%
                               </span>
@@ -128,15 +137,15 @@ export default function MonthlyDashBoard() {
                   </div>
 
                   <div className="w-full flex flex-row gap-2 justify-between">
-                     <ExpesesGraphic />
-                     <IncomesGraphic />
+                     {/* <ExpesesGraphic />
+                     <IncomesGraphic /> */}
                   </div>
 
                   <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">
                      <h2 className="text-sm font-extrabold text-gray-500 mt-2">Tabelas</h2>
                   </div>
                </div>
-               <Tables />
+               {/* <Tables /> */}
             </div>
          }
 
