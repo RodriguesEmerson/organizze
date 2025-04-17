@@ -9,7 +9,7 @@ export default function Header(){
          <Link href="/">
             <Image src={"/images/logo.png"} alt="logo" width={200} height={33} placeholder="blur" blurDataURL="/images/logo.png"/>
          </Link>
-        <UserBox />
+        {/* <UserBox /> */}
       </section>
    ) 
 }

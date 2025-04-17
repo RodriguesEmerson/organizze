@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 
-export function useGetEntries(year, month, callId){
+export function useGetEntries(year, month){
 
    const [entriesData, setEntriesData] = useState(null);
-
+   
    useEffect(() => {
       const getEntries = async () => {
          await fetch(`http://localhost/organizze-bk/public/entries.php?year=${year}&month=${getMonthNumber(month)}`, {
@@ -15,27 +15,24 @@ export function useGetEntries(year, month, callId){
             const data = await response.json();
 
             if(data){
-               if(entriesData.callId !== callId || !entriesData.callId){
-                  const incomes = [];
-                  const expenses = [];
-                  
-                  data.entries.forEach(entry => {
-                     if(entry.type == 'income'){
-                        incomes.push(entry);
-                     }else{
-                        expenses.push(entry);
-                     }
-                  });
+               const incomes = [];
+               const expenses = [];
+               
+               data.entries.forEach(entry => {
+                  if(entry.type == 'income'){
+                     incomes.push(entry);
+                  }else{
+                     expenses.push(entry);
+                  }
+               });
 
-                  setEntriesData({
-                     entries: {
-                        incomes: incomes,
-                        expenses: expenses
-                     },
-                     sum: {...data.sum[0], balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum},
-                     callId: callId
-                  }); 
-               }
+               setEntriesData({
+                  entries: {
+                     incomes: incomes,
+                     expenses: expenses
+                  },
+                  sum: {...data.sum[0], balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum},
+               }); 
             }
          })
          .catch(error => {
@@ -43,7 +40,7 @@ export function useGetEntries(year, month, callId){
          })
       }
       getEntries()
-   })
+   },[year, month])
 
    function getMonthNumber (monthName){
       const yearMonths = [

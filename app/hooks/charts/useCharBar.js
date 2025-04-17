@@ -101,7 +101,7 @@ export function useChartBar(){
                   if(chartData.orientation === "y"){
                      ctx.fillText(value, rowValue >= 0 
                         ? bar.x : 
-                        bar.x + barWidth, bar.y
+                        bar.x, bar.y
                      ); // Adiciona o texto no interior das barras
                   }
                   

@@ -16,34 +16,24 @@ import { FloatOkNotification } from "@/app/components/FloatOkNotification";
 import { useSearchParams } from "next/navigation";
 import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
 import { useGetEntries } from "@/app/hooks/monthlyPageHooks/useGetEntries";
-import { useEffect, useState } from "react";
-
 
 export default function MonthlyDashBoard() {
 
    useAuthGuard(); //Checks if the user is Authenticated;
 
-   const { gerarCUID } = useUtils()
-   const searchParams = useSearchParams();
-   const yearURL = searchParams.get('year');
-   const monthURL = searchParams.get('month');
-   const { entriesData } = useGetEntries(yearURL, monthURL, gerarCUID());
-   console.log(entriesData)
-
-   // const { tableHandler } = useTable();
-   // const { totalExpenses, totalIncomes } = useSummaryGraphic();
-   useEffect(() =>{
-   },[yearURL, monthURL])
-
-   // const table = tableHandler.getSelectedMonthData();
    const { toUpperFirstLeter, currencyFormat } = useUtils();
+   const searchParams = useSearchParams();
+   const yearURL =searchParams.get('year');
+   const monthURL= searchParams.get('month');
+   const { entriesData } = useGetEntries(yearURL, monthURL);
+
    
    if (!entriesData) return (
       <div className="flex items-center justify-center h-[95vh]">
          <Spinner />
       </div>
    )
-   // const monthlyGoal = data[yearURL].monthlyGoal;
+   
    return (
       <section
          className="relative ml-44 pl-5 pt-3 pr-3"
@@ -125,8 +115,8 @@ export default function MonthlyDashBoard() {
                            </div>
                            <div className="absolute flex flex-row text-center w-10 right-7 top-11 text-gray-500">
                               <span className="text-xl font-semibold">
-                                 {(entriesData.sum.incomes_sum && entriesData.sum.expenses_sum) && (entriesData.sum.balance >= 0
-                                    ? `${((entriesData.sum.balance) / 4000 * 100).toFixed(0)}`
+                                 {(entriesData.sum.balance >= 0
+                                    ? `${(entriesData.sum.balance / 4000 * 100).toFixed(0)}`
                                     : '0')
                                  }%
                               </span>
