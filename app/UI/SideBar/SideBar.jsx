@@ -7,9 +7,10 @@ import { Spinner } from "@/app/components/loads/spinner";
 
 export default function SideBar() {
    const pathName = usePathname()
+   if(pathName === '/signin') return;
+   
    const { availableTables } = useAvailablesTables();
    const [data, setData] = useState(false);
-   if(pathName === '/signin') return;
    
    useEffect(() => {
       if(Object.entries(availableTables).length > 0){

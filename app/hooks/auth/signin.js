@@ -1,8 +1,8 @@
-export async function useSignin(formData){
+export async function useSignin(data, setStatus){
    const credentials = {
-      email: formData.get('email'),
-      password: formData.get('password'),
-      remember: formData.get('remember'),
+      email: data.email,
+      password: data.password,
+      remember: data.remember,
    }
 
    if(credentials.email && credentials.password){
@@ -19,7 +19,8 @@ export async function useSignin(formData){
          }
       })
       .catch(error => {
-         console.log(error)
+         console.log(error);
+         setStatus({loading: false, error: true})
       })
    }
 }
