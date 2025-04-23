@@ -102,7 +102,7 @@ export default function MonthlyDashBoard() {
                               {/*Labels, values, colors, orientation*/}
                               <ChartBar
                                  data={{
-                                    labels: ['Meta', 'Atual'],
+                                    labels: ['Meta', ''],
                                     values: [4000, entriesData.sum.balance],
                                     colors: ['#047857',
                                        (entriesData.sum.balance) >= 4000 

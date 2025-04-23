@@ -1,4 +1,4 @@
-export async function useSignin(data, setStatus){
+export async function useSignin(data, setStatus, status){
    const credentials = {
       email: data.email,
       password: data.password,
@@ -15,12 +15,18 @@ export async function useSignin(data, setStatus){
       .then(async response => {
          const result = await response.json();
          if(result.success){
-            window.location.href = result.redirect;
+            return window.location.href = result.redirect;
          }
+
+         setStatus({loading: false, error: {status: true, message: 'E-mail ou senha inválidos, tente novamente.'}});
       })
       .catch(error => {
          console.log(error);
-         setStatus({loading: false, error: true})
+         setStatus({loading: false, error: {status: true, message: 'E-mail ou senha inválidos, tente novamente.'}});
       })
+      return;
    }
+   
+   setStatus({loading: false, error: {status: true, message: 'Preencha todos os campos.'}});
+   console.log(status)
 }

@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function Signin(){
 
    const [data, setData] = useState({email: '', password: '', remember: true});
-   const [status, setStatus] = useState({loading: false, error: false});
+   const [status, setStatus] = useState({loading: false, error: {status: false, message: ''}});
 
    return (
       <main 
@@ -15,7 +15,7 @@ export default function Signin(){
       >
          <section className="bg-white rounded-md h-[26rem] w-80 p-3 pt-4 shadow-xl">
 
-            <h1 className="text-center text-gray-900 font-extrabold text-2xl">SignIn</h1>
+            <h1 className="text-center text-gray-900 font-extrabold text-2xl">Entrar</h1>
 
             <div className="h-[90%] content-center">
                <form className="flex flex-col gap-2">
@@ -28,7 +28,7 @@ export default function Signin(){
                      />
                   </div>
                   <div className="flex flex-col">
-                     <label htmlFor="signin-password" className="text-gray-500 text-sm pl-1">Password</label>
+                     <label htmlFor="signin-password" className="text-gray-500 text-sm pl-1">Senha</label>
                      <input type="password" name="password" id="signin-password" required
                          className="border border-gray-500 text-sm rounded-md h-8 pl-2"
                          value={data.password}
@@ -46,18 +46,18 @@ export default function Signin(){
                      <label htmlFor="remember-checkbox" className="text-sm">Remember-me</label>
                   </div>
 
-                  <button onClick={(e)=> {e.preventDefault(); useSignin(data, setStatus); setStatus({...status, loading: true})}}
+                  <button onClick={(e)=> {e.preventDefault(); setStatus({...status, loading: true}); useSignin(data, setStatus, status)}}
                      className="h-10 bg-gray-800 rounded-md text-white cursor-pointer mt-2 transition-all hover:bg-gray-900"
                   >{
                      status.loading
                      ? <Spinner />
-                     : "SignIn"
+                     : "Entrar"
                   }</button>
                </form>
 
                {
-                  status.error && 
-                  <p className="text-red-800 text-center text-sm mt-6">Invalid credentials, please try again.</p>
+                  status.error.status && 
+                  <p className="text-red-800 text-center text-sm mt-6">{status.error.message}</p>
                }
             </div>
          </section>
