@@ -6,28 +6,28 @@ export const useTableStore = create((set) =>({
    newReleaseType: null,
    data: null,
    categories: null,
-   editingRelease: null,
-   changeTable: (year, month) => set((state) => (
+   editingEntry: null,
+   changeTable: (year, month) => set(() => (
       {
          selectedTable: {year: year, month: month}
       }
    )),
-   setData: (data) => set((state) => (
+   setData: (data) => set(() => (
       {data: data}
    )),
-   setCategories: (categoriesDB) => set((state) =>(
+   setCategories: (categoriesDB) => set(() =>(
       {
          categories: categoriesDB
       }
    )),
-   setNewReleaseType: (type) => set((state) => (
+   setNewReleaseType: (type) => set(() => (
       {
          newReleaseType: type
       }
    )),
-   setEditingRelease: (release) => set((state) => (
+   setEditingEntry: (entry) => set(() => (
       {
-         editingRelease: release
+         editingEntry: entry
       }
    )),
    months: [

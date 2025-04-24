@@ -1,13 +1,16 @@
+import { useCategoriesSelect } from "@/app/hooks/categoriesSelect/useCategoriesSelect";
 import { useEffect, useState } from "react"
+import { Spinner } from "../loads/spinner";
 
-export function CategorieSelect({ categories, defaultValue, name, value, setValue, formData }){
+export function CategorieSelect({ categoriesB, defaultValue, name, value, setValue, formData }){
    
    const [openSelect, setOpenSelect] = useState(false);
    const [dropDownHeight, setDropDownHeight] = useState(0);
+   const { categories } = useCategoriesSelect('expense')
 
    useEffect(()=>{
-      setDropDownHeight(`${28 * categories.length + 2}px`);
-   },[categories])
+      setDropDownHeight(`${28 * categoriesB.length + 2}px`);
+   },[categoriesB])
 
    return(
       <div className=" relative" >
@@ -30,15 +33,19 @@ export function CategorieSelect({ categories, defaultValue, name, value, setValu
                style={{height: openSelect ? dropDownHeight : 0}}
          >
             <ul>
-               {categories.map(item =>(
+               {!categories && 
+                  <Spinner />
+               }
+               {categories && 
+                  categories.map(item =>(
                   <li 
+                     key={item.name}  
                      className={`flex flow-row items-center cursor-pointer px-2 gap-2 h-7 hover:bg-gray-200 transition-all 
-                        ${value == item.categ && "bg-blue-900 text-white hover:bg-blue-900"}`} 
-                     key={item.categ}
-                     onClick={()=> {setValue({...formData, categ: item.categ}); setOpenSelect(false)}}
+                        ${value == item.name && "bg-blue-900 text-white hover:bg-blue-900"}`} 
+                     onClick={()=> {setValue({...formData, categ: item.name}); setOpenSelect(false)}}
                   >
-                     <img className="w-5 h-5" src={`/icons/c-${item.icon}.png`} alt="" />
-                     {item.categ}
+                     <img className="w-5 h-5" src={`/icons/${item.image}`} alt="" />
+                     {item.name}
                   </li>
                ))}
             </ul>

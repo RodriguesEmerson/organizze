@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react"
-import { ButtonClose } from "./buttons/ButtonClose"
-import { ButtonSave } from "./buttons/ButtonSave"
-import { CategorieSelect } from "./selects/CategorieSelect";
-import { useNewRelease } from "../hooks/useNewRelease";
-import { Calendar } from "./Calendar";
-import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
-import { FloatAtentionNotification } from "./FloatAtentionNotification";
-import { useTableStore } from "../zustand/useTablesStore";
-import { ModalBackGround } from "./ModalBackGround";
-import useCalendar from "../hooks/useCalendar";
+import { ButtonClose } from "../buttons/ButtonClose"
+import { ButtonSave } from "../buttons/ButtonSave";
+import { CategorieSelect } from "../selects/CategorieSelect";
+import { useNewRelease } from "../../hooks/useNewRelease";
+import { Calendar } from "../Calendar";
+import { FloatAtentionNotification } from "./../FloatAtentionNotification";
+import { useTableStore } from "../../zustand/useTablesStore";
+import { ModalBackGround } from "./../ModalBackGround";
+import useCalendar from "../../hooks/useCalendar";
+import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 
-export function ModalNewRelease() {
+export function ModalEditEntry(){
+   const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
+   if(showEditModal){
+      return (
+         <ModalEditEntryBody />
+      )
+   }
+}
+
+function ModalEditEntryBody() {
    
    const { releaseHandler, releaseMensage } = useNewRelease();
    const { datesHandler } = useCalendar();
@@ -19,20 +28,13 @@ export function ModalNewRelease() {
    
    //Dados do item em edição.
    const editingEntry = useTableStore((state) => state.editingEntry);
-   const seteditingEntry = useTableStore((state) => state.seteditingEntry);
-   
-   const newReleaseType = useTableStore((state) => state.newReleaseType);
    const categories = useTableStore((state) => state.categories);
-   
-   const releaseType = newReleaseType?.type;
-   const releaseTitle = newReleaseType?.title;
-   
+
    const [fixedRelease, setFixedRelease] = useState(false);
-   const [editingIcon, setEditingIcon] = useState('/gif/edit.gif');
    
    useEffect(() => {
-      setFormData( editingEntry 
-         ? {   
+      setFormData( 
+         {   
             desc: editingEntry.description,
             categ: editingEntry.category,
             date: datesHandler.dateConvert(editingEntry.date, 'br'),
@@ -40,7 +42,6 @@ export function ModalNewRelease() {
             value: new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(editingEntry.value).slice(3,),
             id: editingEntry.id
          } 
-         : { desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }
       );
       setFixedRelease(!!editingEntry?.end_date && true);
    }, [editingEntry]);
@@ -48,20 +49,17 @@ export function ModalNewRelease() {
    return (
       <ModalBackGround >
          <div className="relative modal flex flex-col justify-between h-fit w-96 bg-white rounded-xl shadow-lg py-2 px-3">
+
             <div className="text-center h-9 leading-7 w-[384px] rounded-t-xl -ml-3 -mt-2 text-sm pt-[6px] border-b mb-3 bg-gray-200">
-               {!!editingEntry && 
-                  <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
-                     <img className="w-6 transition-all" src={"/gif/edit.gif"} />
-                  </div>
-               }
-
-               {!!editingEntry && <h4>{`Editando ${releaseTitle}`}</h4>}
-               {!!!editingEntry && <h4>{`Adicionar nova ${releaseTitle}`}</h4>}
-
+               <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
+                  <img className="w-6 transition-all" src={"/gif/edit.gif"} />
+               </div>
+                <h4>{`Editando ${editingEntry.type == 'expenses' ? 'Despesas' : 'Receitas'}`}</h4>
                <div className="absolute h-5 w-5 top-0 right-0">
-                  <ButtonClose onClick={() => { setHiddenReleaseModal(); seteditingEntry(false)}} />
+                  <ButtonClose onClick={() => { setHiddenReleaseModal() }} />
                </div>
             </div>
+
             <div>
                <form className="text-[13px] text-gray-700" id="new-release-form">
                   <div className="flex flex-col gap-[2px] mb-2">
@@ -82,7 +80,8 @@ export function ModalNewRelease() {
                         <label className="pl-1">Categoria *</label>
                         <CategorieSelect
                            name={"categoria"}
-                           categories={categories[releaseType]}
+                           categoriesB={[{categ: 'Teste', icon: 'icon.png'}]}
+                           // categories={categories[editingEntry.type]}
                            value={formData.categ}
                            setValue={ setFormData }
                            formData={formData}
@@ -120,9 +119,9 @@ export function ModalNewRelease() {
                               name="fixa"
                               checked={fixedRelease}
                               onChange={() => { fixedRelease && setFormData({ ...formData, endDate: '' }); setFixedRelease(!fixedRelease)}}
-                              id={`${releaseType}-fixedReleaseCheckbox`}
+                              id={`${editingEntry.type}-fixedReleaseCheckbox`}
                            />
-                           <label htmlFor={`${releaseType}-fixedReleaseCheckbox`}>{`${releaseTitle} fixa`}</label>
+                           <label htmlFor={`${editingEntry.type}-fixedReleaseCheckbox`}>{`${editingEntry.type} fixa`}</label>
                         </div>
                      </div>
                   </div>
@@ -139,18 +138,10 @@ export function ModalNewRelease() {
                      />
                   </div>
                   <div className="flex justify-center mt-3">
-                     {!!!editingEntry && (
-                        <ButtonSave 
-                           onClick={(e) => {releaseHandler.createNewRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' })}} 
-                           text="Adicionar" 
-                        />
-                     )}
-                     {!!editingEntry && (
-                        <ButtonSave 
-                           onClick={(e) => {releaseHandler.updateRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }); setHiddenReleaseModal(); seteditingEntry(false)}} 
-                           text="Salvar alteraçôes" 
-                        />
-                     )}
+                     <ButtonSave 
+                        onClick={(e) => {releaseHandler.updateRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }); setHiddenReleaseModal() }} 
+                        text="Salvar alteraçôes" 
+                     />
                   </div>
                </form>
             </div>

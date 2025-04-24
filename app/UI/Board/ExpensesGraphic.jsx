@@ -3,13 +3,12 @@ import { Chart, registerables } from "chart.js";
 import { useExpensesGraphic } from "@/app/hooks/useExpensesGraphic";
 import { ChartBar } from "@/app/components/charts/ChartBar";
 import { ChartDoughnut } from "@/app/components/charts/ChartDoughnut";
-import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
 
 //Registra todos os componentes e plugins necessários para o Chart.js funcionar corretamente.
 Chart.register(...registerables);
 
-export const ExpesesGraphic = memo(() => {
-   const { totalExpenses, totalIncomes } = useSummaryGraphic();
+export const ExpesesGraphic = memo(({expenses, sumary}) => {
+   // const { totalExpenses, totalIncomes } = useSummaryGraphic();
    const { getExpensesData } = useExpensesGraphic();
 
    return (
@@ -22,10 +21,10 @@ export const ExpesesGraphic = memo(() => {
             <div className="min-w-[400px]  h-[250px] pt-4">
                <ChartBar
                   data={{
-                     labels: getExpensesData().labels,
+                     labels: getExpensesData(expenses).labels,
                      datasets: [
                         {
-                           data: getExpensesData().values,
+                           data: getExpensesData(expenses).values,
                            backgroundColor: ['#D91136'],
                         }
                      ],
@@ -35,17 +34,17 @@ export const ExpesesGraphic = memo(() => {
             </div>
             <span className="h-[85%] mt-[2px] w-[1px] rounded-sm mx-2 bg-gray-400"></span>
             <div className=" relative pt-8">
-               <div className="absolute top-[52%] left-[29%]">
+                <div className="absolute top-[52%] left-[29%]">
                   <p className="font-bold w-[85px] text-center text-xl leading-7">
-                     {totalExpenses && `${(totalExpenses / (totalExpenses + totalIncomes) * 100).toFixed(2)}%`}
+                     {`${(sumary.expenses_sum / (sumary.expenses_sum + sumary.incomes_sum) * 100).toFixed(2)}%`}
                   </p>
                </div>
-               <div className="w-[200px] h-[200px]">
+              <div className="w-[200px] h-[200px]">
                   <ChartDoughnut
                      data={{
                         labels: ['Despesas Totais'],
                         labels: ['Despesas Totais'],
-                        values: [totalExpenses, totalIncomes],
+                        values: [sumary.expenses_sum, sumary.incomes_sum],
                         colors: ['#D91136', '  #D3D3D370']
                      }}
                      size={{ w: '200', h: '200' }}

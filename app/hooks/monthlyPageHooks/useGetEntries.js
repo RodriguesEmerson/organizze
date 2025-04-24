@@ -1,9 +1,11 @@
+import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { useEffect, useState } from "react";
 
 
 export function useGetEntries(year, month){
 
    const [entriesData, setEntriesData] = useState(null);
+   const setEntriesDataStore = useEntriesDataStore(state => state.setEntriesDataStore)
    
    useEffect(() => {
       const getEntries = async () => {
@@ -33,6 +35,14 @@ export function useGetEntries(year, month){
                   },
                   sum: {...data.sum[0], balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum},
                }); 
+
+               setEntriesDataStore({
+                  entries: {
+                     incomes: incomes,
+                     expenses: expenses
+                  },
+                  sum: {...data.sum[0], balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum},
+               });
             }
          })
          .catch(error => {

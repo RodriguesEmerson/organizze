@@ -26,7 +26,7 @@ export default function IncomeTable() {
             <div className="pr-2 pb-2"
                // style={{ maxHeight: "calc(100vh - 110px)" }}
             >
-               <Table table={'incomes'} />
+               <Table tableType={'incomes'} />
             </div>
          </div>
       </div>

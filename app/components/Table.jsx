@@ -1,19 +1,23 @@
 
 import { useTable } from "../hooks/useTable";
 import { Spinner } from "../UI/spinner";
+import { useEntriesDataStore } from "../zustand/useEntriesDataStore";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
 import { useTableStore } from "../zustand/useTablesStore";
 import { useUtilsStore } from "../zustand/useUtilsStore";
 
 
-export function Table({ table }) {
-   const { tableHandler, tablesHeaders } = useTable();
-   const data = tableHandler.getSelectedMonthData();
-   const setEditingRelease = useTableStore((state) => state.setEditingRelease);
+export function Table({ tableType }) {
+   const { tableHandler } = useTable();
+   const tablesHeaders = ['Descrição', 'Categoria', 'Data', 'Valor'];
+   const setEditingEntry = useTableStore((state) => state.setEditingEntry);
    const setNewReleaseType = useTableStore((state) => state.setNewReleaseType);
    const setShowAddReleaseModal = useModalsHiddenStore((state) => state.setShowAddReleaseModal);
+   const entriesData = useEntriesDataStore(state => state.entriesData);
+   const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal)
 
-   if (!data) return <Spinner />
+
+   if (!entriesData) return <Spinner />
    return (
       <>
          <table className="text-gray-600 text-sm w-full overflow-x-hidden">
@@ -23,7 +27,7 @@ export function Table({ table }) {
                <col style={{ width: "70px" }} />
                <col style={{ width: "60px" }} />
             </colgroup>
-            <thead className="hidden">
+            <thead className="">
                <tr className="border-b-[1px] border-b-gray-400">
                   {tablesHeaders.map(colName => (
                      <th
@@ -35,23 +39,22 @@ export function Table({ table }) {
                </tr>
             </thead>
             <tbody>
-               {data[table].map(item => (
+               {entriesData.entries[tableType].map(item => (
                   <tr
                      key={item.id}
                      className="h-10 border-t-[1px] border-t-gray-200 text-[13px] hover:bg-gray-100 transition-all cursor-pointer"
                      onClick={()=> {
-                        setEditingRelease({...item});
-                        setNewReleaseType({ title: table == "expenses" ? "Despesa" : "Receita", type: table });
-                        setShowAddReleaseModal();
+                        setEditingEntry({...item, type: tableType});
+                        setShowEditModal(true);
                      }}
                   >
-                     <td className="pl-2 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis font-semibold text-gray-900">{item.desc}</td>
+                     <td className="pl-2 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis font-semibold text-gray-900">{item.description}</td>
 
-                     <TdCategories icon={`/icons/c-${item.categ}.png`} categ={item.categ} />
+                     <TdCategories icon={`/icons/c-${item.category}.png`} categ={item.category} />
 
                      <td className="relative text-center">
                         {`${new Date(item.date).toLocaleDateString('pt-br', { day: "2-digit", month: "short" })}`}
-                        {item.endDate && <img className="absolute max-w-3 top-4 right-0" src="/icons/i-fixed.png"/>}
+                        {item.end_date && <img className="absolute max-w-3 top-4 right-0" src="/icons/i-fixed.png"/>}
                      </td>
                      <td className="text-end pr-2 max-w-10">
                         {Number(item.value).toLocaleString('pt-BR', { style: "currency", currency: "BRL" })}

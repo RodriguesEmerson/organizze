@@ -1,17 +1,15 @@
 import { memo } from "react"
 import { Chart, registerables } from "chart.js";
 import { useIncomesGraphic } from "@/app/hooks/useIncomesGraphic";
-import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
 import { ChartDoughnut } from "@/app/components/charts/ChartDoughnut";
 import { ChartBar } from "@/app/components/charts/ChartBar";
 
 //Registra todos os componentes e plugins necessários para o Chart.js funcionar corretamente.
 Chart.register(...registerables);
 
-export const IncomesGraphic = memo(() => {
+export const IncomesGraphic = memo(({incomes, sumary}) => {
 
    const { getIncomesData } = useIncomesGraphic();
-   const { totalExpenses, totalIncomes } = useSummaryGraphic();
 
    return (
       <div className="!min-w-[636px] h-[300px] flex flex-1  flex-col items-center bg-white p-1 pr-2 shadow-md rounded-md overflow-hidden">
@@ -23,10 +21,10 @@ export const IncomesGraphic = memo(() => {
             <div className="min-w-[400px] flex-1 h-[250px] pt-4">
                <ChartBar
                   data={{
-                     labels: getIncomesData().labels,
+                     labels: getIncomesData(incomes).labels,
                      datasets: [
                         {
-                           data: getIncomesData().values,
+                           data: getIncomesData(incomes).values,
                            backgroundColor: ['#316628'],
                         }
                      ],
@@ -39,11 +37,11 @@ export const IncomesGraphic = memo(() => {
             <div className="relative pt-8">
                <div className="absolute top-[52%] left-[29%]">
                   <p className="font-bold w-[85px] text-center text-xl leading-7">
-                     {totalIncomes && `${(totalIncomes / (totalExpenses + totalIncomes) * 100).toFixed(2)}%`}
+                     {`${(sumary.incomes_sum / (sumary.expenses_sum + sumary.incomes_sum) * 100).toFixed(2)}%`}
                   </p>
                </div>
                <div className="w-[200px] h-[200px]">
-                  <ChartDoughnut data={{ labels: ['Receitas Totais'], values: [totalIncomes, totalExpenses], colors: ['#316628', '#D3D3D370'] }} size={{ w: '200', h: '200' }} />
+                  <ChartDoughnut data={{ labels: ['Receitas Totais'], values: [sumary.incomes_sum, sumary.expenses_sum], colors: ['#316628', '#D3D3D370'] }} size={{ w: '200', h: '200' }} />
                </div>
             </div>
          </div>

@@ -25,7 +25,7 @@ export default function ExpenseTable() {
          </div>
          <div className="table-scroll-style">
             <div className="pr-2 pb-2">
-               <Table table={'expenses'} />
+               <Table tableType={'expenses'} />
             </div>
 
          </div>

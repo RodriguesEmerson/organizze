@@ -10,16 +10,17 @@ import { useUtils } from "@/app/hooks/useUtils";
 import { ExpesesGraphic } from "@/app/UI/Board/ExpensesGraphic";
 import { IncomesGraphic } from "@/app/UI/Board/IncomesGraphic";
 import { ChartBar } from "@/app/components/charts/ChartBar";
-import { useSummaryGraphic } from "@/app/hooks/useSummaryGraphic";
 import { TooltipInfo } from "@/app/components/TooltipInfo";
 import { FloatOkNotification } from "@/app/components/FloatOkNotification";
 import { useSearchParams } from "next/navigation";
 import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
 import { useGetEntries } from "@/app/hooks/monthlyPageHooks/useGetEntries";
+import { ModalEditEntry } from "@/app/components/modals/ModalEditEntry";
 
 export default function MonthlyDashBoard() {
-
+   
    useAuthGuard(); //Checks if the user is Authenticated;
+   
 
    const { toUpperFirstLeter, currencyFormat } = useUtils();
    const searchParams = useSearchParams();
@@ -33,14 +34,15 @@ export default function MonthlyDashBoard() {
          <Spinner />
       </div>
    )
-   
+
    return (
       <section
          className="relative ml-44 pl-5 pt-3 pr-3"
          style={{ height: "calc(100% - 48px)" }}
       >
-         {/* <ModalNewRelease />
-         <FloatOkNotification /> */}
+
+         <ModalEditEntry />
+         {/* <FloatOkNotification /> */}
 
          <div className="sticky top-12 z-[11]  border-t-gray-300 h-8 bg-gray-900 text-white -mt-3  mb-2 text-center leading-8 -ml-[200px]" style={{ width: '100vw' }}>
             {`${toUpperFirstLeter(monthURL)} de ${yearURL}`}
@@ -127,18 +129,17 @@ export default function MonthlyDashBoard() {
                   </div>
 
                   <div className="w-full flex flex-row gap-2 justify-between">
-                     {/* <ExpesesGraphic />
-                     <IncomesGraphic /> */}
+                     <ExpesesGraphic expenses={entriesData.entries.expenses} sumary={entriesData.sum}/>
+                     <IncomesGraphic incomes={entriesData.entries.incomes} sumary={entriesData.sum}/>
                   </div>
 
                   <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">
                      <h2 className="text-sm font-extrabold text-gray-500 mt-2">Tabelas</h2>
                   </div>
                </div>
-               {/* <Tables /> */}
+               <Tables />
             </div>
          }
-
       </section>
    )
 }
@@ -146,7 +147,7 @@ export default function MonthlyDashBoard() {
 function Tables() {
    return (
       <div className="tables !relative justify-stretch flex flex-row gap-2">
-         <TooltipInfo />
+         {/* <TooltipInfo /> */}
          <ExpenseTable />
          <IncomeTable />
       </div>
