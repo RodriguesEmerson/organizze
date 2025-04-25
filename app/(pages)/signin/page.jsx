@@ -2,6 +2,7 @@
 import { useSignin } from "@/app/hooks/auth/signin";
 import { Spinner } from "@/app/components/loads/spinner";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Signin(){
 
@@ -13,7 +14,7 @@ export default function Signin(){
          className="relative flex justify-center items-center"
          style={{ height: "calc(100vh - 48px)" }}
       >
-         <section className="bg-white rounded-md h-[26rem] w-80 p-3 pt-4 shadow-xl">
+         <section className="bg-white rounded-md h-[26rem] w-80 p-3 pt-4 shadow-xl relative">
 
             <h1 className="text-center text-gray-900 font-extrabold text-2xl">Entrar</h1>
 
@@ -59,6 +60,15 @@ export default function Signin(){
                   status.error.status && 
                   <p className="text-red-800 text-center text-sm mt-6">{status.error.message}</p>
                }
+
+               <div className="flex flex-row gap-1 items-center justify-center text-sm w-[92%] absolute bottom-2">
+                  <p>Ainda não tem conta?</p>
+                  <Link href={'http://localhost:3000/signup'}
+                     className="block h-8 w-fit px-2 leading-8 text-blue-900 rounded-md cursor-pointer transition-all hover:underline"   
+                  >  
+                     Cadastre-se
+                  </Link>
+               </div>
             </div>
          </section>
       </main>
