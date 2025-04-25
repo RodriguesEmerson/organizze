@@ -9,6 +9,7 @@ import { useTableStore } from "../../zustand/useTablesStore";
 import { ModalBackGround } from "./../ModalBackGround";
 import useCalendar from "../../hooks/useCalendar";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
+import { useUpdateEntry } from "@/app/hooks/entries/useUpdateEntry";
 
 export function ModalEditEntry(){
    const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
@@ -28,8 +29,6 @@ function ModalEditEntryBody() {
    
    //Dados do item em edição.
    const editingEntry = useTableStore((state) => state.editingEntry);
-   const categories = useTableStore((state) => state.categories);
-
    const [fixedRelease, setFixedRelease] = useState(false);
    
    useEffect(() => {
@@ -48,13 +47,13 @@ function ModalEditEntryBody() {
    
    return (
       <ModalBackGround >
-         <div className="relative modal flex flex-col justify-between h-fit w-96 bg-white rounded-xl shadow-lg py-2 px-3">
+         <div className="relative modal flex flex-col justify-between h-fit w-96 bg-white rounded-md shadow-lg py-2 px-3">
 
-            <div className="text-center h-9 leading-7 w-[384px] rounded-t-xl -ml-3 -mt-2 text-sm pt-[6px] border-b mb-3 bg-gray-200">
+            <div className="text-center h-9 leading-7 w-[384px] rounded-t-md -ml-3 -mt-[9px] text-sm pt-[5px] border-b mb-3 bg-gray-800 text-white">
                <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
                   <img className="w-6 transition-all" src={"/gif/edit.gif"} />
                </div>
-                <h4>{`Editando ${editingEntry.type == 'expenses' ? 'Despesas' : 'Receitas'}`}</h4>
+                <h4>{`Editando ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}</h4>
                <div className="absolute h-5 w-5 top-0 right-0">
                   <ButtonClose onClick={() => { setHiddenReleaseModal() }} />
                </div>
@@ -139,7 +138,9 @@ function ModalEditEntryBody() {
                   </div>
                   <div className="flex justify-center mt-3">
                      <ButtonSave 
-                        onClick={(e) => {releaseHandler.updateRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }); setHiddenReleaseModal() }} 
+                        onClick={(e) => {
+                           //CRIAR CODIGO PARA ATUALIZAR EDIÇÃO
+                           ;releaseHandler.updateRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }); setHiddenReleaseModal() }} 
                         text="Salvar alteraçôes" 
                      />
                   </div>
