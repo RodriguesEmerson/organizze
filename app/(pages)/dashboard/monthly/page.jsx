@@ -16,6 +16,7 @@ import { useSearchParams } from "next/navigation";
 import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
 import { useGetEntries } from "@/app/hooks/monthlyPageHooks/useGetEntries";
 import { ModalEditEntry } from "@/app/components/modals/ModalEditEntry";
+import { ToastNotifications } from "@/app/components/notificatons/ToastNotifications";
 
 export default function MonthlyDashBoard() {
    
@@ -42,7 +43,7 @@ export default function MonthlyDashBoard() {
       >
 
          <ModalEditEntry />
-         {/* <FloatOkNotification /> */}
+         <ToastNotifications />
 
          <div className="sticky top-12 z-[11]  border-t-gray-300 h-8 bg-gray-900 text-white -mt-3  mb-2 text-center leading-8 -ml-[200px]" style={{ width: '100vw' }}>
             {`${toUpperFirstLeter(monthURL)} de ${yearURL}`}

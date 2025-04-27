@@ -5,10 +5,12 @@ import { useEntriesDataStore } from "../zustand/useEntriesDataStore";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
 import { useTableStore } from "../zustand/useTablesStore";
 import { useUtilsStore } from "../zustand/useUtilsStore";
+import { useUtils } from "../hooks/useUtils";
 
 
 export function Table({ tableType }) {
    const { tableHandler } = useTable();
+   const { convertDateToDM } = useUtils();
    const tablesHeaders = ['Descrição', 'Categoria', 'Data', 'Valor'];
    const setEditingEntry = useTableStore((state) => state.setEditingEntry);
    const setNewReleaseType = useTableStore((state) => state.setNewReleaseType);
@@ -53,7 +55,7 @@ export function Table({ tableType }) {
                      <TdCategories icon={`/icons/c-${item.category}.png`} categ={item.category} />
 
                      <td className="relative text-center">
-                        {`${new Date(item.date).toLocaleDateString('pt-br', { day: "2-digit", month: "short" })}`}
+                        {convertDateToDM(item.date)}
                         {item.end_date && <img className="absolute max-w-3 top-4 right-0" src="/icons/i-fixed.png"/>}
                      </td>
                      <td className="text-end pr-2 max-w-10">

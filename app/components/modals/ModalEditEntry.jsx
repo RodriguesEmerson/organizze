@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from "react"
 import { ButtonClose } from "../buttons/ButtonClose"
 import { ButtonSave } from "../buttons/ButtonSave";
@@ -9,7 +10,8 @@ import { useTableStore } from "../../zustand/useTablesStore";
 import { ModalBackGround } from "./../ModalBackGround";
 import useCalendar from "../../hooks/useCalendar";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
-import { useUpdateEntry } from "@/app/hooks/entries/useUpdateEntry";
+import { useEntryHandler } from "@/app/hooks/entries/useEntryHandler";
+import { useUtils } from "@/app/hooks/useUtils";
 
 export function ModalEditEntry(){
    const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
@@ -21,11 +23,11 @@ export function ModalEditEntry(){
 }
 
 function ModalEditEntryBody() {
-   
-   const { releaseHandler, releaseMensage } = useNewRelease();
-   const { datesHandler } = useCalendar();
-   const setHiddenReleaseModal = useModalsHiddenStore((state) => state.setHiddenReleaseModal);
-   const [formData, setFormData] = useState({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' });
+   const { updateEntry } = useEntryHandler(); 
+   const { convertDateToDMY } = useUtils();
+   const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
+   const { releaseMensage } = useNewRelease();
+   const [formData, setFormData] = useState({description: '', category: '', date: '', fixed: false, end_date: '', value: '', id: ''});
    
    //Dados do item em edição.
    const editingEntry = useTableStore((state) => state.editingEntry);
@@ -34,10 +36,11 @@ function ModalEditEntryBody() {
    useEffect(() => {
       setFormData( 
          {   
-            desc: editingEntry.description,
-            categ: editingEntry.category,
-            date: datesHandler.dateConvert(editingEntry.date, 'br'),
-            endDate: editingEntry.end_date ? datesHandler.dateConvert(editingEntry.end_date, 'br') : '',
+            description: editingEntry.description,
+            category: editingEntry.category,
+            date: convertDateToDMY(editingEntry.date),
+            fixed: !!editingEntry?.end_date ? true : false,
+            end_date: editingEntry.end_date ? convertDateToDMY(editingEntry.end_date) : '',
             value: new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(editingEntry.value).slice(3,),
             id: editingEntry.id
          } 
@@ -55,8 +58,8 @@ function ModalEditEntryBody() {
                </div>
                 <h4>{`Editando ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}</h4>
                <div className="absolute h-5 w-5 top-0 right-0">
-                  <ButtonClose onClick={() => { setHiddenReleaseModal() }} />
-               </div>
+                  <ButtonClose onClick={() => { setShowEditModal(false) }} />
+               </div>   
             </div>
 
             <div>
@@ -68,8 +71,8 @@ function ModalEditEntryBody() {
                         type="text"
                         name="descricao"
                         placeholder="Descrição. . ."
-                        value={formData.desc}
-                        onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         autoFocus
                         maxLength={50}
                      />
@@ -79,9 +82,7 @@ function ModalEditEntryBody() {
                         <label className="pl-1">Categoria *</label>
                         <CategorieSelect
                            name={"categoria"}
-                           categoriesB={[{categ: 'Teste', icon: 'icon.png'}]}
-                           // categories={categories[editingEntry.type]}
-                           value={formData.categ}
+                           value={formData.category}
                            setValue={ setFormData }
                            formData={formData}
                         />
@@ -102,22 +103,25 @@ function ModalEditEntryBody() {
                            />
                            <Calendar
                               name="dataFim"
-                              value={formData.endDate}
+                              value={formData.end_date}
                               disabled={!fixedRelease}
                               disabledCalendar={!fixedRelease}
                               setFormData={setFormData}
                               formData={formData}
-                              formRef = "endDate"
-                              onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                              formRef = "end_date"
+                              onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
                            />
                         </div>
                         <div className="absolute right-[10px] h-5 flex flex-row items-center gap-[4px]">
                            <input
                               className="h-4"
-                              type="checkbox"
+                              type="checkbox"   
                               name="fixa"
                               checked={fixedRelease}
-                              onChange={() => { fixedRelease && setFormData({ ...formData, endDate: '' }); setFixedRelease(!fixedRelease)}}
+                              onChange={() => { 
+                                 setFormData({ ...formData, end_date: '', fixed: !fixedRelease }); 
+                                 setFixedRelease(!fixedRelease); 
+                              }}
                               id={`${editingEntry.type}-fixedReleaseCheckbox`}
                            />
                            <label htmlFor={`${editingEntry.type}-fixedReleaseCheckbox`}>{`${editingEntry.type} fixa`}</label>
@@ -139,8 +143,10 @@ function ModalEditEntryBody() {
                   <div className="flex justify-center mt-3">
                      <ButtonSave 
                         onClick={(e) => {
-                           //CRIAR CODIGO PARA ATUALIZAR EDIÇÃO
-                           ;releaseHandler.updateRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }); setHiddenReleaseModal() }} 
+                           e.preventDefault();
+                           updateEntry(formData)
+                           // ;releaseHandler.updateRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }); setHiddenReleaseModal() 
+                        }} 
                         text="Salvar alteraçôes" 
                      />
                   </div>

@@ -54,7 +54,7 @@ export function Calendar({disabledCalendar, formData, setFormData, formRef, ...p
 
                   <p className="text-xs font-semibold cursor-default">
                      {/**Gets month by index */}
-                     {/* {`${toUpperFirstLeter(yearMonths[monthEndYear.month])} de ${monthEndYear.year}`} */}
+                     {`${toUpperFirstLeter(yearMonths[monthEndYear.month])} de ${monthEndYear.year}`}
                   </p>
 
                   <span

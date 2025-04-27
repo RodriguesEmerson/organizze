@@ -2,15 +2,15 @@ import { useCategoriesSelect } from "@/app/hooks/categoriesSelect/useCategoriesS
 import { useEffect, useState } from "react"
 import { Spinner } from "../loads/spinner";
 
-export function CategorieSelect({ categoriesB, defaultValue, name, value, setValue, formData }){
+export function CategorieSelect({ defaultValue, name, value, setValue, formData }){
    
    const [openSelect, setOpenSelect] = useState(false);
    const [dropDownHeight, setDropDownHeight] = useState(0);
-   const { categories } = useCategoriesSelect('expense')
+   const { categories } = useCategoriesSelect('expense');
 
    useEffect(()=>{
-      setDropDownHeight(`${28 * categoriesB.length + 2}px`);
-   },[categoriesB])
+      setDropDownHeight(`${28 * categories.length + 2}px`);
+   },[categories])
 
    return(
       <div className=" relative" >
@@ -42,7 +42,7 @@ export function CategorieSelect({ categoriesB, defaultValue, name, value, setVal
                      key={item.name}  
                      className={`flex flow-row items-center cursor-pointer px-2 gap-2 h-7 hover:bg-gray-200 transition-all 
                         ${value == item.name && "bg-blue-900 text-white hover:bg-blue-900"}`} 
-                     onClick={()=> {setValue({...formData, categ: item.name}); setOpenSelect(false)}}
+                     onClick={()=> {setValue({...formData, category: item.name}); setOpenSelect(false)}}
                   >
                      <img className="w-5 h-5" src={`/icons/${item.image}`} alt="" />
                      {item.name}
