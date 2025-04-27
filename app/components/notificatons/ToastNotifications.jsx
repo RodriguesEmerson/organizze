@@ -20,7 +20,7 @@ export function ToastNotifications() {
    
    return (
       <div
-         className="fixed left-2 bottom-4 flex flex-col justify-end items-end gap-2 text-sm z-[40] w-60 h-52 p-2 transition-all duration-300 "
+         className="fixed left-1 bottom-4 flex flex-col justify-end items-end gap-2 text-sm z-[40] w-60 h-52 p-2 transition-all duration-300 "
       >
          {notifications.map(notification => (
             !notification.isShowed && (
@@ -28,7 +28,7 @@ export function ToastNotifications() {
             )
          ))}
 
-      </div>
+      </div>   
    )
 }
 

@@ -8,10 +8,10 @@ import { Calendar } from "../Calendar";
 import { FloatAtentionNotification } from "./../FloatAtentionNotification";
 import { useTableStore } from "../../zustand/useTablesStore";
 import { ModalBackGround } from "./../ModalBackGround";
-import useCalendar from "../../hooks/useCalendar";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { useEntryHandler } from "@/app/hooks/entries/useEntryHandler";
 import { useUtils } from "@/app/hooks/useUtils";
+import { Spinner } from "../loads/spinner";
 
 export function ModalEditEntry(){
    const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
@@ -23,7 +23,7 @@ export function ModalEditEntry(){
 }
 
 function ModalEditEntryBody() {
-   const { updateEntry } = useEntryHandler(); 
+   const { updateEntry, updateDBSAnswer } = useEntryHandler(); 
    const { convertDateToDMY } = useUtils();
    const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
    const { releaseMensage } = useNewRelease();
@@ -32,6 +32,9 @@ function ModalEditEntryBody() {
    //Dados do item em edição.
    const editingEntry = useTableStore((state) => state.editingEntry);
    const [fixedRelease, setFixedRelease] = useState(false);
+   const [loading, setLoading] = useState(updateDBSAnswer.loading);
+
+   //Criando função para loading 
    
    useEffect(() => {
       setFormData( 
@@ -61,7 +64,7 @@ function ModalEditEntryBody() {
                   <ButtonClose onClick={() => { setShowEditModal(false) }} />
                </div>   
             </div>
-
+            
             <div>
                <form className="text-[13px] text-gray-700" id="new-release-form">
                   <div className="flex flex-col gap-[2px] mb-2">
@@ -140,15 +143,22 @@ function ModalEditEntryBody() {
                         required
                      />
                   </div>
+                  {updateDBSAnswer.error &&
+                     <div className="mt-3">
+                        <p className="text-sm text-red-700 text-center">{updateDBSAnswer.message}</p>
+                     </div>
+                  }
                   <div className="flex justify-center mt-3">
                      <ButtonSave 
                         onClick={(e) => {
                            e.preventDefault();
-                           updateEntry(formData)
+                           updateEntry(formData);
                            // ;releaseHandler.updateRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }); setHiddenReleaseModal() 
                         }} 
                         text="Salvar alteraçôes" 
-                     />
+                     >{updateDBSAnswer.loading &&
+                        <Spinner />
+                     }</ ButtonSave >
                   </div>
                </form>
             </div>
