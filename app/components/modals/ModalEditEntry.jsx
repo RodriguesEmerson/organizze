@@ -32,10 +32,7 @@ function ModalEditEntryBody() {
    //Dados do item em edição.
    const editingEntry = useTableStore((state) => state.editingEntry);
    const [fixedRelease, setFixedRelease] = useState(false);
-   const [loading, setLoading] = useState(updateDBSAnswer.loading);
 
-   //Criando função para loading 
-   
    useEffect(() => {
       setFormData( 
          {   
@@ -152,7 +149,7 @@ function ModalEditEntryBody() {
                      <ButtonSave 
                         onClick={(e) => {
                            e.preventDefault();
-                           updateEntry(formData);
+                           updateEntry(formData, editingEntry.type);
                            // ;releaseHandler.updateRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }); setHiddenReleaseModal() 
                         }} 
                         text="Salvar alteraçôes" 

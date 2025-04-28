@@ -6,6 +6,7 @@ import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
 import { useTableStore } from "../zustand/useTablesStore";
 import { useUtilsStore } from "../zustand/useUtilsStore";
 import { useUtils } from "../hooks/useUtils";
+import { useEffect, useState } from "react";
 
 
 export function Table({ tableType }) {
@@ -13,13 +14,17 @@ export function Table({ tableType }) {
    const { convertDateToDM } = useUtils();
    const tablesHeaders = ['Descrição', 'Categoria', 'Data', 'Valor'];
    const setEditingEntry = useTableStore((state) => state.setEditingEntry);
-   const setNewReleaseType = useTableStore((state) => state.setNewReleaseType);
-   const setShowAddReleaseModal = useModalsHiddenStore((state) => state.setShowAddReleaseModal);
-   const entriesData = useEntriesDataStore(state => state.entriesData);
    const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal)
+   const entriesData = useEntriesDataStore(state => state.entriesData);
+   const [entries, setEntries] = useState(false);
 
+   useEffect(() => {
+      if(entriesData){
+         setEntries(entriesData.entries[tableType]);
+      }
+   },[entriesData.entries[tableType]]);
 
-   if (!entriesData) return <Spinner />
+   if (!entries) return <Spinner />
    return (
       <>
          <table className="text-gray-600 text-sm w-full overflow-x-hidden">
@@ -41,7 +46,7 @@ export function Table({ tableType }) {
                </tr>
             </thead>
             <tbody>
-               {entriesData.entries[tableType].map(item => (
+               {entries.map(item => (
                   <tr
                      key={item.id}
                      className="h-10 border-t-[1px] border-t-gray-200 text-[13px] hover:bg-gray-100 transition-all cursor-pointer"

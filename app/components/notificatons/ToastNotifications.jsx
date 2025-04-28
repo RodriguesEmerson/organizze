@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 export function ToastNotifications() {
    const notifications = useToastNotifications(state => state.notifications);
    const setNotifications = useToastNotifications(state => state.setNotifications);
-   
-
    const [updated, setUpdated] = useState(false);
 
    useEffect(() => {
@@ -15,9 +13,7 @@ export function ToastNotifications() {
       }
    }, [notifications]);
 
-   
    if(!updated) return;
-   
    return (
       <div
          className="fixed left-1 bottom-4 flex flex-col justify-end items-end gap-2 text-sm z-[40] w-60 h-52 p-2 transition-all duration-300 "

@@ -3,58 +3,64 @@ import { useToastNotifications } from "@/app/zustand/useToastNotifications";
 import { useUtils } from "../useUtils";
 import { useState } from "react";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
+import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 
 export function useEntryHandler(){
    const editingEntry = useTableStore((state) => state.editingEntry);
-   const { convertDateToYMD, convertValueToNumeric, gerarCUID } = useUtils();
    const setNotifications = useToastNotifications(state => state.setNotifications);
    const [updateDBSAnswer, setUpdateDBSAnswer] = useState({error: false, loading: false});
    const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
+   const { updateStore } = useUpdateEntriesStore();
+   const { convertDateToYMD, convertValueToNumeric, gerarCUID } = useUtils();
 
-   async function updateEntry(entry){
+   async function updateEntry(entry, type){
       //Formata os dados para o mesmo formato que vem do DB,
       //para depois fazer a comparação.
-      const updatedData = {};
+      const updatedEntry = {};
+      console.log(editingEntry)
       for(const key in entry){
-         let newValue = entry[key];
+         let curr = entry[key];
 
          if (key === 'date' || key === 'end_date') {
-            newValue = convertDateToYMD(entry[key]);
+            curr = convertDateToYMD(entry[key]);
          } else if (key === 'fixed') {
-            newValue = entry[key] ? 1 : 0;
+            curr = entry[key] ? 1 : 0;
          } else if (key === 'value') {
-            newValue = convertValueToNumeric(entry[key]);
+            curr = convertValueToNumeric(entry[key]);
          }
-
-         if (newValue !== editingEntry[key]) {
-            updatedData[key] = newValue;
+         
+         if (curr !== editingEntry[key]) {
+            updatedEntry[key] = curr;
          }
       }
       
-      if(Object.keys(updatedData).length <= 0) {
+      if(Object.keys(updatedEntry).length <= 0) {
          setUpdateDBSAnswer({error: 'Nenhuma informação foi alterada', loading: false})
          return;
       };
       setUpdateDBSAnswer({error: false, loading: true})
-      updatedData.id = editingEntry.id; //Id da entry
-
-      if(!updatedData.hasOwnProperty('fixed')){
-         updatedData.fixed = editingEntry.fixed
+      updatedEntry.id = editingEntry.id; //Id da entry
+      
+      if(updatedEntry.hasOwnProperty('end_date')){
+         if(updatedEntry.end_date) updatedEntry.fixed =  1;
       }
-
+      
       await fetch('http://localhost/organizze-bk/public/entries.php', {
          method: 'PUT',
          credentials: 'include',
          headers: {'Content-Type': 'application/json'},
-         body: JSON.stringify(updatedData)
+         body: JSON.stringify(updatedEntry)
       })
       .then(async response => {
          const result = await response.json();
+         console.log(result)
          if(response.status == 200){
             setNotifications('Dados atualizados com sucesso.', gerarCUID());
             setUpdateDBSAnswer({error: false, loading: false});
+            updateStore(updatedEntry, type);
+            
             setTimeout(() => {
-               setShowEditModal(false)
+               setShowEditModal(false);
             }, 50);
             return;
          }
@@ -67,6 +73,57 @@ export function useEntryHandler(){
          console.log(error)
       })
    }
-
+  
    return { updateEntry, updateDBSAnswer };
 }
+
+export function useUpdateEntriesStore(){
+   const entriesData = useEntriesDataStore(state => state.entriesData);
+   const updateEntriesExpenses = useEntriesDataStore(state => state.updateEntriesExpenses);
+   const updateEntriesExpensesSum = useEntriesDataStore(state => state.updateEntriesExpensesSum);
+   const updateEntriesIncomes = useEntriesDataStore(state => state.updateEntriesIncomes);
+   const updateEntriesIncomesSum = useEntriesDataStore(state => state.updateEntriesIncomesSum);
+
+   function updateStore(updatedEntry, type){
+
+      let toUpdatedEntry, toUpdatedValue;
+      const editingEntries = [...entriesData.entries[type]];
+
+      editingEntries.forEach((entry, index) => {
+         if(entry.id === updatedEntry.id){
+            toUpdatedEntry = {...entry};
+            for(const key in updatedEntry){
+               if(key == 'value') {
+                  toUpdatedValue = toUpdatedEntry[key];
+               }
+               toUpdatedEntry[key] = updatedEntry[key];
+            }
+            editingEntries[index] = toUpdatedEntry;
+         }
+
+         
+         if(Object.keys(updatedEntry).indexOf('value') != -1){
+            const intactType = type == 'expenses' ? 'incomes' : 'expenses'; //Salva o tipo de entries não editadas
+            const intactValue = entriesData.sum[`${intactType}_sum`]; //Guarda o valor que não será alterado
+            const updatedValue = entriesData.sum[`${type}_sum`] - toUpdatedValue; //Subtrai o valor antigo
+            const newValue = updatedValue + updatedEntry.value; //Adiciona o novo valor inserido
+
+            const newBalance = type == 'expenses'
+            ? intactValue - newValue
+            : newValue - intactValue;
+
+            type == 'expenses'
+               ? updateEntriesExpensesSum(newValue, newBalance)
+               : updateEntriesIncomesSum(newValue, newBalance);
+               
+         }
+
+         type == 'expenses'
+            ? updateEntriesExpenses(editingEntries)
+            : updateEntriesIncomes(editingEntries)
+      })
+   }
+
+   return { updateStore }
+}
+

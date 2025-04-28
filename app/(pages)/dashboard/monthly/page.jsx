@@ -17,11 +17,14 @@ import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
 import { useGetEntries } from "@/app/hooks/monthlyPageHooks/useGetEntries";
 import { ModalEditEntry } from "@/app/components/modals/ModalEditEntry";
 import { ToastNotifications } from "@/app/components/notificatons/ToastNotifications";
+import { IncomesTotal } from "@/app/UI/Board/IncomesTotal";
+import { BalanceTotal } from "@/app/UI/Board/BalanceTotal";
+import { ExpensesTotal } from "@/app/UI/Board/ExpensesTotal";
+import { GoalGraphic } from "@/app/UI/Board/GoalGraphic";
 
 export default function MonthlyDashBoard() {
    
    useAuthGuard(); //Checks if the user is Authenticated;
-   
 
    const { toUpperFirstLeter, currencyFormat } = useUtils();
    const searchParams = useSearchParams();
@@ -29,7 +32,6 @@ export default function MonthlyDashBoard() {
    const monthURL= searchParams.get('month');
    const { entriesData } = useGetEntries(yearURL, monthURL);
 
-   
    if (!entriesData) return (
       <div className="flex items-center justify-center h-[95vh]">
          <Spinner />
@@ -64,68 +66,13 @@ export default function MonthlyDashBoard() {
                   <div>
                      <div className="flex flex-row gap-2 mb-2 justify-between">
 
-                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 flex-1 bg-white text-white rounded-md pt-3">
-                           <div className="w-9">
-                              <img src="/icons/expenses.png" alt="expenses-icon" />
-                           </div>
-                           <div className="h-[70%] flex flex-col items-start justify-center">
-                              <p className="text-3xl font-extrabold text-gray-600">
-                                 {currencyFormat(entriesData.sum.expenses_sum)}
-                              </p>
-                              <h4 className="text-sm text-center -mt-1 text-red-800">Despesas totais</h4>
-                           </div>
-                        </div>
+                        { <ExpensesTotal /> }
 
-                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 flex-1 bg-white text-white rounded-md pt-3">
-                           <div className="w-9">
-                              <img src="/icons/incomes.png" alt="incomes-icon" />
-                           </div>
-                           <div className="h-[70%] flex flex-col items-start justify-center">
-                              <p className="text-3xl font-extrabold text-gray-600">
-                                 {currencyFormat(entriesData.sum.incomes_sum)}
-                              </p>
-                              <h4 className="text-sm text-center -mt-1 text-green-800">Receitas totais</h4>
-                           </div>
-                        </div>
+                        { <IncomesTotal /> }
 
-                        <div className="z-[5] flex items-center gap-4 justify-center h-28 shadow-md w-72 flex-1 bg-white text-white rounded-md pt-3">
-                           <div className="w-9">
-                              <img src="/icons/balance.png" alt="balance-icon" />
-                           </div>
-                           <div className="h-[70%] flex flex-col items-start justify-center">
-                              <p className="text-3xl font-extrabold text-gray-600">
-                                 {currencyFormat(entriesData.sum.balance)}
-                              </p>
-                              <h4 className="text-sm text-center -mt-1 text-blue-800">Saldo</h4>
-                           </div>
-                        </div>
+                        { <BalanceTotal /> }
 
-                        <div className="relative z-[5] flex pl-1  h-28 shadow-md w-72 bg-white flex-1 text-white rounded-md overflow-hidden">
-                           <div className="w-[250px] h-[130px]">
-                              {/*Labels, values, colors, orientation*/}
-                              <ChartBar
-                                 data={{
-                                    labels: ['Meta', ''],
-                                    values: [4000, entriesData.sum.balance],
-                                    colors: ['#047857',
-                                       (entriesData.sum.balance) >= 4000 
-                                          ? "#6ee7b7" 
-                                          : (entriesData.sum.balance) < 0 ? "#D91136" : "#a4a4a4" ,
-                                    ],
-                                    orientation: 'y'
-                                 }}
-                              />
-                           </div>
-                           <div className="absolute flex flex-row text-center w-10 right-7 top-11 text-gray-500">
-                              <span className="text-xl font-semibold">
-                                 {(entriesData.sum.balance >= 0
-                                    ? `${(entriesData.sum.balance / 4000 * 100).toFixed(0)}`
-                                    : '0')
-                                 }%
-                              </span>
-                              <span className="text-xs rotate-90 -ml-7">Concluídos</span>
-                           </div>
-                        </div>
+                        { <GoalGraphic /> }
                      </div>
                   </div>
 
