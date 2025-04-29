@@ -4,6 +4,7 @@ import { AvailableYears } from "./AvailableYears";
 import { useAvailablesTables } from "@/app/hooks/sideBar/useAvailableTables";
 import { useState, useEffect } from "react";
 import { Spinner } from "@/app/components/loads/spinner";
+import { Nav } from './Nav';
 
 export default function SideBar() {
    const pathName = usePathname()
@@ -19,13 +20,17 @@ export default function SideBar() {
    }, [availableTables])
 
    return (
-      <section className={`fixed ml-2 mt-2 rounded-md z-[12] bg-white shadow-2xl left-0 top-12 p-2 transition-all text-sm border-t border-t-white w-44`} style={{ height: 'calc(100% - 65px' }}>
+      <section className={`fixed ml-2 mt-2 rounded-md z-[12] bg-white shadow-2xl left-0 top-12 transition-all text-sm border-t border-t-white w-44`} style={{ height: 'calc(100% - 65px' }}>
          {!data &&
             <Spinner />
          }
          {data && 
-            <AvailableYears availableTables={data}/>
+            <>
+               <AvailableYears availableTables={data}/>
+               <Nav />
+            </>
          }
+        
       </section>
    )
 }

@@ -21,7 +21,7 @@ export function AvailableMonths({ year, availableMonths }) {
          className={`w-full overflow-hidden transition-max-height duration-200 ease-in-out`}
          style={{ maxHeight: expandMonthSelect ? '24px' : `${availableMonths.length * 24 + 27}px` }}
       >
-         <div className="flex flex-row h-6 gap-1 items-center mb-1 cursor-pointer rounded-md hover:bg-gray-300 transition-all"
+         <div className="flex flex-row h-6 gap-1 items-center mb-1 cursor-pointer hover:bg-gray-300 transition-all"
             onClick={() => { setExpandMonthSelect(!expandMonthSelect) }}
          >
             <span className={`material-icons-outlined !text-lg transition-all ${!expandMonthSelect && "rotate-180"}`}>
@@ -34,7 +34,7 @@ export function AvailableMonths({ year, availableMonths }) {
             {availableMonths.map((month, index) => (
                <li
                   key={index}
-                  className={`cursor-pointer text-xs transition-all duration-200 w-fit  rounded-md hover:bg-gray-300
+                  className={`cursor-pointer text-xs transition-all duration-200 w-fit  rounded-sm hover:bg-gray-300
                      ${(yearURL == year && monthURL == month) && "!bg-gray-900 text-white"}
                   `}
                   onClick={() => { changeTable(year, month) }}

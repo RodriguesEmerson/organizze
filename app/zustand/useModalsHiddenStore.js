@@ -9,8 +9,9 @@ export const useModalsHiddenStore = create ((set) =>({
    setHiddenReleaseModal: () => set((state) => ({
       showAddReleaseModal: false,
    })),
-   setHiddenAllModals: () => set((state) => ({
+   setHiddenAllModals: () => set(() => ({
       showAddReleaseModal: false,
+      showEditModal: false
    })),
    setShowEditModal: (status) => set(() => ({
       showEditModal: status

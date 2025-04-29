@@ -12,10 +12,14 @@ export function useCategoriesSelect(type){
          })
          .then(async response => {
             const result = await response.json();
-            setCategories(result);
+            if(response.status == 200){
+               setCategories(result);
+               return
+            }
+            setCategories(false);
          })
          .catch(error => {
-            console.log(error)
+            setCategories(false);
          })
       }
       getCategories();

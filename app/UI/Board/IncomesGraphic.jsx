@@ -62,7 +62,7 @@ export const IncomesGraphicBody = memo(({data}) => {
                <div className="relative pt-8">
                   <div className="absolute top-[52%] left-[29%]">
                      <p className="font-bold w-[85px] text-center text-xl leading-7">
-                        {`${(data.sum.expenses_sum / (data.sum.expenses_sum + data.sum.incomes_sum) * 100).toFixed(2)}%`}
+                        {`${(data.sum.incomes_sum / (data.sum.expenses_sum + data.sum.incomes_sum) * 100).toFixed(2)}%`}
                      </p>
                   </div>
                   <div className="w-[200px] h-[200px]">

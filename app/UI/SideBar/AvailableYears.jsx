@@ -19,7 +19,7 @@ export function AvailableYears({ availableTables }){
       return;
    }
    return (
-      <div className="relative mt-8 bg-gray-200 text-gray-900 rounded-md">
+      <div className="relative mt-4 pb-1 text-gray-900 border-t border-b border-gray-300">
          <div className="absolute right-0 -top-4 z-10">
             <Select
                options={Object.keys(availableTables)}
@@ -36,7 +36,7 @@ export function AvailableYears({ availableTables }){
          {year &&
             <Link
                href={`/dashboard?year=${formData.year}`}
-               className={`w-full mt-1 h-7 flex items-center justify-center text-gray-900 text-xs bg-orange-400 rounded-md
+               className={`w-full mt-1 h-7 rounded-sm flex items-center justify-center text-gray-900 text-xs bg-gray-400 hover:bg-gray-500 transition-all duration-300
                   ${(year === formData.year && !monthURL) && " !bg-gray-900 text-white"}
                `}
             >

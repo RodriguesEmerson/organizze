@@ -17,7 +17,7 @@ export function useEntryHandler(){
       //Formata os dados para o mesmo formato que vem do DB,
       //para depois fazer a comparação.
       const updatedEntry = {};
-      console.log(editingEntry)
+      // console.log(editingEntry)
       for(const key in entry){
          let curr = entry[key];
 
@@ -43,7 +43,7 @@ export function useEntryHandler(){
       
       if(updatedEntry.hasOwnProperty('end_date')){
          if(updatedEntry.end_date) updatedEntry.fixed =  1;
-      }
+      } 
       
       await fetch('http://localhost/organizze-bk/public/entries.php', {
          method: 'PUT',
@@ -65,12 +65,12 @@ export function useEntryHandler(){
             return;
          }
          if(response.status == 400){
-            setUpdateDBSAnswer({error: true, message: 'Erro: Cheque os dados e tente novamente.', loading: false});
+            return setUpdateDBSAnswer({error: true, message: 'Erro: Cheque os dados e tente novamente.', loading: false});
          }
       })
       .catch(error => {
-         setUpdateDBSAnswer({error: true,  message: error, loading: false})
          console.log(error)
+         return setUpdateDBSAnswer({error: true,  message: error, loading: false})
       })
    }
   

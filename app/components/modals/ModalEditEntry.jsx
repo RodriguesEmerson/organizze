@@ -124,7 +124,9 @@ function ModalEditEntryBody() {
                               }}
                               id={`${editingEntry.type}-fixedReleaseCheckbox`}
                            />
-                           <label htmlFor={`${editingEntry.type}-fixedReleaseCheckbox`}>{`${editingEntry.type} fixa`}</label>
+                           <label htmlFor={`${editingEntry.type}-fixedReleaseCheckbox`}>
+                              {`${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'} fixa`}
+                           </label>
                         </div>
                      </div>
                   </div>
