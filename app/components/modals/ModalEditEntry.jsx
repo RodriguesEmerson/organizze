@@ -85,6 +85,7 @@ function ModalEditEntryBody() {
                            value={formData.category}
                            setValue={ setFormData }
                            formData={formData}
+                           type={editingEntry.type.slice(0,-1)}
                         />
                      </div>
 
