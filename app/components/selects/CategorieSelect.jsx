@@ -1,17 +1,17 @@
 import { useState } from "react"
 import { Spinner } from "../loads/spinner";
-import { useCategoreisHandler } from "@/app/hooks/categories/useCategoreisHandler";
+import { useGetCategories } from "@/app/hooks/categories/useCategoreisHandler";
 
 export function CategorieSelect({ defaultValue, name, value, setValue, formData, type }){
    
    const [openSelect, setOpenSelect] = useState(false);
-   const { categoriesHandler, categories } = useCategoreisHandler();
+   const { categories } = useGetCategories(type);
    
    return(
       <div className=" relative" >
          <div 
             className="flex flex-row gap-1 items-center justify-between h-8 cursor-pointer w-32 pl-2 font-thin border border-gray-300 rounded-md"
-            onClick={()=> {setOpenSelect(!openSelect); categoriesHandler.getCategories(type);}}
+            onClick={()=> {setOpenSelect(!openSelect);}}
          >
             <input
                className="outline-none w-[90%] bg-white max-w-full !cursor-pointer pointer-events-none"

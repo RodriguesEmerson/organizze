@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
-export function useCategoreisHandler(){
+export function useGetCategories(type){
    const [categories, setCategories] = useState(false);
+   const param = type ? `?type=${type}` : '';
 
-   const categoriesHandler = {
-      getCategories: async function(type){
-         const param = type ? `?type=${type}` : '';
+   useEffect(() => {
+      const getCategories = async function(){
          await fetch (`http://localhost/organizze-bk/public/categories.php${param}`, {
             method: 'GET',
             credentials: 'include'
@@ -20,7 +20,9 @@ export function useCategoreisHandler(){
             console.log(error);
          })
       }
-   }
+      getCategories()
 
-   return { categoriesHandler, categories }
+   }, [])
+
+   return { categories }
 }
