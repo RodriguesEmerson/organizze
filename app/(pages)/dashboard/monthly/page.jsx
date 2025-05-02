@@ -29,7 +29,6 @@ export default function MonthlyDashBoard() {
 
    if (!entriesData) return (
       <div className="flex items-center justify-center h-[95vh]">
-         <Spinner />
       </div>
    )
    
@@ -38,14 +37,17 @@ export default function MonthlyDashBoard() {
       <ModalEditEntry />
       <ToastNotifications />
       <PageModel title={`${toUpperFirstLeter(monthURL)} de ${yearURL}`}>
-         {!entriesData
-            ?
+         {entriesData.loading && 
+            <Spinner />
+         }
+         {entriesData.erro &&
             <div className=" flex items-center justify-center h-[95%] text-gray-900">
                <span className="text-3xl font-bold">404</span>
                <span className="inline-block h-12 w-[2px] mx-2 bg-gray-900"></span>
                <p>{`As finanças de ${monthURL} de ${yearURL} não foram encontradas!`}</p>
             </div>
-            :
+         }
+         {entriesData.entries &&
             <div className="flex flex-col gap-2 pb-3 ">
                <div className="w-full h-full">
                   <div>

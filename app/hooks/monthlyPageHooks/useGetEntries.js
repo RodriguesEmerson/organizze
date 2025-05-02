@@ -9,6 +9,7 @@ export function useGetEntries(year, month){
    
    useEffect(() => {
       const getEntries = async () => {
+         setEntriesData({loading: true})
          await fetch(`http://localhost/organizze-bk/public/entries.php?year=${year}&month=${getMonthNumber(month)}`, {
             method: 'GET',
             credentials: 'include'
@@ -46,6 +47,7 @@ export function useGetEntries(year, month){
             }
          })
          .catch(error => {
+            setEntriesData({erro: true})
             console.log(error)
          })
       }
