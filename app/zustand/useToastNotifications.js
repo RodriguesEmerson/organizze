@@ -2,11 +2,13 @@ import { create } from "zustand";
 
 export const useToastNotifications = create((set) =>({
    notifications: [],
-   setNotifications: ( mensage, id ) => set((state) =>({
+   setNotifications: ( mensage, type, id ) => set((state) =>({
       notifications: [
          ...state.notifications, 
-         {message: mensage, isShowed: false, id: id}
+         {message: mensage, type: type, isShowed: false, id: id}
       ]
+   })),
+   deletNotification: (id) => set(state => ({
+      notifications: state.notifications.filter(notification => notification.id != id)
    }))
 }));
-// {message: false, isShowed: false, id: '123d23efs3'}

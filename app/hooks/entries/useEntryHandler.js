@@ -17,7 +17,6 @@ export function useEntryHandler(){
       //Formata os dados para o mesmo formato que vem do DB,
       //para depois fazer a comparação.
       const updatedEntry = {};
-      // console.log(editingEntry)
       for(const key in entry){
          let curr = entry[key];
 
@@ -35,10 +34,11 @@ export function useEntryHandler(){
       }
       
       if(Object.keys(updatedEntry).length <= 0) {
-         setUpdateDBSAnswer({error: 'Nenhuma informação foi alterada', loading: false})
+         setNotifications('Nenhuma informação foi alterada.', 'info', gerarCUID());
+         setUpdateDBSAnswer({loading: false})
          return;
       };
-      setUpdateDBSAnswer({error: false, loading: true})
+      setUpdateDBSAnswer({loading: true})
       updatedEntry.id = editingEntry.id; //Id da entry
       
       if(updatedEntry.hasOwnProperty('end_date')){
@@ -55,7 +55,7 @@ export function useEntryHandler(){
          const result = await response.json();
          console.log(result)
          if(response.status == 200){
-            setNotifications('Dados atualizados com sucesso.', gerarCUID());
+            setNotifications('Dados atualizados com sucesso.', 'success', gerarCUID());
             setUpdateDBSAnswer({error: false, loading: false});
             updateStore(updatedEntry, type);
             
@@ -65,12 +65,16 @@ export function useEntryHandler(){
             return;
          }
          if(response.status == 400){
-            return setUpdateDBSAnswer({error: true, message: 'Erro: Cheque os dados e tente novamente.', loading: false});
+            setNotifications('Cheque os dados e tente novamente.', 'warn', gerarCUID());
+            setUpdateDBSAnswer({loading: false});
+            return;
          }
       })
       .catch(error => {
          console.log(error)
-         return setUpdateDBSAnswer({error: true,  message: error, loading: false})
+         setNotifications('Erro ao atualizar os dados, tente novamente', 'warn', gerarCUID());
+         setUpdateDBSAnswer({loading: false});
+         return;
       })
    }
   

@@ -40,6 +40,7 @@ function ModalEditEntryBody() {
             category: editingEntry.category,
             date: convertDateToDMY(editingEntry.date),
             fixed: !!editingEntry?.end_date ? true : false,
+            icon: editingEntry.icon,
             end_date: editingEntry.end_date ? convertDateToDMY(editingEntry.end_date) : '',
             value: new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(editingEntry.value).slice(3,),
             id: editingEntry.id
@@ -50,16 +51,16 @@ function ModalEditEntryBody() {
    
    return (
       <ModalBackGround >
-         <div className="relative modal flex flex-col justify-between h-fit w-96 bg-white rounded-md shadow-lg py-2 px-3">
+         <div className="relative modal flex flex-col justify-between h-fit w-[420px] bg-white rounded-md shadow-lg py-2 px-3">
 
-            <div className="text-center h-9 leading-7 w-[384px] rounded-t-md -ml-3 -mt-[9px] text-sm pt-[5px] border-b mb-3 bg-gray-800 text-white">
+            <div className="text-center h-9 leading-7 w-[420px] rounded-t-md -ml-3 -mt-[9px] text-sm pt-[5px] border-b mb-3 bg-gray-800 text-white">
                <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
                   <img className="w-6 transition-all" src={"/gif/edit.gif"} />
                </div>
                 <h4>{`Editando ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}</h4>
                <div className="absolute h-5 w-5 top-0 right-0">
                   <ButtonClose onClick={() => { setShowEditModal(false) }} />
-               </div>   
+               </div>
             </div>
             
             <div>
@@ -143,17 +144,11 @@ function ModalEditEntryBody() {
                         required
                      />
                   </div>
-                  {updateDBSAnswer.error &&
-                     <div className="mt-3">
-                        <p className="text-sm text-red-700 text-center">{updateDBSAnswer.message}</p>
-                     </div>
-                  }
                   <div className="flex justify-center mt-3">
                      <ButtonSave 
                         onClick={(e) => {
                            e.preventDefault();
                            updateEntry(formData, editingEntry.type);
-                           // ;releaseHandler.updateRelease(e, formData); setFormData({ desc: '', categ: '*Selecione*', date: '', endDate: '', value: '' }); setHiddenReleaseModal() 
                         }} 
                         text="Salvar alteraçôes" 
                      >{updateDBSAnswer.loading &&
@@ -162,11 +157,6 @@ function ModalEditEntryBody() {
                   </div>
                </form>
             </div>
-            {releaseMensage &&
-               <div className="absolute -right-2 top-0 transition-all">
-                  <FloatAtentionNotification releaseMensage={releaseMensage} />
-               </div>
-            }
          </div>
       </ModalBackGround>
    )

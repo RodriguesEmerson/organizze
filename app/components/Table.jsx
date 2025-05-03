@@ -57,7 +57,7 @@ export function Table({ tableType }) {
                   >
                      <td className="pl-2 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis font-semibold text-gray-900">{item.description}</td>
 
-                     <TdCategories icon={`/icons/c-${item.category}.png`} categ={item.category} />
+                     <TdCategories icon={`/icons/${item.icon}`} categ={item.category} />
 
                      <td className="relative text-center">
                         {convertDateToDM(item.date)}
