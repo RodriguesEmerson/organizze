@@ -35,7 +35,7 @@ export function AvailableMonths({ year, availableMonths }) {
                <li
                   key={index}
                   className={`cursor-pointer text-xs transition-all duration-200 w-fit  rounded-sm hover:bg-gray-300
-                     ${(yearURL == year && monthURL == month) && "!bg-gray-900 text-white"}
+                     ${(yearURL == year && monthURL == month) && "!bg-cyan-600 text-white"}
                   `}
                   onClick={() => { changeTable(year, month) }}
                >

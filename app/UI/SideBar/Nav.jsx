@@ -13,7 +13,7 @@ export function Nav(){
       <nav>
          <ul>
             {navLinks.map(link => (
-               <li key={link.ref} className={`h-7 text-[13px] hover:bg-gray-200 transition-all duration-300
+               <li key={link.ref} className={`h-7 text-xs hover:bg-gray-200 transition-all duration-300
                   ${pathName == '/dashboard/categories' && 'bg-gray-900 text-white hover:bg-gray-900'}
                `}>
                   <Link href={link.ref} className='h-full text-center leading-7 block border-b border-b-gray-300'>

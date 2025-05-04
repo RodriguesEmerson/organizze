@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 export function ToastNotifications() {
    const notifications = useToastNotifications(state => state.notifications);
    
-   if(!notifications) return;
+   if(!notifications || notifications.length < 1) return;
    return (
       <div
          className="fixed left-1 bottom-4 flex flex-col justify-end items-start gap-2 text-sm z-[40] w-fit h-52 p-2 transition-all duration-300 "
@@ -15,7 +15,7 @@ export function ToastNotifications() {
                <Notifications key={notification.id} notification={notification}/>
             )
          ))}
-      </div>   
+      </div>  
    )
 }
 

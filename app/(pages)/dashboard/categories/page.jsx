@@ -13,18 +13,22 @@ import { useCategoriesDataStore } from "@/app/zustand/useCategoriesDataStore";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { ModalEditCategory } from "@/app/components/modals/ModalEditCategory";
 import { useDeleteCategory } from "@/app/hooks/categories/useDeleteCategory";
+import { TableSkeleton } from "@/app/components/loads/TableSkeleton";
 
 export default function CategoriesManage() {
    useAuthGuard(); //Checks if the user is Authenticated;
 
    const { getCategories } = useGetCategories();
-   const setShowEditCategoryModal = useModalsHiddenStore(state => state.setShowEditCategoryModal);
-   const setEditingCategory = useCategoriesDataStore(state => state.setEditingCategory);
    const categories = useCategoriesDataStore(state => state.categories);
+   const categoriesLoadedType = useCategoriesDataStore(state => state.categoriesLoadedType);
+   const setCategoriesLoadedType = useCategoriesDataStore(state => state.setCategoriesLoadedType);
 
-   if (!categories) {
-      getCategories()
+   if (categoriesLoadedType != 'all') {
+      getCategories();
+      setCategoriesLoadedType('all');
    }
+
+   //CONSERTAR BUG DE QUE ABRE CATEGORIAS JÁ CARREGADAS EM OUTRA ABA
 
    return (
       <>
@@ -32,13 +36,16 @@ export default function CategoriesManage() {
          <ToastNotifications />
          <PageModel title={'Gerenciar Categorias'}>
             <FormNewCategory categories={categories} />
-            <div className="z-[5] w-fit bg-white rounded-md px-1 shadow-md">
+            <div className="z-[5] max-w-[730px] w-fit bg-white rounded-md px-1 shadow-md">
                <table className="text-sm">
                   <thead className="h-7">
                      <tr>
                         <th scope="col" className="w-96">Categoria</th>
                         <th scope="col" className="w-40">Tipo</th>
                         <th scope="col" className="w-36">Icone</th>
+                        {!categories && 
+                        <th scope="col" className="w-9"></th>
+                        }
                      </tr>
                   </thead>
                   <tbody>
@@ -49,7 +56,7 @@ export default function CategoriesManage() {
                </table>
 
                {!categories &&
-                  <Spinner />
+                  <TableSkeleton />
                }
             </div>
          </PageModel>

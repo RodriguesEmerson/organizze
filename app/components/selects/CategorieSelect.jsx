@@ -8,10 +8,13 @@ export function CategorieSelect({ defaultValue, name, value, setValue, formData,
    const [openSelect, setOpenSelect] = useState(false);
    const categories = useCategoriesDataStore(state => state.categories);
    const { getCategories } = useGetCategories();
+   const categoriesLoadedType = useCategoriesDataStore(state => state.categoriesLoadedType);
+   const setCategoriesLoadedType = useCategoriesDataStore(state => state.setCategoriesLoadedType);
 
-   useEffect(() => {
+   if (categoriesLoadedType != type) {
       getCategories(type);
-   },[type])
+      setCategoriesLoadedType(type);
+   }
 
    return(
       <div className=" relative" >

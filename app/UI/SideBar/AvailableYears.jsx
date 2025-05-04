@@ -19,7 +19,7 @@ export function AvailableYears({ availableTables }){
       return;
    }
    return (
-      <div className="relative mt-4 pb-1 text-gray-900 border-t border-b border-gray-300">
+      <div className="relative mt-4 text-gray-900 border-t border-b border-gray-300">
          <div className="absolute right-0 -top-4 z-10">
             <Select
                options={Object.keys(availableTables)}
@@ -32,17 +32,21 @@ export function AvailableYears({ availableTables }){
          </div>
          <ul className="flex flex-col gap-[2px]">
             <AvailableMonths key={formData.year} year={formData.year} availableMonths={availableTables[formData.year]} />
+            {formData.year &&
+               <li>
+                  <Link
+                     href={`/dashboard?year=${formData.year}`}
+                     className={`w-full mt-1 h-7 rounded-sm flex items-center justify-center text-gray-900 text-xs hover:bg-gray-200 transition-all duration-300 border-t border-t-gray-300
+                        ${(year === formData.year && !monthURL) && " !bg-gray-900 text-white"}
+                     `}
+                  >
+                     <p>{`Ver relatório de ${formData.year}`}</p>
+                  </Link>
+               </li>
+            }
          </ul>
-         {year &&
-            <Link
-               href={`/dashboard?year=${formData.year}`}
-               className={`w-full mt-1 h-7 rounded-sm flex items-center justify-center text-gray-900 text-xs bg-gray-400 hover:bg-gray-500 transition-all duration-300
-                  ${(year === formData.year && !monthURL) && " !bg-gray-900 text-white"}
-               `}
-            >
-               <p>{`Ver relatório de ${year}`}</p>
-            </Link>
-         }
+         
+            
       </div>
    )
 }

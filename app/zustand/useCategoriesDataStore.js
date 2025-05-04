@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 export const useCategoriesDataStore = create((set) => ({
    categories: false,
+   categoriesLoadedType: false,
    editingCategory: false,
    icons: [
       'c-icon-0.png', 'c-icon-1.png', 'c-icon-2.png', 'c-icon-3.png', 'c-icon-4.png', 
@@ -9,6 +10,9 @@ export const useCategoriesDataStore = create((set) => ({
    ],
    setCategories: (categories) => set((state) => ({
       categories: categories
+   })),
+   setCategoriesLoadedType: (type) => set(() => ({
+      categoriesLoadedType: type
    })),
    setEditingCategory: (category) => set(() => ({
       editingCategory: category

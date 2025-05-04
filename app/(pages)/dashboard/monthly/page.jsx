@@ -16,66 +16,67 @@ import { BalanceTotal } from "@/app/UI/Board/BalanceTotal";
 import { ExpensesTotal } from "@/app/UI/Board/ExpensesTotal";
 import { GoalGraphic } from "@/app/UI/Board/GoalGraphic";
 import { Spinner } from "@/app/components/loads/spinner";
+import { MonthlyPageSqueleton } from "@/app/components/loads/MonthlyPageSqueleton";
 
 export default function MonthlyDashBoard() {
-   
+
    useAuthGuard(); //Checks if the user is Authenticated;
 
    const { toUpperFirstLeter } = useUtils();
    const searchParams = useSearchParams();
-   const yearURL =searchParams.get('year');
-   const monthURL= searchParams.get('month');
+   const yearURL = searchParams.get('year');
+   const monthURL = searchParams.get('month');
    const { entriesData } = useGetEntries(yearURL, monthURL);
 
-   if (!entriesData) return (
-      <div className="flex items-center justify-center h-[95vh]">
-      </div>
-   )
-   
+   // if (!entriesData) return (
+   //    <div className="flex items-center justify-center h-[95vh]">
+   //    </div>
+   // )
+
    return (
       <>
-      <ModalEditEntry />
-      <ToastNotifications />
-      <PageModel title={`${toUpperFirstLeter(monthURL)} de ${yearURL}`}>
-         {entriesData.loading && 
-            <Spinner />
-         }
-         {entriesData.erro &&
-            <div className=" flex items-center justify-center h-[95%] text-gray-900">
-               <span className="text-3xl font-bold">404</span>
-               <span className="inline-block h-12 w-[2px] mx-2 bg-gray-900"></span>
-               <p>{`As finanças de ${monthURL} de ${yearURL} não foram encontradas!`}</p>
-            </div>
-         }
-         {entriesData.entries &&
-            <div className="flex flex-col gap-2 pb-3 ">
-               <div className="w-full h-full">
-                  <div>
-                     <div className="flex flex-row gap-2 mb-2 justify-between">
+         <ModalEditEntry />
+         <ToastNotifications />
+         <PageModel title={`${toUpperFirstLeter(monthURL)} de ${yearURL}`}>
+            {(entriesData?.loading || !entriesData) &&
+               <MonthlyPageSqueleton />
+            }
+            {entriesData?.erro &&
+               <div className=" flex items-center justify-center h-[95%] text-gray-900">
+                  <span className="text-3xl font-bold">404</span>
+                  <span className="inline-block h-12 w-[2px] mx-2 bg-gray-900"></span>
+                  <p>{`As finanças de ${monthURL} de ${yearURL} não foram encontradas!`}</p>
+               </div>
+            }
+            {entriesData?.entries &&
+               <div className="flex flex-col gap-2 pb-3 ">
+                  <div className="w-full h-full">
+                     <div>
+                        <div className="flex flex-row gap-2 mb-2 justify-between">
 
-                        { <ExpensesTotal /> }
+                           {<ExpensesTotal />}
 
-                        { <IncomesTotal /> }
+                           {<IncomesTotal />}
 
-                        { <BalanceTotal /> }
+                           {<BalanceTotal />}
 
-                        { <GoalGraphic /> }
+                           {<GoalGraphic />}
+                        </div>
+                     </div>
+
+                     <div className="w-full flex flex-row gap-2 justify-between">
+                        <ExpesesGraphic expenses={entriesData.entries.expenses} sumary={entriesData.sum} />
+                        <IncomesGraphic incomes={entriesData.entries.incomes} sumary={entriesData.sum} />
+                     </div>
+
+                     <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">
+                        <h2 className="text-sm font-extrabold text-gray-500 mt-2">Tabelas</h2>
                      </div>
                   </div>
-
-                  <div className="w-full flex flex-row gap-2 justify-between">
-                     <ExpesesGraphic expenses={entriesData.entries.expenses} sumary={entriesData.sum}/>
-                     <IncomesGraphic incomes={entriesData.entries.incomes} sumary={entriesData.sum}/>
-                  </div>
-
-                  <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">
-                     <h2 className="text-sm font-extrabold text-gray-500 mt-2">Tabelas</h2>
-                  </div>
+                  <Tables />
                </div>
-               <Tables />
-            </div>
-         }
-      </PageModel>
+            }
+         </PageModel>
       </>
    )
 }
