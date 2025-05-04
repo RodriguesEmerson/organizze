@@ -7,7 +7,7 @@ import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { Spinner } from "../loads/spinner";
 import { IconSelect } from "../selects/IconSelect";
 import { useCategoriesDataStore } from "@/app/zustand/useCategoriesDataStore";
-import { useUpdateCategoriesHandler } from "@/app/hooks/categories/useUpdateCategoryHandler";
+import { useUpdateCategories } from "@/app/hooks/categories/useUpdateCategory";
 
 export function ModalEditCategory() {
    const showEditCategoryModal = useModalsHiddenStore((state) => state.showEditCategoryModal);
@@ -20,7 +20,7 @@ export function ModalEditCategory() {
 
 function ModalEditCategoryBody() {
 
-   const { updateCategoryHandler, loading } = useUpdateCategoriesHandler();
+   const { updateCategoryHandler, loading } = useUpdateCategories();
    const setShowEditCategoryModal = useModalsHiddenStore(state => state.setShowEditCategoryModal);
    const icons = useCategoriesDataStore(state => state.icons);
    const editingCategory = useCategoriesDataStore(state => state.editingCategory);

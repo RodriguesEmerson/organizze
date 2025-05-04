@@ -4,7 +4,7 @@ import { useToastNotifications } from "@/app/zustand/useToastNotifications";
 import { useGetCategories } from "./useGetCategories";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 
-export function useUpdateCategoriesHandler(){
+export function useUpdateCategories(){
    const setNotifications = useToastNotifications(state => state.setNotifications);
    const setShowEditCategoryModal = useModalsHiddenStore(state => state.setShowEditCategoryModal);
    const { gerarCUID } = useUtils();

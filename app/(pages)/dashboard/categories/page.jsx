@@ -12,6 +12,7 @@ import { ToastNotifications } from "@/app/components/notificatons/ToastNotificat
 import { useCategoriesDataStore } from "@/app/zustand/useCategoriesDataStore";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { ModalEditCategory } from "@/app/components/modals/ModalEditCategory";
+import { useDeleteCategory } from "@/app/hooks/categories/useDeleteCategory";
 
 export default function CategoriesManage() {
    useAuthGuard(); //Checks if the user is Authenticated;
@@ -21,65 +22,79 @@ export default function CategoriesManage() {
    const setEditingCategory = useCategoriesDataStore(state => state.setEditingCategory);
    const categories = useCategoriesDataStore(state => state.categories);
 
-   if(!categories){
+   if (!categories) {
       getCategories()
    }
 
    return (
-   <>
-      <ModalEditCategory />
-      <ToastNotifications />
-      <PageModel title={'Gerenciar Categorias'}>
-         <FormNewCategory categories={categories}/>
-         <div className="z-[5] w-fit bg-white rounded-md px-1 shadow-md">
-            <table className="text-sm">
-               <thead className="h-7">
-                  <tr>
-                     <th scope="col" className="w-96">Categoria</th>
-                     <th scope="col" className="w-40">Tipo</th>
-                     <th scope="col" className="w-36">Icone</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  {categories && categories.map(category => (
-                     <tr key={category.id} 
-                        className={`h-9 border-t border-gray-200  hover:bg-gray-100 transition-all cursor-pointer
-                           ${category.type == 'expense' ? 'text-red-800' : 'text-green-800'}`}
-                        onClick={() => {
-                           setShowEditCategoryModal(true);
-                           setEditingCategory(category)
-                        }}
-                     >
-                        <td className="pl-1">{category.name}</td>
-                        <td className="text-center">{category.type == 'expense' ? 'Despesa' : 'Receita'}</td>
-                        <td className="text-center">
-                           <img className="w-5 h-5 m-auto" src={`/icons/${category.icon}`} />
-                        </td>
-                        <td className="text-center">
-                           {<ButtonDelete />}
-                        </td>
+      <>
+         <ModalEditCategory />
+         <ToastNotifications />
+         <PageModel title={'Gerenciar Categorias'}>
+            <FormNewCategory categories={categories} />
+            <div className="z-[5] w-fit bg-white rounded-md px-1 shadow-md">
+               <table className="text-sm">
+                  <thead className="h-7">
+                     <tr>
+                        <th scope="col" className="w-96">Categoria</th>
+                        <th scope="col" className="w-40">Tipo</th>
+                        <th scope="col" className="w-36">Icone</th>
                      </tr>
-                  ))}
-               </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                     {categories && categories.map(category => (
+                        <Tr key={category.id} category={category} />
+                     ))}
+                  </tbody>
+               </table>
 
-            {!categories &&
-               <Spinner />
+               {!categories &&
+                  <Spinner />
+               }
+            </div>
+         </PageModel>
+      </>
+   )
+}
+
+function Tr({ category }) {
+   const { deleteCategoryHandler, deleting } = useDeleteCategory();
+   const setShowEditCategoryModal = useModalsHiddenStore(state => state.setShowEditCategoryModal);
+   const setEditingCategory = useCategoriesDataStore(state => state.setEditingCategory);
+   return (
+      <tr key={category.id}
+         className={`h-9 border-t border-gray-200  hover:bg-gray-100 transition-all cursor-pointer
+            ${category.type == 'expense' ? 'text-red-800' : 'text-green-800'}`}
+         onClick={() => {
+            setShowEditCategoryModal(true);
+            setEditingCategory(category);
+         }}
+      >
+         <td className="pl-1">{category.name}</td>
+         <td className="text-center">{category.type == 'expense' ? 'Despesa' : 'Receita'}</td>
+         <td className="text-center">
+            <img className="w-5 h-5 m-auto" src={`/icons/${category.icon}`} />
+         </td>
+         <td className="text-center">
+            {deleting &&
+               <Spinner size={5}/>
             }
-         </div>
-      </PageModel>
-   </>
+            {!deleting &&
+               <ButtonDelete onClick={(e) => {e.stopPropagation(); deleteCategoryHandler.delete(category)}}/>
+            }
+         </td>
+      </tr>
    )
 }
 
 function FormNewCategory({ categories }) {
    const { categoriesHandler, insertCategoryStatus } = useCategoriesHandler();
-   const [formData, setFormData] = useState({ name: '', type: '', icon: 'c-icon-0.png'});
+   const [formData, setFormData] = useState({ name: '', type: '', icon: 'c-icon-0.png' });
    const icons = useCategoriesDataStore(state => state.icons);
 
    useEffect(() => {
-      if(insertCategoryStatus.success){
-         setFormData({ name: '', type: '', icon: 'c-icon-0.png'})
+      if (insertCategoryStatus.success) {
+         setFormData({ name: '', type: '', icon: 'c-icon-0.png' })
       }
    }, [insertCategoryStatus.success]);
 
@@ -123,9 +138,9 @@ function FormNewCategory({ categories }) {
                <label htmlFor="incomeradio" className="-ml-1">Receita</label>
             </div>
             <div className="flex items-center flex-row gap-2 mb-2">
-               <label  className="-ml-1 font-bold">Ícone:</label>
-               < IconSelect 
-                  currentIcon={formData.icon} 
+               <label className="-ml-1 font-bold">Ícone:</label>
+               < IconSelect
+                  currentIcon={formData.icon}
                   formData={formData}
                   setFormData={setFormData}
                   icons={icons}
@@ -133,9 +148,9 @@ function FormNewCategory({ categories }) {
             </div>
             <div>
                <ButtonSave
-                  onClick={() => {categoriesHandler.insertCategory(formData, categories)}}
+                  onClick={() => { categoriesHandler.insertCategory(formData, categories) }}
                >
-                  {insertCategoryStatus.loading 
+                  {insertCategoryStatus.loading
                      ? <Spinner />
                      : <span>Adicionar</span>
                   }
