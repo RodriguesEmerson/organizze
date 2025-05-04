@@ -50,6 +50,7 @@ export function useCategoriesHandler(){
             return;
          })
       },
+      
       validateCategory: (category, categories) => {
          if(!category.name || !category.type || !category.icon){
             setInsertCategoryStatus(

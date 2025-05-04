@@ -6,7 +6,7 @@ export function ModalBackGround({ children }) {
 
    return (
       <div
-         className=" fixed flex justify-center items-center bg-black bg-opacity-75 top-0 left-0 h-full w-full z-[30]"
+         className=" fixed flex justify-center items-center bg-black bg-opacity-55 top-0 left-0 h-full w-full z-[30]"
          onMouseDown={(e) => {
             initialClick = e.target.closest(".modal");
          }}

@@ -10,18 +10,24 @@ import { useEffect, useState } from "react";
 import { useCategoriesHandler } from "@/app/hooks/categories/useCategoriesHandler";
 import { ToastNotifications } from "@/app/components/notificatons/ToastNotifications";
 import { useCategoriesDataStore } from "@/app/zustand/useCategoriesDataStore";
+import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
+import { ModalEditCategory } from "@/app/components/modals/ModalEditCategory";
 
 export default function CategoriesManage() {
    useAuthGuard(); //Checks if the user is Authenticated;
 
    const { getCategories } = useGetCategories();
+   const setShowEditCategoryModal = useModalsHiddenStore(state => state.setShowEditCategoryModal);
+   const setEditingCategory = useCategoriesDataStore(state => state.setEditingCategory);
    const categories = useCategoriesDataStore(state => state.categories);
+
    if(!categories){
       getCategories()
    }
 
    return (
    <>
+      <ModalEditCategory />
       <ToastNotifications />
       <PageModel title={'Gerenciar Categorias'}>
          <FormNewCategory categories={categories}/>
@@ -39,6 +45,10 @@ export default function CategoriesManage() {
                      <tr key={category.id} 
                         className={`h-9 border-t border-gray-200  hover:bg-gray-100 transition-all cursor-pointer
                            ${category.type == 'expense' ? 'text-red-800' : 'text-green-800'}`}
+                        onClick={() => {
+                           setShowEditCategoryModal(true);
+                           setEditingCategory(category)
+                        }}
                      >
                         <td className="pl-1">{category.name}</td>
                         <td className="text-center">{category.type == 'expense' ? 'Despesa' : 'Receita'}</td>
@@ -65,10 +75,7 @@ export default function CategoriesManage() {
 function FormNewCategory({ categories }) {
    const { categoriesHandler, insertCategoryStatus } = useCategoriesHandler();
    const [formData, setFormData] = useState({ name: '', type: '', icon: 'c-icon-0.png'});
-   const icons = [
-      'c-icon-0.png', 'c-icon-1.png', 'c-icon-2.png', 'c-icon-3.png', 'c-icon-4.png', 
-      'c-icon-5.png', 'c-icon-6.png', 'c-icon-7.png', 'c-icon-8.png', 'c-icon-9.png', 'c-icon-10.png', 'c-icon-11.png'
-   ];
+   const icons = useCategoriesDataStore(state => state.icons);
 
    useEffect(() => {
       if(insertCategoryStatus.success){

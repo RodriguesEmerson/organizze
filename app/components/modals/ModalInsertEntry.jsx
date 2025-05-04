@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { ButtonClose } from "../buttons/ButtonClose"
 import { ButtonSave } from "../buttons/ButtonSave";
 import { CategorieSelect } from "../selects/CategorieSelect";
@@ -11,40 +11,24 @@ import { useEntryHandler } from "@/app/hooks/entries/useEntryHandler";
 import { useUtils } from "@/app/hooks/useUtils";
 import { Spinner } from "../loads/spinner";
 
-export function ModalEditEntry(){
+export function ModalInsertEntry(){
    const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
    if(showEditModal){
       return (
-         <ModalEditEntryBody />
+         <ModalInsertEntryBody />
       )
    }
 }
 
-function ModalEditEntryBody() {
+function ModalInsertEntryBody({ type }) {
    const { updateEntry, updateDBSAnswer } = useEntryHandler(); 
    const { convertDateToDMY } = useUtils();
    const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
-   const [formData, setFormData] = useState({description: '', category: '', date: '', fixed: false, end_date: '', value: '', id: ''});
+   const [formData, setFormData] = useState({description: '', category: '', date: '', icon: '', fixed: false, end_date: '', value: '', id: ''});
    
    //Dados do item em edição.
-   const editingEntry = useTableStore((state) => state.editingEntry);
    const [fixedRelease, setFixedRelease] = useState(false);
 
-   useEffect(() => {
-      setFormData( 
-         {   
-            description: editingEntry.description,
-            category: editingEntry.category,
-            date: convertDateToDMY(editingEntry.date),
-            fixed: !!editingEntry?.end_date ? true : false,
-            icon: editingEntry.icon,
-            end_date: editingEntry.end_date ? convertDateToDMY(editingEntry.end_date) : '',
-            value: new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(editingEntry.value).slice(3,),
-            id: editingEntry.id
-         } 
-      );
-      setFixedRelease(!!editingEntry?.end_date && true);
-   }, [editingEntry]);
    
    return (
       <ModalBackGround >
@@ -54,7 +38,7 @@ function ModalEditEntryBody() {
                <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
                   <img className="w-6 transition-all" src={"/gif/edit.gif"} />
                </div>
-                <h4>{`Editando ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}</h4>
+                <h4>{`Editando ${type == 'expenses' ? 'Despesa' : 'Receita'}`}</h4>
                <div className="absolute h-5 w-5 top-0 right-0">
                   <ButtonClose onClick={() => { setShowEditModal(false) }} />
                </div>

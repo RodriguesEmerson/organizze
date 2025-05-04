@@ -2,7 +2,9 @@ import { create } from "zustand";
 
 export const useModalsHiddenStore = create ((set) =>({
    showAddReleaseModal: false,
+   showInsertModal: false,
    showEditModal: false,
+   showEditCategoryModal: false,
    setShowAddReleaseModal:() => set((state) =>({
       showAddReleaseModal: true
    })),
@@ -11,9 +13,17 @@ export const useModalsHiddenStore = create ((set) =>({
    })),
    setHiddenAllModals: () => set(() => ({
       showAddReleaseModal: false,
-      showEditModal: false
+      showInsertModal: false,
+      showEditModal: false,
+      showEditCategoryModal: false,
+   })),
+   setShowInsertModal: (status) => set(() => ({
+      showInsertModal: status
    })),
    setShowEditModal: (status) => set(() => ({
       showEditModal: status
+   })),
+   setShowEditCategoryModal: (status) => set(() => ({
+      showEditCategoryModal: status
    }))
 }))

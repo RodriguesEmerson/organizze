@@ -18,7 +18,7 @@ export default function SideBar() {
          setData(availableTables)
       }
    }, [availableTables])
-
+   
    return (
       <section className={`fixed ml-2 mt-2 rounded-md z-[12] bg-white shadow-2xl left-0 top-12 transition-all text-sm border-t border-t-white w-44`} style={{ height: 'calc(100% - 65px' }}>
          {!data &&
