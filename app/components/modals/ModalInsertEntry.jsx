@@ -4,43 +4,41 @@ import { ButtonClose } from "../buttons/ButtonClose"
 import { ButtonSave } from "../buttons/ButtonSave";
 import { CategorieSelect } from "../selects/CategorieSelect";
 import { Calendar } from "../Calendar";
-import { useTableStore } from "../../zustand/useTablesStore";
 import { ModalBackGround } from "./../ModalBackGround";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
-import { useEntryHandler } from "@/app/hooks/entries/useEntryHandler";
-import { useUtils } from "@/app/hooks/useUtils";
 import { Spinner } from "../loads/spinner";
+import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
+import { useInsertNewEntry } from "@/app/hooks/entries/useInsertNewEntry";
 
 export function ModalInsertEntry(){
-   const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
-   if(showEditModal){
+   const showInsertModal = useModalsHiddenStore((state) => state.showInsertModal);
+   if(showInsertModal){
       return (
          <ModalInsertEntryBody />
       )
    }
 }
 
-function ModalInsertEntryBody({ type }) {
-   const { updateEntry, updateDBSAnswer } = useEntryHandler(); 
-   const { convertDateToDMY } = useUtils();
-   const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
-   const [formData, setFormData] = useState({description: '', category: '', date: '', icon: '', fixed: false, end_date: '', value: '', id: ''});
-   
-   //Dados do item em edição.
-   const [fixedRelease, setFixedRelease] = useState(false);
-
-   
+function ModalInsertEntryBody() {
+   const { insertEntry, loading } = useInsertNewEntry(); 
+   const setShowInsertModal = useModalsHiddenStore(state => state.setShowInsertModal);
+   const [formData, setFormData] = useState(
+      {description: '', category: '', date: '', icon: '', fixed: false, end_date: '', value: '', id: ''}
+   );
+   const newEntryType = useEntriesDataStore(state => state.newEntryType);
+   const [fixedEntry, setFixedEntry] = useState(false);
+   //CRIANDO FUNÇÃO PARA PAGINAÇÃO
    return (
       <ModalBackGround >
          <div className="relative modal flex flex-col justify-between h-fit w-[420px] bg-white rounded-md shadow-lg py-2 px-3">
 
             <div className="text-center h-9 leading-7 w-[420px] rounded-t-md -ml-3 -mt-[9px] text-sm pt-[5px] border-b mb-3 bg-gray-800 text-white">
                <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
-                  <img className="w-6 transition-all" src={"/gif/edit.gif"} />
+                  <img className="w-6 transition-all" src={"/icons/edit.png"} />
                </div>
-                <h4>{`Editando ${type == 'expenses' ? 'Despesa' : 'Receita'}`}</h4>
+                <h4>{`Adicionar nova ${newEntryType == 'expense' ? 'Despesa' : 'Receita'}`}</h4>
                <div className="absolute h-5 w-5 top-0 right-0">
-                  <ButtonClose onClick={() => { setShowEditModal(false) }} />
+                  <ButtonClose onClick={() => { setShowInsertModal(false) }} />
                </div>
             </div>
             
@@ -56,7 +54,7 @@ function ModalInsertEntryBody({ type }) {
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         autoFocus
-                        maxLength={50}
+                        maxLength={50} 
                      />
                   </div>
                   <div className="flex flex-row gap-1 mb-3">
@@ -67,7 +65,7 @@ function ModalInsertEntryBody({ type }) {
                            value={formData.category}
                            setValue={ setFormData }
                            formData={formData}
-                           type={editingEntry.type.slice(0,-1)}
+                           type={newEntryType}
                         />
                      </div>
 
@@ -87,8 +85,8 @@ function ModalInsertEntryBody({ type }) {
                            <Calendar
                               name="dataFim"
                               value={formData.end_date}
-                              disabled={!fixedRelease}
-                              disabledCalendar={!fixedRelease}
+                              disabled={!fixedEntry}
+                              disabledCalendar={!fixedEntry}
                               setFormData={setFormData}
                               formData={formData}
                               formRef = "end_date"
@@ -100,15 +98,15 @@ function ModalInsertEntryBody({ type }) {
                               className="h-4"
                               type="checkbox"   
                               name="fixa"
-                              checked={fixedRelease}
+                              checked={fixedEntry}
                               onChange={() => { 
-                                 setFormData({ ...formData, end_date: '', fixed: !fixedRelease }); 
-                                 setFixedRelease(!fixedRelease); 
+                                 setFormData({ ...formData, end_date: '', fixed: !fixedEntry }); 
+                                 setFixedEntry(!fixedEntry); 
                               }}
-                              id={`${editingEntry.type}-fixedReleaseCheckbox`}
+                              id={`${newEntryType}-fixedEntryCheckbox`}
                            />
-                           <label htmlFor={`${editingEntry.type}-fixedReleaseCheckbox`}>
-                              {`${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'} fixa`}
+                           <label htmlFor={`${newEntryType}-fixedEntryCheckbox`}>
+                              {`${newEntryType == 'expense' ? 'Despesa' : 'Receita'} fixa`}
                            </label>
                         </div>
                      </div>
@@ -122,17 +120,17 @@ function ModalInsertEntryBody({ type }) {
                         placeholder="0,00"
                         value={formData.value}
                         onChange={(e) => setFormData({ ...formData, value: e.target.value })}
-                        required
                      />
                   </div>
                   <div className="flex justify-center mt-3">
                      <ButtonSave 
                         onClick={(e) => {
                            e.preventDefault();
-                           updateEntry(formData, editingEntry.type);
+                           insertEntry(formData, newEntryType);
+                           loading === false && setFormData({description: '', category: '', date: '', icon: '', fixed: false, end_date: '', value: '', id: ''})
                         }} 
-                        text="Salvar alteraçôes" 
-                     >{updateDBSAnswer.loading &&
+                        text="Adicionar" 
+                     >{loading === true &&
                         <Spinner />
                      }</ ButtonSave >
                   </div>

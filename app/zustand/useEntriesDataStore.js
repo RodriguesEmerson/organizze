@@ -2,28 +2,16 @@ import { create } from "zustand";
 
 export const useEntriesDataStore = create((set) => ({
    entriesData: false,
+   newEntryType: false,
    setEntriesDataStore: (data) => set(() => ({
       entriesData: data
    })),
-   updateEntriesDataStore: (updatedData) => set((state) => ({
-      entriesData: {...updatedData}
-   })),
-   
-   updateEntriesExpenses: (expenses) => set((state) => ({
+   updateEntriesDataStore: (entries, type) => set((state) => ({
       entriesData: {
          ...state.entriesData,
          entries: {
             ...state.entriesData.entries,
-            expenses: expenses
-         }
-      }
-   })),
-   updateEntriesIncomes: (incomes) => set((state) => ({
-      entriesData: {
-         ...state.entriesData,
-         entries: {
-            ...state.entriesData.entries,
-            incomes: incomes
+            [type]: entries
          }
       }
    })),
@@ -46,5 +34,8 @@ export const useEntriesDataStore = create((set) => ({
             balance: balance
          }
       }
+   })),
+   setNewEntryType: (type) => set(() => ({
+      newEntryType: type
    }))
 }))

@@ -1,16 +1,12 @@
 import { ButtonAdd } from "@/app/components/buttons/ButtonAdd"
 import { Table } from "@/app/components/Table"
+import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
-import { useTableStore } from "@/app/zustand/useTablesStore";
 
 export default function IncomeTable() {
+   const setShowInsertModal = useModalsHiddenStore((state) => state.setShowInsertModal);
+   const setNewEntryType = useEntriesDataStore(state => state.setNewEntryType);
 
-   const setShowAddReleaseModal = useModalsHiddenStore((state) => state.setShowAddReleaseModal);
-   const  setNewReleaseType  = useTableStore((state) => state.setNewReleaseType);
-   function handleAddReleaseType(){
-      setNewReleaseType({title: 'Receita', type: 'incomes'})
-      setShowAddReleaseModal();
-   }
    return (
       <div className="flex-1 p-2 pb-0 rounded-md shadow-lg min-w-[527px] h-fit bg-white">
          <div
@@ -18,13 +14,19 @@ export default function IncomeTable() {
          >
             <h3 className="leading-9">Receitas</h3>
             <div className="absolute top-0 right-2">
-               <ButtonAdd clickEvent={handleAddReleaseType} title={"Receita"}/>
+               <ButtonAdd 
+                  text={"Receita"} 
+                  onClick={() => {
+                     setShowInsertModal(true);
+                     setNewEntryType('income');
+                  }}
+               />
             </div>
          </div>
 
          <div className=" table-scroll-style">
             <div className="pr-2 pb-2"
-               // style={{ maxHeight: "calc(100vh - 110px)" }}
+            // style={{ maxHeight: "calc(100vh - 110px)" }}
             >
                <Table tableType={'incomes'} />
             </div>

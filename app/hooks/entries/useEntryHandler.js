@@ -4,12 +4,14 @@ import { useUtils } from "../useUtils";
 import { useState } from "react";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
+import { useAuthStatus } from "@/app/zustand/useAuthStatus";
 
 export function useEntryHandler(){
    const editingEntry = useTableStore((state) => state.editingEntry);
    const setNotifications = useToastNotifications(state => state.setNotifications);
    const [updateDBSAnswer, setUpdateDBSAnswer] = useState({error: false, loading: false});
    const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
+   const setAuth = useAuthStatus((state) => state.setAuth);
    const { updateStore } = useUpdateEntriesStore();
    const { convertDateToYMD, convertValueToNumeric, gerarCUID } = useUtils();
 
@@ -69,6 +71,11 @@ export function useEntryHandler(){
             setUpdateDBSAnswer({loading: false});
             return;
          }
+         if(response.status == 500){
+            setAuth(false);
+            window.location.href ='http://localhost:3000/signin';
+            return;
+         }
       })
       .catch(error => {
          console.log(error)
@@ -83,10 +90,9 @@ export function useEntryHandler(){
 
 export function useUpdateEntriesStore(){
    const entriesData = useEntriesDataStore(state => state.entriesData);
-   const updateEntriesExpenses = useEntriesDataStore(state => state.updateEntriesExpenses);
    const updateEntriesExpensesSum = useEntriesDataStore(state => state.updateEntriesExpensesSum);
-   const updateEntriesIncomes = useEntriesDataStore(state => state.updateEntriesIncomes);
    const updateEntriesIncomesSum = useEntriesDataStore(state => state.updateEntriesIncomesSum);
+   const updateEntriesDataStore = useEntriesDataStore(state => state.updateEntriesDataStore);
 
    function updateStore(updatedEntry, type){
 
@@ -104,7 +110,6 @@ export function useUpdateEntriesStore(){
             }
             editingEntries[index] = toUpdatedEntry;
          }
-
          
          if(Object.keys(updatedEntry).indexOf('value') != -1){
             const intactType = type == 'expenses' ? 'incomes' : 'expenses'; //Salva o tipo de entries não editadas
@@ -119,13 +124,19 @@ export function useUpdateEntriesStore(){
             type == 'expenses'
                ? updateEntriesExpensesSum(newValue, newBalance)
                : updateEntriesIncomesSum(newValue, newBalance);
-               
          }
-
-         type == 'expenses'
-            ? updateEntriesExpenses(editingEntries)
-            : updateEntriesIncomes(editingEntries)
       })
+
+      //Retira a versção antiga da entry editada
+      const entriesWITHOUTUpdatedEntry = editingEntries.filter(entry => entry.id != updatedEntry.id);
+      //Adiciona a entry já editada
+      const entriesWITHUpdatedEntry = [...entriesWITHOUTUpdatedEntry, toUpdatedEntry];
+      //Organiza por data descendente.
+      const sortedEntries = entriesWITHUpdatedEntry.sort((curr, prev) => { 
+         return new Date(prev.date).getTime() - new Date(curr.date).getTime();
+      });
+
+      updateEntriesDataStore(sortedEntries, type);
    }
 
    return { updateStore }

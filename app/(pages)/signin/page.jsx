@@ -13,27 +13,29 @@ export default function Signin(){
       <main 
          className="relative flex justify-center items-center"
          style={{ height: "calc(100vh - 48px)" }}
-      >
-         <section className="bg-white rounded-md h-[26rem] w-80 p-3 pt-4 shadow-xl relative">
-
-            <h1 className="text-center text-gray-900 font-extrabold text-2xl">Entrar</h1>
-
+      >  
+         <section className="bg-white rounded-md h-[26rem] w-80 p-3 pt-4 shadow-md relative">
+            <div>
+               <h2 className="text-center text-gray-900 font-extrabold text-2xl">Entrar</h2>
+            </div>
             <div className="h-[90%] content-center">
-               <form className="flex flex-col gap-2">
+               <form className="flex flex-col gap-3">
                   <div className="flex flex-col">
-                     <label htmlFor="signin-email" className="text-gray-500 text-sm pl-1">E-mail</label>
+                     {/* <label htmlFor="signin-email" className="text-gray-500 text-sm pl-1">E-mail</label> */}
                      <input type="email" name="email" id="signin-email" required
-                        className="border border-gray-500 text-sm rounded-md h-8 pl-2"
+                        className="border border-gray-300 text-sm rounded-[4px] h-9 pl-2"
                         value={data.email}
+                        placeholder="Email"
                         onChange={(e)=> {setData({...data, email: e.target.value}); setStatus({...status, error: false})}}
                      />
                   </div>
                   <div className="flex flex-col">
-                     <label htmlFor="signin-password" className="text-gray-500 text-sm pl-1">Senha</label>
+                     {/* <label htmlFor="signin-password" className="text-gray-500 text-sm pl-1">Senha</label> */}
                      <input type="password" name="password" id="signin-password" required
-                         className="border border-gray-500 text-sm rounded-md h-8 pl-2"
-                         value={data.password}
-                         onChange={(e)=> {setData({...data, password: e.target.value}); setStatus({...status, error: false})}}
+                        className="border border-gray-300 text-sm rounded-[4px] h-9 pl-2"
+                        value={data.password}
+                        placeholder="Senha"
+                        onChange={(e)=> {setData({...data, password: e.target.value}); setStatus({...status, error: false})}}
                      />
                   </div>
                   <div className="flex justify-end gap-1">
@@ -44,7 +46,7 @@ export default function Signin(){
                         checked = {data.remember}
                         onChange={(e)=> {setData({...data, remember: !data.remember})}}
                      />
-                     <label htmlFor="remember-checkbox" className="text-sm">Remember-me</label>
+                     <label htmlFor="remember-checkbox" className="text-xs">Lembrar por 30 dias</label>
                   </div>
 
                   <button onClick={(e)=> {e.preventDefault(); setStatus({...status, loading: true}); useSignin(data, setStatus, status)}}

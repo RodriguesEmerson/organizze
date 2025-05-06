@@ -29,7 +29,6 @@ export function ExpesesGraphic () {
 
 const ExpesesGraphicBody = memo(({data}) => {
    const { getExpensesData } = useExpensesGraphic();
-
    return (
       <div className="!min-w-[636px] h-[300px] flex flex-col flex-1 items-center p-1 pr-2 bg-white shadow-md rounded-md overflow-hidden">
          {!data &&

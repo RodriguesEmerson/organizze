@@ -1,6 +1,5 @@
 'use client'
 import { PageModel } from "@/app/components/PageModel";
-import { ModalNewRelease } from "@/app/components/Modal-NewRelease";
 import ExpenseTable from "/app/UI/Board/ExpenseTable";
 import IncomeTable from "/app/UI/Board/IncomeTable";
 import { useUtils } from "@/app/hooks/useUtils";
@@ -8,34 +7,41 @@ import { ExpesesGraphic } from "@/app/UI/Board/ExpensesGraphic";
 import { IncomesGraphic } from "@/app/UI/Board/IncomesGraphic";
 import { useSearchParams } from "next/navigation";
 import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
-import { useGetEntries } from "@/app/hooks/monthlyPageHooks/useGetEntries";
+import { useGetEntries } from "@/app/hooks/entries/useGetEntries";
 import { ModalEditEntry } from "@/app/components/modals/ModalEditEntry";
 import { ToastNotifications } from "@/app/components/notificatons/ToastNotifications";
 import { IncomesTotal } from "@/app/UI/Board/IncomesTotal";
 import { BalanceTotal } from "@/app/UI/Board/BalanceTotal";
 import { ExpensesTotal } from "@/app/UI/Board/ExpensesTotal";
 import { GoalGraphic } from "@/app/UI/Board/GoalGraphic";
-import { Spinner } from "@/app/components/loads/spinner";
 import { MonthlyPageSqueleton } from "@/app/components/loads/MonthlyPageSqueleton";
+import { ModalInsertEntry } from "@/app/components/modals/ModalInsertEntry";
+import { useTableStore } from "@/app/zustand/useTablesStore";
+import { useEffect } from "react";
 
 export default function MonthlyDashBoard() {
 
    useAuthGuard(); //Checks if the user is Authenticated;
+
+   //Adicionar redirecionamento à resposta 500 nas categorais.
 
    const { toUpperFirstLeter } = useUtils();
    const searchParams = useSearchParams();
    const yearURL = searchParams.get('year');
    const monthURL = searchParams.get('month');
    const { entriesData } = useGetEntries(yearURL, monthURL);
+   const setSelectedMonth = useTableStore(state => state.setSelectedMonth);
 
-   // if (!entriesData) return (
-   //    <div className="flex items-center justify-center h-[95vh]">
-   //    </div>
-   // )
+   useEffect(() => {
+      //Seta a tabela selecionada para o calendário abrir no mês correto.
+      setSelectedMonth(yearURL, monthURL);
+   },[])
 
    return (
       <>
          <ModalEditEntry />
+         <ModalInsertEntry />
+
          <ToastNotifications />
          <PageModel title={`${toUpperFirstLeter(monthURL)} de ${yearURL}`}>
             {(entriesData?.loading || !entriesData) &&
@@ -53,13 +59,9 @@ export default function MonthlyDashBoard() {
                   <div className="w-full h-full">
                      <div>
                         <div className="flex flex-row gap-2 mb-2 justify-between">
-
                            {<ExpensesTotal />}
-
                            {<IncomesTotal />}
-
                            {<BalanceTotal />}
-
                            {<GoalGraphic />}
                         </div>
                      </div>

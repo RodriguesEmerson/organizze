@@ -12,6 +12,11 @@ export const useTableStore = create((set) =>({
          selectedTable: {year: year, month: month}
       }
    )),
+   setSelectedMonth: (year, month) => set(() => (
+      {
+         selectedTable: {year: year, month: month}
+      }
+   )),
    setData: (data) => set(() => (
       {data: data}
    )),

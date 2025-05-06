@@ -1,11 +1,12 @@
+import { useAuthStatus } from "@/app/zustand/useAuthStatus";
 import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { useEffect, useState } from "react";
-
 
 export function useGetEntries(year, month){
 
    const [entriesData, setEntriesData] = useState(null);
-   const setEntriesDataStore = useEntriesDataStore(state => state.setEntriesDataStore)
+   const setEntriesDataStore = useEntriesDataStore(state => state.setEntriesDataStore);
+   const setAuth = useAuthStatus((state) => state.setAuth);
    
    useEffect(() => {
       const getEntries = async () => {
@@ -17,7 +18,7 @@ export function useGetEntries(year, month){
          .then(async response => {
             const data = await response.json();
 
-            if(data){
+            if(response.status == 200){
                const incomes = [];
                const expenses = [];
                
@@ -28,7 +29,7 @@ export function useGetEntries(year, month){
                      expenses.push(entry);
                   }
                });
-
+               
                setEntriesData({
                   entries: {
                      incomes: incomes,
@@ -44,6 +45,11 @@ export function useGetEntries(year, month){
                   },
                   sum: {...data.sum[0], balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum},
                });
+            }
+            if(response.status == 500){
+               setAuth(false);
+               window.location.href ='http://localhost:3000/signin';
+               return;
             }
          })
          .catch(error => {
