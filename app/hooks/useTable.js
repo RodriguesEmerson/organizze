@@ -3,9 +3,6 @@
 import { useTableStore } from "../zustand/useTablesStore"
 
 export function useTable() {
-
-   //Causa re-renderização no componente se qualquer uma das variaveis for alterada.
-   // const [ data, selectedTable ] = useTableStore((state) => [state.data, state.selectedTable]);
    
    //re-renderização granulada, so renderiza o componente quando a vairavel que o usa em si mudar.
    const data = useTableStore((state) => state.data);
@@ -15,7 +12,7 @@ export function useTable() {
       getSelectedMonthData: function () {
          if (!data) return;
 
-         //Current selected year and month.
+         //Atual data selecioanda.
          const { year, month } = selectedTable;
          if (!data[year] || !data[year].months[month]) return false;
 

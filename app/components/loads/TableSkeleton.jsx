@@ -14,6 +14,12 @@ function TableSkeleton() {
          <div className="flex w-full flex-col gap-2 items-end border-b border-b-gray-300">
             <span className="block h-7 w-full rounded-md animate-pulse my-1 bg-gray-300"></span>
          </div>
+         <div className="flex w-full flex-col gap-2 items-end border-b border-b-gray-300">
+            <span className="block h-7 w-full rounded-md animate-pulse my-1 bg-gray-300"></span>
+         </div>
+         <div className="flex w-full flex-col gap-2 items-end border-b border-b-gray-300">
+            <span className="block h-7 w-full rounded-md animate-pulse my-1 bg-gray-300"></span>
+         </div>
       </div>
    )
 }

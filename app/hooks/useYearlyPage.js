@@ -1,7 +1,6 @@
 
 import { useSearchParams } from 'next/navigation'
 import { useTableStore } from '../zustand/useTablesStore';
-import { useYearlyPageStore } from '../zustand/useCategoriesDataStore';
 
 export function useYearlyPage() {
    const searchParams = useSearchParams();

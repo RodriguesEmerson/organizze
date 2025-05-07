@@ -23,6 +23,6 @@ export function ChartDoughnut({ data, size }){
    }, [chartDoughnutConfig]);
 
    return (
-         <canvas ref={chartRef} width={size?.w} height={size?.h} className=""></canvas>
+         <canvas ref={chartRef} width={size?.w} height={size?.h}></canvas>
    )
 }

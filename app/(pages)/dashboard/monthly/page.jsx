@@ -18,12 +18,11 @@ import { MonthlyPageSqueleton } from "@/app/components/loads/MonthlyPageSqueleto
 import { ModalInsertEntry } from "@/app/components/modals/ModalInsertEntry";
 import { useTableStore } from "@/app/zustand/useTablesStore";
 import { useEffect } from "react";
+import { SummaryGraphic } from "@/app/UI/Board/SummaryGraphic";
 
 export default function MonthlyDashBoard() {
 
-   useAuthGuard(); //Checks if the user is Authenticated;
-
-   //Adicionar redirecionamento à resposta 500 nas categorais.
+   useAuthGuard(); //Verifica se o usuário está autenticado, se não estiver o redireciona para página de login;
 
    const { toUpperFirstLeter } = useUtils();
    const searchParams = useSearchParams();
@@ -41,8 +40,8 @@ export default function MonthlyDashBoard() {
       <>
          <ModalEditEntry />
          <ModalInsertEntry />
-
          <ToastNotifications />
+         
          <PageModel title={`${toUpperFirstLeter(monthURL)} de ${yearURL}`}>
             {(entriesData?.loading || !entriesData) &&
                <MonthlyPageSqueleton />
@@ -69,6 +68,7 @@ export default function MonthlyDashBoard() {
                      <div className="w-full flex flex-row gap-2 justify-between">
                         <ExpesesGraphic expenses={entriesData.entries.expenses} sumary={entriesData.sum} />
                         <IncomesGraphic incomes={entriesData.entries.incomes} sumary={entriesData.sum} />
+                        <SummaryGraphic />
                      </div>
 
                      <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">

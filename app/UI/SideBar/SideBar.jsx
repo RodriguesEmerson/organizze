@@ -13,8 +13,9 @@ import { useUtils } from '@/app/hooks/useUtils';
 
 export default function SideBar() {
    const pathName = usePathname()
+   const isAuthenticated = useAuthStatus(state => state.isAuthenticated);
    if(pathName === '/signin') return;
-   
+
    const { availableTables } = useAvailablesTables();
    const [data, setData] = useState(false);
    const setNotifications = useToastNotifications(state => state.setNotifications);
@@ -29,10 +30,10 @@ export default function SideBar() {
    
    return (
       <section className={`fixed z-[12] bg-white rounded-md shadow-2xl left-0 top-12 transition-all text-sm border-t border-t-white w-[185px]`} style={{ height: 'calc(100% - 45px' }}>
+         <UserBox />
          {!data &&
             <Spinner />
          }
-         <UserBox />
          {data && 
             <>
                <AvailableYears availableTables={data}/>
