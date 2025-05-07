@@ -69,7 +69,7 @@ export function useInsertNewEntry(){
             setLoading(false);
             return;
          }
-         if(response.status == 500){
+         if(response.status == 401){
             setAuth(false);
             window.location.href ='http://localhost:3000/signin';
             return;

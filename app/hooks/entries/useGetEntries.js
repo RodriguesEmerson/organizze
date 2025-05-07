@@ -46,7 +46,7 @@ export function useGetEntries(year, month){
                   sum: {...data.sum[0], balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum},
                });
             }
-            if(response.status == 500){
+            if(response.status == 401){
                setAuth(false);
                window.location.href ='http://localhost:3000/signin';
                return;

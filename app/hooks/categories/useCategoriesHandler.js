@@ -40,7 +40,7 @@ export function useCategoriesHandler(){
             setInsertCategoryStatus(
                {success: false, loading: false}
             );
-            setNotifications('Algo deu errado.', 'warn', gerarCUID())
+            setNotifications('Algo deu errado.', 'warn', gerarCUID());
          })
          .catch(error => {
             setInsertCategoryStatus(

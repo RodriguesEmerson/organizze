@@ -19,7 +19,7 @@ export function AvailableYears({ availableTables }){
       return;
    }
    return (
-      <div className="relative mt-4 text-gray-900 border-t border-b border-gray-300">
+      <div className="relative text-gray-900 border-t border-b border-gray-300">
          <div className="absolute right-0 -top-4 z-10">
             <Select
                options={Object.keys(availableTables)}

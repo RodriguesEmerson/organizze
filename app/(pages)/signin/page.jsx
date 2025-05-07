@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function Signin(){
 
-   const [data, setData] = useState({email: '', password: '', remember: true});
+   const [data, setData] = useState({email: '', password: '', remember: false});
    const [status, setStatus] = useState({loading: false, error: {status: false, message: ''}});
 
    return (
