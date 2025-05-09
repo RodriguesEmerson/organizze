@@ -12,6 +12,7 @@ export function useEntryHandler(){
    const [updateDBSAnswer, setUpdateDBSAnswer] = useState({error: false, loading: false});
    const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
    const setAuth = useAuthStatus((state) => state.setAuth);
+   const setToAnimateEntry = useTableStore((state) => state.setToAnimateEntry);
    const { updateStore } = useUpdateEntriesStore();
    const { convertDateToYMD, convertValueToNumeric, gerarCUID } = useUtils();
 
@@ -63,6 +64,7 @@ export function useEntryHandler(){
             
             setTimeout(() => {
                setShowEditModal(false);
+               setToAnimateEntry(entry.id)
             }, 50);
             return;
          }
@@ -92,6 +94,7 @@ export function useUpdateEntriesStore(){
    const entriesData = useEntriesDataStore(state => state.entriesData);
    const updateEntriesExpensesSum = useEntriesDataStore(state => state.updateEntriesExpensesSum);
    const updateEntriesIncomesSum = useEntriesDataStore(state => state.updateEntriesIncomesSum);
+   const updateEntriesSum = useEntriesDataStore(state => state.updateEntriesSum);
    const updateEntriesDataStore = useEntriesDataStore(state => state.updateEntriesDataStore);
 
    function updateStore(updatedEntry, type){
@@ -125,7 +128,11 @@ export function useUpdateEntriesStore(){
                ? updateEntriesExpensesSum(newValue, newBalance)
                : updateEntriesIncomesSum(newValue, newBalance);
          }
-      })
+
+         if(Object.keys(updatedEntry).indexOf('category') != -1){
+            updateEntriesSum(`${type}_sum`);
+         }
+      });
 
       //Retira a versção antiga da entry editada
       const entriesWITHOUTUpdatedEntry = editingEntries.filter(entry => entry.id != updatedEntry.id);

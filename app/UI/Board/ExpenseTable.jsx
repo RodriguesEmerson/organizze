@@ -23,11 +23,11 @@ export default function ExpenseTable() {
                      setNewEntryType('expense');
                   }}
                />
-            </div>
+            </div>  
          </div>
          <div className="table-scroll-style">
             <div className="pr-2 pb-2">
-               <Table tableType={'expenses'} />
+               <Table type={'expenses'} />
             </div>
 
          </div>

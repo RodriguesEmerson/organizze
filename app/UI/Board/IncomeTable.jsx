@@ -12,7 +12,7 @@ export default function IncomeTable() {
          <div
             className="relative text-center text-sm font-thin h-9 border-b-1 border-b-gray-200"
          >
-            <h3 className="leading-9">Receitas</h3>
+            <h3 className="leading-9 text-base">Receitas</h3>
             <div className="absolute top-0 right-2">
                <ButtonAdd 
                   text={"Receita"} 
@@ -28,7 +28,7 @@ export default function IncomeTable() {
             <div className="pr-2 pb-2"
             // style={{ maxHeight: "calc(100vh - 110px)" }}
             >
-               <Table tableType={'incomes'} />
+               <Table type={'incomes'} />
             </div>
          </div>
       </div>

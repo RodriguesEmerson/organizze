@@ -1,28 +1,22 @@
 
-import { useTable } from "../hooks/useTable";
+import { useEffect, useState } from "react";
+import { useUtils } from "../hooks/useUtils";
 import { Spinner } from "../UI/spinner";
 import { useEntriesDataStore } from "../zustand/useEntriesDataStore";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
 import { useTableStore } from "../zustand/useTablesStore";
 import { useUtilsStore } from "../zustand/useUtilsStore";
-import { useUtils } from "../hooks/useUtils";
-import { useEffect, useState } from "react";
 
-
-export function Table({ tableType }) {
-   const { tableHandler } = useTable();
-   const { convertDateToDM } = useUtils();
+export function Table({ type }) {
    const tablesHeaders = ['Descrição', 'Categoria', 'Data', 'Valor'];
-   const setEditingEntry = useTableStore((state) => state.setEditingEntry);
-   const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal)
    const entriesData = useEntriesDataStore(state => state.entriesData);
    const [entries, setEntries] = useState(false);
 
    useEffect(() => {
       if(entriesData){
-         setEntries(entriesData.entries[tableType]);
+         setEntries(entriesData.entries[type]);
       }
-   },[entriesData.entries[tableType]]);
+   },[entriesData.entries[type]]);
 
    if (!entries) return <Spinner />
    return (
@@ -46,27 +40,8 @@ export function Table({ tableType }) {
                </tr>
             </thead>
             <tbody>
-               {entries.map(item => (
-                  <tr
-                     key={item.id}
-                     className="h-10 border-t-[1px] border-t-gray-200 text-[13px] hover:bg-gray-100 transition-all cursor-pointer"
-                     onClick={()=> {
-                        setEditingEntry({...item, type: tableType});
-                        setShowEditModal(true);
-                     }}
-                  >
-                     <td className="pl-2 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis font-semibold text-gray-900">{item.description}</td>
-
-                     <TdCategories icon={`/icons/${item.icon}`} categ={item.category} />
-
-                     <td className="relative text-center">
-                        {convertDateToDM(item.date)}
-                        {item.end_date && <img className="absolute max-w-3 top-4 right-0" src="/icons/i-fixed.png"/>}
-                     </td>
-                     <td className="text-end pr-2 max-w-10">
-                        {Number(item.value).toLocaleString('pt-BR', { style: "currency", currency: "BRL" })}
-                     </td>
-                  </tr>
+               {entries.map(entry => (
+                  <TableTr key={entry.id} entry={entry} type={type}/>
                ))}
             </tbody>
          </table>
@@ -74,7 +49,50 @@ export function Table({ tableType }) {
    )
 }
 
-function TdCategories({ icon, categ }) {
+function TableTr({ entry, type }){
+   const { convertDateToDM } = useUtils();
+   const setEditingEntry = useTableStore((state) => state.setEditingEntry);
+   const toAnimateEntry = useTableStore((state) => state.toAnimateEntry);
+   const setToAnimateEntry = useTableStore((state) => state.setToAnimateEntry);
+   const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
+   const [animate, setAnimate] = useState('');
+
+   if(toAnimateEntry == entry.id){
+      if(!animate){
+         setAnimate(true);
+         setTimeout(() => {
+            setToAnimateEntry(false);
+            setAnimate('');
+         }, 3000);
+      }
+   }
+
+   return(
+      <tr
+         key={entry.id}
+         className={`h-10 border-t-[1px] border-t-gray-200 text-[13px] hover:bg-gray-100 transition-all cursor-pointer
+         ${animate && 'animate-fadeIn'}`}
+         onClick={()=> {
+            setEditingEntry({...entry, type: type});
+            setShowEditModal(true);
+         }}
+      >
+         <td className="pl-2 max-w-[120px] text-nowrap overflow-x-hidden text-ellipsis font-semibold text-gray-900">{entry.description}</td>
+
+         <TableTd icon={`/icons/${entry.icon}`} categ={entry.category} />
+
+         <td className="relative text-center">
+            {convertDateToDM(entry.date)}
+            {entry.end_date && <img className="absolute max-w-3 top-4 right-0" src="/icons/i-fixed.png"/>}
+         </td>
+         <td className="text-end pr-2 max-w-10">
+            {Number(entry.value).toLocaleString('pt-BR', { style: "currency", currency: "BRL" })}
+         </td>
+      </tr>
+   )
+}
+
+function TableTd({ icon, categ }) {
    const setTooltipInfoText = useUtilsStore((state) => state.setTooltipInfoText);
 
    return (

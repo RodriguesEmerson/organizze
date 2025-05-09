@@ -7,6 +7,7 @@ export const useTableStore = create((set) =>({
    data: null,
    categories: null,
    editingEntry: null,
+   toAnimateEntry: false,
    changeTable: (year, month) => set(() => (
       {
          selectedTable: {year: year, month: month}
@@ -35,28 +36,11 @@ export const useTableStore = create((set) =>({
          editingEntry: entry
       }
    )),
+   setToAnimateEntry:(id) => set(() => ({
+      toAnimateEntry: id,
+   })),
    months: [
       'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
       'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
    ]
-
-
-
-
-   // addYearTable: (newYear) => set((state) => ({tables: {...state.tables, newYear}})),
-   // newoveYearTable: (deletedYear) => 
-   //    set((state) => ({
-   //       tables: 
-   //          Object.fromEntries(
-   //            Object.entries(...state.tables).filter(([key, value]) => value != deletedYear),
-   //          )
-   //    })),
-   // addMonthTable: (year, newMonth) => set((state) => ({tables: {...state.tables[year], newMonth}})),
-   // removeMonthTable: (year, deletedMonth) => 
-   //    set((state) => ({
-   //       tables: {
-   //          ...state.tables,
-   //          [year]: state.tables[year].filter(month => month !== deletedMonth),
-   //       }
-   //    }))
 }))

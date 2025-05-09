@@ -35,7 +35,18 @@ export const useEntriesDataStore = create((set) => ({
          }
       }
    })),
+   updateEntriesSum: (type) => set((state) => ({
+      //Apenas seta a soma novamente para atualizar a categoria nos gráficos.
+      entriesData: {
+         ...state.entriesData,
+         sum: {
+            ...state.entriesData.sum,
+            [type]: state.entriesData.sum[type],
+         }
+      }
+   })),
    setNewEntryType: (type) => set(() => ({
       newEntryType: type
-   }))
+   })),
+
 }))

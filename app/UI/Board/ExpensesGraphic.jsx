@@ -17,10 +17,9 @@ export function ExpesesGraphic() {
       if (entriesData) {
          setData({
             expenses: entriesData.entries.expenses,
-            sum: entriesData.sum
          });
       }
-   }, [entriesData.sum]);
+   }, [entriesData.entries.expenses]);
 
    return (
       < ExpesesGraphicBody data={data} />
@@ -54,25 +53,6 @@ const ExpesesGraphicBody = memo(({ data }) => {
                         }}
                      />
                   </div>
-                  {/* <span className="h-[85%] mt-[2px] w-[1px] rounded-sm mx-2 bg-gray-400"></span>
-                  <div className=" relative pt-8">
-                     <div className="absolute top-[52%] left-[29%]">
-                        <p className="font-bold w-[85px] text-center text-xl leading-7 !z-0">
-                           {`${(data.sum.expenses_sum / (data.sum.expenses_sum + data.sum.incomes_sum) * 100).toFixed(2)}%`}
-                        </p>
-                     </div>
-                     <div className="w-[200px] h-[200px]">
-                        <ChartDoughnut
-                           data={{
-                              labels: ['Despesas Totais'],
-                              labels: ['Despesas Totais'],
-                              values: [data.sum.expenses_sum, data.sum.incomes_sum],
-                              colors: ['#D91136', '  #D3D3D370']
-                           }}
-                           size={{ w: '200', h: '200' }}
-                        />
-                     </div>
-                  </div> */}
                </div>
             </>
          }

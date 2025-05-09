@@ -29,19 +29,26 @@ export function useGetEntries(year, month){
                      expenses.push(entry);
                   }
                });
+
+               const sortedIncomes = incomes.sort((curr, prev) => { 
+                  return new Date(prev.date).getTime() - new Date(curr.date).getTime();
+               });
+               const sortedExpenses = expenses.sort((curr, prev) => { 
+                  return new Date(prev.date).getTime() - new Date(curr.date).getTime();
+               });
                
                setEntriesData({
                   entries: {
-                     incomes: incomes,
-                     expenses: expenses
+                     incomes: sortedIncomes,
+                     expenses: sortedExpenses
                   },
                   sum: {...data.sum[0], balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum},
                }); 
 
                setEntriesDataStore({
                   entries: {
-                     incomes: incomes,
-                     expenses: expenses
+                     incomes: sortedIncomes,
+                     expenses: sortedExpenses
                   },
                   sum: {...data.sum[0], balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum},
                });

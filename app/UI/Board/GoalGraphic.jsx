@@ -9,7 +9,9 @@ export function GoalGraphic(){
    
    useEffect(() => {
       if(entriesData){
-         setSum(entriesData.sum);
+         if(entriesData?.sum.expenses_sum != sum?.expenses_sum || entriesData?.sum.incomes_sum != sum?.incomes_sum){
+            setSum(entriesData.sum);
+         }
       }
    },[entriesData.sum]);
 

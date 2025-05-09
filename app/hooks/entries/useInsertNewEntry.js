@@ -3,10 +3,12 @@ import { useUtils } from "../useUtils";
 import { useState } from "react";
 import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { useAuthStatus } from "@/app/zustand/useAuthStatus";
+import { useTableStore } from "@/app/zustand/useTablesStore";
 
 export function useInsertNewEntry(){
    const setNotifications = useToastNotifications(state => state.setNotifications);
    const setAuth = useAuthStatus((state) => state.setAuth);
+   const setToAnimateEntry = useTableStore((state) => state.setToAnimateEntry);
    const [loading, setLoading] = useState(false);
    const { updateStore } = useUpdateEntriesStore();
    const { convertDateToYMD, convertValueToNumeric, gerarCUID } = useUtils();
@@ -63,6 +65,7 @@ export function useInsertNewEntry(){
             setNotifications(`Nova ${type == 'expense' ? 'Despesa' : 'Receita'} adiconada.`, 'success', gerarCUID());
             setLoading(false);
             updateStore(insertingEntry, `${type}s`);
+            setToAnimateEntry(insertingEntry.id)
          }
          if(response.status == 400){
             setNotifications('Cheque os dados e tente novamente.', 'warn', gerarCUID());
