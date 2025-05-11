@@ -2,7 +2,7 @@
 import { useAuthStatus } from "@/app/zustand/useAuthStatus";
 import { useEffect } from "react";
 
-export function useAuthGuard(){
+export function useAuthGuard(redirect = false){
    const setAuth = useAuthStatus((state) => state.setAuth);
    const isAuthenticated = useAuthStatus((state) => state.isAuthenticated);
 
@@ -13,11 +13,17 @@ export function useAuthGuard(){
             credentials: 'include'
          })
          .then(async response => {
+            const result = await response.json();
             if(response.status === 200){
                setAuth(true);
+               if(redirect){
+                   return window.location.href = result.redirect;
+               }
             }else{
-               setAuth(false);
-               window.location.href ='http://localhost:3000/signin';
+               if(!redirect){
+                  setAuth(false);
+                  window.location.href ='http://localhost:3000/signin';
+               }
             }
          })
          .catch(error => {

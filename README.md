@@ -13,9 +13,6 @@ meses automaticamente.
 
 Buscar dados do usuário e mostrar na UserBox na SideBar         *4*
 
-Criar função para que assim que o dashBoad for aberto,
-seja selecionado o último mês encontrado no banco.              *5*
-
 Criar token de 30 dias ao selecionar a checkbox na
 página de login.                                                *5*
 
