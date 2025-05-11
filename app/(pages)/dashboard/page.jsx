@@ -32,7 +32,7 @@ export default function YearlyDashBoard() {
                <BoxInfos type="income" data={yearlySummary} />
                <BoxInfos type="balance" data={yearlySummary} />
             </div>
-
+            
             <SumaryChart data={yearlySummary}/>
          </>
          }
@@ -45,8 +45,6 @@ const BoxInfos = ({ type, data }) => {
    const { getChartLablesAndValues } = useYearlyPage();
 
    const chartData = getChartLablesAndValues(data.months, type);
-
-
    const BoxConfig = {
       expense: { color: 'text-red-700', title: 'Despesas', chartColor: '#D91136' },
       income: { color: 'text-green-700', title: 'Receitas', chartColor: '#008000' },
@@ -58,7 +56,7 @@ const BoxInfos = ({ type, data }) => {
    }
 
    return (
-      <div className="h-72 shadow-xl relative min-w-80 flex-1 font-semibold text-gray-700 p-2 rounded-md bg-white">
+      <div className="h-72 shadow-md relative min-w-80 flex-1 font-semibold text-gray-700 p-2 rounded-md bg-white">
          <h3 className={`text-sm font-thin ${BoxConfig[type].color}`}
          >{BoxConfig[type].title}</h3>
          <div className="flex flex-row justify-between">
@@ -103,8 +101,6 @@ function SumaryChart({ data }) {
    const chartExpensesData = getChartLablesAndValues(data.months, 'expense');
    const chartIncomesData = getChartLablesAndValues(data.months, 'income');
    const chartBalanceData = getChartLablesAndValues(data.months, 'balance');
-
-   //Criando função para gerar o numeros no grafico anual
 
    return (
       <div className="w-full h-[335px] rounded-md shadow-xl bg-white mt-2 p-2">

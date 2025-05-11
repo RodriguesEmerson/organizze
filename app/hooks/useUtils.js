@@ -39,7 +39,7 @@ export function useUtils() {
          const splicedDate = date.split((/\/|\-/));
          dateToGetMonth = `${splicedDate[2]}-${splicedDate[1]}-${splicedDate[0]}`;
       }
-      const monthName = new Date(dateToGetMonth).toLocaleDateString('pt-br', { month: "long"});
+      const monthName = new Date(dateToGetMonth + 'T00:00:00').toLocaleDateString('pt-br', { month: "long"});
       if(caracters){ return monthName.slice(0, caracters)}
       return monthName;
    }

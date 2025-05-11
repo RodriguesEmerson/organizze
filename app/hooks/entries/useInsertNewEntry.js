@@ -53,14 +53,14 @@ export function useInsertNewEntry(){
       };
 
       if(tableMonth != getMonthName(insertingEntry.date)){
-         setNotifications(`Selecione uma data no mês de ${toUpperFirstLeter(tableMonth)} par continuar.`, 'error', gerarCUID());
+         setNotifications(`Selecione uma data no mês de ${toUpperFirstLeter(tableMonth)} para continuar.`, 'error', gerarCUID());
          setLoading(false);
          return;
       }
       
       insertingEntry.id = gerarCUID();
       insertingEntry.type = type;
-      
+
       setLoading(true);
       setSuccess(false);
       await fetch('http://localhost/organizze-bk/public/entries.php', {
@@ -90,7 +90,7 @@ export function useInsertNewEntry(){
       })
       .catch(error => {
          console.log(error)
-         setNotifications(`Erro tentar adicionar nova ${type == 'expense' ? 'Despesa' : 'Receita'} , tente novamente`, 'error', gerarCUID());
+         setNotifications(`Erro tentar adicionar nova ${type == 'expense' ? 'Despesa' : 'Receita'}, tente novamente`, 'error', gerarCUID());
          setLoading(false);
          return;
       })

@@ -38,7 +38,7 @@ export function useEntryHandler(){
 
       if(updatedEntry.hasOwnProperty('date')){
          if(getMonthName(editingEntry.date) != getMonthName(updatedEntry.date)){
-            setNotifications(`Selecione uma data no mês de ${toUpperFirstLeter(getMonthName(editingEntry.date))} par continuar.`, 'error', gerarCUID());
+            setNotifications(`Selecione uma data no mês de ${toUpperFirstLeter(getMonthName(editingEntry.date))} para continuar.`, 'error', gerarCUID());
             setUpdateDBSAnswer({loading: false})
             return;
          }

@@ -11,6 +11,7 @@ import { useEntryHandler } from "@/app/hooks/entries/useEntryHandler";
 import { useUtils } from "@/app/hooks/useUtils";
 import { Spinner } from "../loads/spinner";
 import { ButtonDelete } from "../buttons/ButtonDelete"; 
+import { useDeleteEntry } from "@/app/hooks/entries/useDeleteEntry";
 
 export function ModalEditEntry(){
    const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
@@ -22,7 +23,8 @@ export function ModalEditEntry(){
 }
 
 function ModalEditEntryBody() {
-   const { updateEntry, updateDBSAnswer } = useEntryHandler(); 
+   const { updateEntry, updateDBSAnswer } = useEntryHandler();
+   const { deleteEntry, loading } = useDeleteEntry();
    const { convertDateToDMY } = useUtils();
    const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
    const [formData, setFormData] = useState({description: '', category: '', date: '', fixed: false, end_date: '', value: '', id: ''});
@@ -159,7 +161,15 @@ function ModalEditEntryBody() {
                         <div className="flex-1"><hr /></div>
                      </div>
 
-                     <ButtonDelete text={`Deletar ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}/>
+                     <ButtonDelete  
+                        onClick={(e) => {
+                           e.preventDefault();
+                           deleteEntry(editingEntry, editingEntry.type)
+                        }}
+                        text={`Deletar ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}
+                     >{loading &&
+                        <Spinner />
+                     }</ ButtonDelete >
                   </div>
                </form>
             </div>
