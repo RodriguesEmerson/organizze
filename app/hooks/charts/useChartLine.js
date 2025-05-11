@@ -15,7 +15,8 @@ export function useChartLine(){
             borderColor: chartData.colors,
             backgroundColor:chartData.opacityColor,
             fill: true, // Habilitar preenchimento abaixo da linha
-            tension: 0.4 // Suaviza a linha
+            tension: 0.2, // Suaviza a linha
+            borderWidth: 1
          }]
          
       },

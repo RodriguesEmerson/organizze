@@ -33,10 +33,16 @@ export function useUtils() {
       return new Date(date + 'T00:00:00').toLocaleDateString('pt-br', { day: "2-digit", month: "2-digit", year: 'numeric'})
    }
 
+   function getMonthName(date, caracters){
+      const monthName = new Date(date + 'T00:00:00').toLocaleDateString('pt-br', { month: "long"});
+      if(caracters){ return monthName.slice(0, caracters)}
+      return monthName;
+   }
+
    function convertValueToNumeric(value){
       const valueWithoutPoint = value.replace('.', '');
       return Number(valueWithoutPoint.replace(',', '.'));
    }
 
-   return { toUpperFirstLeter, currencyFormat, gerarCUID, convertDateToYMD, convertValueToNumeric, convertDateToDM, convertDateToDMY }
+   return { toUpperFirstLeter, currencyFormat, gerarCUID, convertDateToYMD, convertValueToNumeric, convertDateToDM, convertDateToDMY, getMonthName }
 }

@@ -7,7 +7,22 @@ export function useYearlyPage() {
    const yearURL = searchParams.get('year');
    const data = useTableStore(state => state.data);
 
+
+   function getChartLablesAndValues(data, type){
+      const lables = [];
+      const values = [];
+
+      for(const month in data){
+         lables.push(month);
+         values.push(data[month][type])
+      }
+ 
+      return { labels: lables, values: values };
+   }
+
    const yearlyPageHandler = {
+
+
       getInfos: function (type, sumary) {
          if (!data || !yearURL) return;
          const yearData = data[yearURL];
@@ -76,6 +91,6 @@ export function useYearlyPage() {
       }
    }
 
-   return { yearlyPageHandler }
+   return { yearlyPageHandler, getChartLablesAndValues }
 
 }

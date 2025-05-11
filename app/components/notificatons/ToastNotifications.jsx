@@ -8,7 +8,7 @@ export function ToastNotifications() {
    if(!notifications || notifications.length < 1) return;
    return (
       <div
-         className="fixed left-1 bottom-4 flex flex-col justify-end items-start gap-2 text-sm z-[40] w-fit h-52 p-2 transition-all duration-300 "
+         className="fixed right-1 bottom-4 flex flex-col justify-end items-end gap-2 text-sm z-[40] w-fit h-52 p-2 transition-all duration-300 "
       >
          {notifications.map(notification => (
             !notification.isShowed && (
@@ -38,23 +38,42 @@ function Notifications({ notification }){
       setTimeout(() => {
          setLeft('17px');
          setBarWidth('0px');
-      }, 50)
+      }, 50);
       setTimeout(() => {
          setLeft(`-${notificationRef.current.offsetWidth + 20}px`);
       }, 4000);
       setTimeout(() => {
          setVisible(false) //Desmonta o componente
-         deletNotification(notification.id)
+         deletNotification(notification.id);
       }, 5400);
    }, []); 
+
+   //Notificação no canto inferior esquerdo
+   // useEffect(() => {
+   //    //Garante que a aniamção aconteça de forma suave;
+   //    setTimeout(() => {
+   //       setLeft('17px');
+   //       setBarWidth('0px');
+   //    }, 50);
+   //    setTimeout(() => {
+   //       setLeft(`-${notificationRef.current.offsetWidth + 20}px`);
+   //    }, 4000);
+   //    setTimeout(() => {
+   //       setVisible(false) //Desmonta o componente
+   //       deletNotification(notification.id);
+   //    }, 5400);
+   // }, []); 
+   //-right-[240px] deve estar na classe da notificação
+   // items-end deve estar na classe da caixa das notificaçãoes
+
 
    if(!visible) return;
 
    return (
       <div
          ref={notificationRef}
-         className={`relative text-gray-800 flex items-center -left-[240px] justify-around gap-1 text-sm z-40 h-16 p-2 rounded-md transition-all duration-500 shadow-[-10px_35px_60px_2px_rgba(0,0,0,0.3)] ${type[notification.type].bg}`}
-         style={{ left: left }}
+         className={`relative text-gray-800 flex items-center -right-[240px] justify-around gap-1 text-sm z-40 min-h-16 h-16 p-2 rounded-md transition-all duration-500 shadow-[-10px_35px_60px_2px_rgba(0,0,0,0.3)] ${type[notification.type].bg}`}
+         style={{ right: left }}
       >
 
          <span className="material-icons-outlined">{type[notification.type].icon}</span>

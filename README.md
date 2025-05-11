@@ -4,7 +4,7 @@ Este é um projeto criado  com NextJS, Tailwind e ChartJs, integarado ao reposit
 *Tarefa*                                                 *prioridade (1-5)*
 
 Adicionar validador para não permitir entrada                   *2*
-de dados fora do mês da tabela que está selecionada.
+de dados fora do mês da tabela que está selecionada.  
 
 Criar modal para confirmar exclusão de categorias               *4*
 

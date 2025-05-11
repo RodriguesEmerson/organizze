@@ -6,7 +6,7 @@ export function useAvailablesTables(){
 
       useEffect(() => {
          const getData = async () => {
-            await fetch('http://localhost/organizze-bk/public/availables-tables.php', {
+            await fetch('http://localhost/organizze-bk/public/entries.php?reportType=availableTables', {
                method: 'GET',
                credentials: 'include',
             })

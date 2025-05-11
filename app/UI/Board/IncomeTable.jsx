@@ -25,9 +25,7 @@ export default function IncomeTable() {
          </div>
 
          <div className=" table-scroll-style">
-            <div className="pr-2 pb-2"
-            // style={{ maxHeight: "calc(100vh - 110px)" }}
-            >
+            <div className="pr-2 pb-2" >
                <Table type={'incomes'} />
             </div>
          </div>

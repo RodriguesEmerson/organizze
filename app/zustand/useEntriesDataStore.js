@@ -3,6 +3,7 @@ import { create } from "zustand";
 export const useEntriesDataStore = create((set) => ({
    entriesData: false,
    newEntryType: false,
+   yearlyData: false,
    setEntriesDataStore: (data) => set(() => ({
       entriesData: data
    })),
@@ -48,5 +49,8 @@ export const useEntriesDataStore = create((set) => ({
    setNewEntryType: (type) => set(() => ({
       newEntryType: type
    })),
+   setYearlyData: (data) => set(() => ({
+      yearlyData: data
+   }))
 
 }))

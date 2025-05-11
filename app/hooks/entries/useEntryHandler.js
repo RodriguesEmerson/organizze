@@ -47,7 +47,7 @@ export function useEntryHandler(){
       if(updatedEntry.hasOwnProperty('end_date')){
          if(updatedEntry.end_date) updatedEntry.fixed =  1;
       } 
-      
+
       await fetch('http://localhost/organizze-bk/public/entries.php', {
          method: 'PUT',
          credentials: 'include',
@@ -56,7 +56,6 @@ export function useEntryHandler(){
       })
       .then(async response => {
          const result = await response.json();
-         console.log(result)
          if(response.status == 200){
             setNotifications('Dados atualizados com sucesso.', 'success', gerarCUID());
             setUpdateDBSAnswer({error: false, loading: false});
@@ -78,6 +77,9 @@ export function useEntryHandler(){
             window.location.href ='http://localhost:3000/signin';
             return;
          }
+
+         setNotifications('Algo deu errado. Atualize a página e tente novamente.', 'error', gerarCUID());
+         setUpdateDBSAnswer({loading: false});
       })
       .catch(error => {
          console.log(error)

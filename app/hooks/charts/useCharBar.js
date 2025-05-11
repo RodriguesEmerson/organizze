@@ -75,38 +75,41 @@ export function useChartBar(){
             id: 'custom-text-inside-labels',
             afterDatasetDraw(chart) {
                const { ctx, data } = chart;
-               const dataset = chart.data.datasets[0];
+               
+               const columnsGroupLength = (chart.data.datasets).length //Quantidade de barras em um conjuto do gráfico
+               
+               for(let column = 0; column <= columnsGroupLength; column++){
+                  const dataset = chart.data.datasets[column]; //Coluna atual;
 
-               chart.getDatasetMeta(0).data.forEach((bar, index) => {
+                  //Criando função para gerar o numeros no grafico anual
+                  chart.getDatasetMeta(column).data.forEach((bar, index) => {
 
-                  //Remove os números no topo da coluna.
-                  if(chartData.hiddenNumbers) return;
+                     //Remove os números no topo da coluna se for true.
+                     if(chartData.hiddenNumbers) return;
 
-                  //Largura em pixels de cada barra.
-                  // console.log(chart.getDatasetMeta(0).data[index].width);
+                     const value = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dataset.data[index]);
+                     const rowValue = dataset.data[index];
+                     const barWidth = chart.getDatasetMeta(column).data[index].width;
 
-                  const value = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(dataset.data[index]);
-                  const rowValue = dataset.data[index];
-                  const barWidth = chart.getDatasetMeta(0).data[index].width;
+                     ctx.save();
+                     ctx.fillStyle = chartData.orientation == 'x' ? '#61727C' : '#1a202c'; // Cor do texto
+                     ctx.font = '9px Arial'; // Estilo da fonte
+                     ctx.textAlign = chartData.orientation == 'x' ? 'center' : 'end'; // posição do texto horizontalmente
+                     ctx.textBaseline = 'middle'; // Centraliza verticalmente
 
-                  ctx.save();
-                  ctx.fillStyle = chartData.orientation == 'x' ? '#61727C' : '#1a202c'; // Cor do texto
-                  ctx.font = '9px Arial'; // Estilo da fonte
-                  ctx.textAlign = chartData.orientation == 'x' ? 'center' : 'end'; // posição do texto horizontalmente
-                  ctx.textBaseline = 'middle'; // Centraliza verticalmente
-
-                  if(chartData.orientation == 'x'){
-                     ctx.fillText(value,  bar.x, bar.y - 5); // Adiciona o texto acima das barras
-                  }
-                  if(chartData.orientation === "y"){
-                     ctx.fillText(value, rowValue >= 0 
-                        ? bar.x : 
-                        bar.x, bar.y
-                     ); // Adiciona o texto no interior das barras
-                  }
-                  
-                  ctx.restore();
-               });
+                     if(chartData.orientation == 'x'){
+                        ctx.fillText(value,  bar.x, bar.y - 5); // Adiciona o texto acima das barras
+                     }
+                     if(chartData.orientation === "y"){
+                        ctx.fillText(value, rowValue >= 0 
+                           ? bar.x : 
+                           bar.x, bar.y
+                        ); // Adiciona o texto no interior das barras
+                     }
+                     
+                     ctx.restore();
+                  });
+               };
             }
          }
       ]

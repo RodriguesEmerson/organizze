@@ -7,17 +7,19 @@ import { useUtils } from "../../hooks/useUtils";
 import { useYearlyPage } from "../../hooks/useYearlyPage";
 import { Spinner } from "../../UI/spinner";
 import { useAuthGuard } from "../../hooks/auth/useAuthGuard";
+import { useGetYearlySumary } from "@/app/hooks/entries/useGetYearlySumary";
 
 export default function YearlyDashBoard() {
-   
+
    useAuthGuard();
 
    const searchParams = useSearchParams();
    const yearURL = searchParams.get('year');
+   const { yearlySummary } = useGetYearlySumary('2025');
 
    return (
       <section
-         className="relative ml-44 pl-5 pt-3 pr-3 bg-gray-200"
+         className="relative ml-44 pl-5 pt-3 pr-3 bg-gray-100"
          style={{ height: "calc(100% - 48px)" }}
       >
          {!yearURL &&
@@ -25,7 +27,7 @@ export default function YearlyDashBoard() {
                <p>Selecione a tabela que deseja vizualiar!</p>
             </div>
          }
-         {yearURL &&
+         {(yearURL && yearlySummary) &&
             <>
                <div className="sticky top-12 z-[11]  border-t-gray-300 h-8 bg-gray-900 text-white -mt-3  mb-2 text-center leading-8 -ml-[200px]" style={{ width: '100vw' }}>
                   {`Relatório de ${yearURL}`}
@@ -33,38 +35,42 @@ export default function YearlyDashBoard() {
                <div className="absolute top-0 -left-44 h-24 w-[100vw] bg-gray-900 !z-[0]"></div>
 
                <div className="flex flex-row gap-2">
-                  <BoxInfos type="expenses" title="Despesas" color={'#D91136'} />
-                  <BoxInfos type="incomes" title="Receitas" color={'#008000'} />
-                  <BoxInfos type="sumary" title="Saldos" color={'#1E90FF'} />
+                  <BoxInfos type="expense" data={yearlySummary} />
+                  <BoxInfos type="income" data={yearlySummary} />
+                  <BoxInfos type="balance" data={yearlySummary} />
                </div>
 
-               <SumaryChart />
+               <SumaryChart data={yearlySummary}/>
             </>
          }
       </section>
    )
 }
 
-const BoxInfos = ({ type, title, color }) => {
-   const { yearlyPageHandler } = useYearlyPage();
+const BoxInfos = ({ type, data }) => {
    const { toUpperFirstLeter, currencyFormat } = useUtils();
+   const { getChartLablesAndValues } = useYearlyPage();
 
-   const boxData = type !== "sumary"
-      ? yearlyPageHandler.getInfos(type)
-      : yearlyPageHandler.getYearlySumary();
+   const chartData = getChartLablesAndValues(data.months, type);
 
 
-   if (!boxData) {
+   const BoxConfig = {
+      expense: { color: 'text-red-700', title: 'Despesas', chartColor: '#D91136' },
+      income: { color: 'text-green-700', title: 'Receitas', chartColor: '#008000' },
+      balance: { color: 'text-blue-700', title: 'Saldos', chartColor: '#1E90FF' }
+   }
+
+   if (!data || data.loading) {
       return <Spinner />
    }
+
    return (
       <div className="h-72 shadow-xl relative min-w-80 flex-1 font-semibold text-gray-700 p-2 rounded-md bg-white">
-         <h3 className="text-sm text-red-800 font-thin"
-            style={{ color: `${color}` }}
-         >{title}</h3>
+         <h3 className={`text-sm font-thin ${BoxConfig[type].color}`}
+         >{BoxConfig[type].title}</h3>
          <div className="flex flex-row justify-between">
             <div className="mt-2">
-               <span className="text-3xl">{currencyFormat(boxData.total)}</span>
+               <span className="text-3xl">{currencyFormat(data.summary[type])}</span>
             </div>
             <img
                className="w-[60px] mr-2 -mt-1"
@@ -73,49 +79,67 @@ const BoxInfos = ({ type, title, color }) => {
             />
          </div>
          <div className="flex flex-col gap-1 mt-1">
-            <span className="text-xs font-thin">Mês com a maior {title.slice(0, -1)}: {toUpperFirstLeter(boxData.greaterValue.month)}</span>
-            <span className="font-bold">{currencyFormat(boxData.greaterValue.value)}</span>
+            <span className="text-xs font-thin">
+               Mês com a maior {BoxConfig[type].title.slice(0, -1)}: {toUpperFirstLeter(data.highestValues[type].month)}
+            </span>
+            <span className="font-bold">{currencyFormat(data.highestValues[type].value)}</span>
          </div>
-         <div className="w-full h-[55%]">
-            <ChartLine data={{ labels: boxData.shortLabels, values: boxData.values, colors: [color], opacityColor: [`${color}40`] }} />
-         </div>
+         <MonthlyTypeChart color={`${BoxConfig[type].chartColor}`} chartData={chartData}/>
       </div>
    )
 }
 
-function SumaryChart() {
-   const { yearlyPageHandler } = useYearlyPage();
+function MonthlyTypeChart({ color, chartData }) {
+   return (
+      <div className="w-full h-[55%]">
+         <ChartLine 
+            data={{
+               labels: chartData.labels, 
+               values: chartData.values, 
+               colors: [color],
+               opacityColor: [`${color}15`]
+            }}
+         />
+      </div>
+   )
+}
 
-   const expensesData =  yearlyPageHandler.getInfos("expenses");
-   const incomesData =  yearlyPageHandler.getInfos("incomes");
-   const sumaryData = yearlyPageHandler.getYearlySumary();
+function SumaryChart({ data }) {
+   const { yearlyPageHandler } = useYearlyPage();
+   const { getChartLablesAndValues } = useYearlyPage();
+
+   const chartExpensesData = getChartLablesAndValues(data.months, 'expense');
+   const chartIncomesData = getChartLablesAndValues(data.months, 'income');
+   const chartBalanceData = getChartLablesAndValues(data.months, 'balance');
+
+   //Criando função para gerar o numeros no grafico anual
 
    return (
       <div className="w-full h-[335px] rounded-md shadow-xl bg-white mt-2 p-2">
          <p className="text-sm text-center">Detalhes de cada mês</p>
          <div className="w-full h-72">
             <ChartBar data={{
-               labels: sumaryData.labels,
+               labels: chartBalanceData.labels,
                datasets: [
                   {
                      label: 'Despesas',
-                     data: expensesData?.values,
+                     data: chartExpensesData.values,
                      backgroundColor: ['#D9113699']
                   },
                   {
                      label: 'Receitas',
-                     data: incomesData?.values ,
+                     data: chartIncomesData.values,
                      backgroundColor: ['#00800099']
                   },
                   {
                      label: 'Saldo',
-                     data: sumaryData?.values,
+                     data: chartBalanceData.values,
                      backgroundColor: ['#1E90FF99']
                   },
                ],
                orientation: 'x',
                showLabel: true,
-               hiddenNumbers: true
+               hiddenNumbers: false
             }}
                size={{ w: '500', h: '200' }}
             />
