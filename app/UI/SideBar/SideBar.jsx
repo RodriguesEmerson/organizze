@@ -1,8 +1,6 @@
 'use client';  
 import { usePathname } from 'next/navigation';
 import { AvailableYears } from "./AvailableYears";
-import { useAvailablesTables } from "@/app/hooks/sideBar/useAvailableTables";
-import { useState, useEffect } from "react";
 import { Spinner } from "@/app/components/loads/spinner";
 import { UserBox } from './UserBox';
 import { Nav } from './Nav';
@@ -10,33 +8,27 @@ import { useToastNotifications } from '@/app/zustand/useToastNotifications';
 import { useSignout } from '@/app/hooks/auth/signout';
 import { useAuthStatus } from '@/app/zustand/useAuthStatus';
 import { useUtils } from '@/app/hooks/useUtils';
+import { useGetAvailablesTables } from '@/app/hooks/entries/useGetAvailableTables';
 
 export default function SideBar() {
    const pathName = usePathname()
    const isAuthenticated = useAuthStatus(state => state.isAuthenticated);
-   if(pathName === '/signin') return;
+   if( pathName === '/signin' ) return;
 
-   const { availableTables } = useAvailablesTables();
-   const [data, setData] = useState(false);
+   const { availableTables } = useGetAvailablesTables();
    const setNotifications = useToastNotifications(state => state.setNotifications);
    const setAuth = useAuthStatus(state => state.setAuth);
    const { gerarCUID } = useUtils();
    
-   useEffect(() => {
-      if(Object.entries(availableTables).length > 0){
-         setData(availableTables);
-      }
-   }, [availableTables])
-   
    return (
       <section className={`fixed z-[12] bg-white rounded-md shadow-2xl left-0 top-12 transition-all text-sm border-t border-t-white w-[185px]`} style={{ height: 'calc(100% - 45px' }}>
          <UserBox />
-         {!data &&
+         {!availableTables &&
             <Spinner />
          }
-         {data && 
+         {availableTables && 
             <>
-               <AvailableYears availableTables={data}/>
+               <AvailableYears availableTables={availableTables}/>
                <Nav />
             </>
          }

@@ -10,6 +10,7 @@ import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { useEntryHandler } from "@/app/hooks/entries/useEntryHandler";
 import { useUtils } from "@/app/hooks/useUtils";
 import { Spinner } from "../loads/spinner";
+import { ButtonDelete } from "../buttons/ButtonDelete"; 
 
 export function ModalEditEntry(){
    const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
@@ -141,7 +142,7 @@ function ModalEditEntryBody() {
                         required
                      />
                   </div>
-                  <div className="flex justify-center mt-3">
+                  <div className="flex flex-col gap-[2px] justify-center mt-3">
                      <ButtonSave 
                         onClick={(e) => {
                            e.preventDefault();
@@ -151,6 +152,14 @@ function ModalEditEntryBody() {
                      >{updateDBSAnswer.loading &&
                         <Spinner />
                      }</ ButtonSave >
+
+                     <div className="flex flex-row items-center">
+                        <div className="flex-1"><hr /></div>
+                        <span className="px-2">ou</span> 
+                        <div className="flex-1"><hr /></div>
+                     </div>
+
+                     <ButtonDelete text={`Deletar ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}/>
                   </div>
                </form>
             </div>

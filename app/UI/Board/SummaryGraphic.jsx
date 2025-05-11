@@ -43,7 +43,8 @@ export const SummaryGraphicBody = memo(({ sum }) => {
                            data={{ 
                               labels: ['Receitas Totais', 'Despesas Totais'], 
                               values: [sum.incomes_sum, sum.expenses_sum],
-                              colors: ['#316628', '#D91136'] 
+                              colors: ['#316628', '#D91136'],
+                              onlyFirsValue: false,
                            }} 
                            size={{ w: '200', h: '200' }} 
                         />

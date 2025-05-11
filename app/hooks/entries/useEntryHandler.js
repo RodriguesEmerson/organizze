@@ -14,8 +14,8 @@ export function useEntryHandler(){
    const setAuth = useAuthStatus((state) => state.setAuth);
    const setToAnimateEntry = useTableStore((state) => state.setToAnimateEntry);
    const { updateStore } = useUpdateEntriesStore();
-   const { convertDateToYMD, convertValueToNumeric, gerarCUID } = useUtils();
-
+   const { convertDateToYMD, convertValueToNumeric, gerarCUID, getMonthName, toUpperFirstLeter } = useUtils();
+   
    async function updateEntry(entry, type){
       //Formata os dados para o mesmo formato que vem do DB,
       //para depois fazer a comparação.
@@ -33,6 +33,14 @@ export function useEntryHandler(){
          
          if (curr !== editingEntry[key]) {
             updatedEntry[key] = curr;
+         }
+      }
+
+      if(updatedEntry.hasOwnProperty('date')){
+         if(getMonthName(editingEntry.date) != getMonthName(updatedEntry.date)){
+            setNotifications(`Selecione uma data no mês de ${toUpperFirstLeter(getMonthName(editingEntry.date))} par continuar.`, 'error', gerarCUID());
+            setUpdateDBSAnswer({loading: false})
+            return;
          }
       }
       

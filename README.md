@@ -3,9 +3,6 @@ Este é um projeto criado  com NextJS, Tailwind e ChartJs, integarado ao reposit
 /============================== A fazer ===============================
 *Tarefa*                                                 *prioridade (1-5)*
 
-Adicionar validador para não permitir entrada                   *2*
-de dados fora do mês da tabela que está selecionada.  
-
 Criar modal para confirmar exclusão de categorias               *4*
 
 Criar função no front e backend para que seja criadas
@@ -23,16 +20,3 @@ Criar token de 30 dias ao selecionar a checkbox na
 página de login.                                                *5*
 
 Criar página de SignUp no front, o back já está pronto.         *5*
-
-
-/========================================================================
-Após fazer isso trabalhar na página relatório anual.
-
-
-
-
-
-
-
-
-

@@ -59,7 +59,6 @@ export function useGetYearlySumary(year){
                      }
                   }
                });
-
                setYearlySummary(yearData);
             }
             if(response.status == 401){

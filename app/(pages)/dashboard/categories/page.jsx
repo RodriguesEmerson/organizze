@@ -1,5 +1,5 @@
 'use client';
-import { ButtonDelete } from "@/app/components/buttons/ButtonDelete";
+import { ButtonDeleteBin } from "@/app/components/buttons/ButtonDeleteBin";
 import { ButtonSave } from "@/app/components/buttons/ButtonSave";
 import { Spinner } from "@/app/components/loads/spinner";
 import { PageModel } from "@/app/components/PageModel";
@@ -87,7 +87,7 @@ function Tr({ category }) {
                <Spinner size={5}/>
             }
             {!deleting &&
-               <ButtonDelete onClick={(e) => {e.stopPropagation(); deleteCategoryHandler.delete(category)}}/>
+               <ButtonDeleteBin onClick={(e) => {e.stopPropagation(); deleteCategoryHandler.delete(category)}}/>
             }
          </td>
       </tr>

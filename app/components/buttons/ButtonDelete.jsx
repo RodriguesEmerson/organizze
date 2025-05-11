@@ -1,10 +1,11 @@
-export function ButtonDelete( {...props} ) {
-   return ( 
-      <button
-         className="flex items-center justify-center w-full gap-1 px-2 h-8  !text-gray-700 rounded-md  hover:!text-red-700 transition-all"
+export function ButtonDelete({ text, ...props }) {
+   return (
+      <button 
+         className="flex flex-row items-center justify-center px-2 gap-1 text-xs transition-all h-8 rounded-md  text-red-700 border border-red-700 hover:bg-red-50"  
          {...props}
       >
-         <span className="material-icons-outlined text-[20px] !text-start">delete</span>
+         <p>{`${text}`}</p>
+         <span className="material-icons-outlined text-[18px] !text-start">delete</span>
       </button>
    )
 }

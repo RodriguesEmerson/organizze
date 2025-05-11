@@ -1,5 +1,6 @@
 'use client';
 
+import { PageModel } from "@/app/components/PageModel";
 import { useSearchParams } from "next/navigation";
 import { ChartBar } from "../../components/charts/ChartBar";
 import { ChartLine } from "../../components/charts/ChartLine";
@@ -18,32 +19,24 @@ export default function YearlyDashBoard() {
    const { yearlySummary } = useGetYearlySumary('2025');
 
    return (
-      <section
-         className="relative ml-44 pl-5 pt-3 pr-3 bg-gray-100"
-         style={{ height: "calc(100% - 48px)" }}
-      >
+      <PageModel title={`Relatório${yearURL ? ` de ${yearURL}` : ''}`}>
          {!yearURL &&
-            <div>
-               <p>Selecione a tabela que deseja vizualiar!</p>
+            <div className="z-10 text-white">
+               <p>Selecione o mês ou ano que deseja vizualiar!</p>
             </div>
          }
          {(yearURL && yearlySummary) &&
-            <>
-               <div className="sticky top-12 z-[11]  border-t-gray-300 h-8 bg-gray-900 text-white -mt-3  mb-2 text-center leading-8 -ml-[200px]" style={{ width: '100vw' }}>
-                  {`Relatório de ${yearURL}`}
-               </div>
-               <div className="absolute top-0 -left-44 h-24 w-[100vw] bg-gray-900 !z-[0]"></div>
+         <>
+            <div className="flex flex-row gap-2">
+               <BoxInfos type="expense" data={yearlySummary} />
+               <BoxInfos type="income" data={yearlySummary} />
+               <BoxInfos type="balance" data={yearlySummary} />
+            </div>
 
-               <div className="flex flex-row gap-2">
-                  <BoxInfos type="expense" data={yearlySummary} />
-                  <BoxInfos type="income" data={yearlySummary} />
-                  <BoxInfos type="balance" data={yearlySummary} />
-               </div>
-
-               <SumaryChart data={yearlySummary}/>
-            </>
+            <SumaryChart data={yearlySummary}/>
+         </>
          }
-      </section>
+      </PageModel>
    )
 }
 
@@ -105,7 +98,6 @@ function MonthlyTypeChart({ color, chartData }) {
 }
 
 function SumaryChart({ data }) {
-   const { yearlyPageHandler } = useYearlyPage();
    const { getChartLablesAndValues } = useYearlyPage();
 
    const chartExpensesData = getChartLablesAndValues(data.months, 'expense');

@@ -9,6 +9,7 @@ import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { Spinner } from "../loads/spinner";
 import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { useInsertNewEntry } from "@/app/hooks/entries/useInsertNewEntry";
+import { useSearchParams } from "next/navigation";
 
 export function ModalInsertEntry(){
    const showInsertModal = useModalsHiddenStore((state) => state.showInsertModal);
@@ -20,8 +21,10 @@ export function ModalInsertEntry(){
 }
 
 function ModalInsertEntryBody() {
-   const { insertEntry, loading } = useInsertNewEntry(); 
+   const { insertEntry, loading, success } = useInsertNewEntry(); 
    const setShowInsertModal = useModalsHiddenStore(state => state.setShowInsertModal);
+   const searchParams = useSearchParams();
+   const monthURL = searchParams.get('month');
    const [formData, setFormData] = useState(
       {description: '', category: '', date: '', icon: '', fixed: false, end_date: '', value: '', id: ''}
    );
@@ -126,11 +129,11 @@ function ModalInsertEntryBody() {
                      <ButtonSave 
                         onClick={(e) => {
                            e.preventDefault();
-                           insertEntry(formData, newEntryType);
-                           loading === false && setFormData({description: '', category: '', date: '', icon: '', fixed: false, end_date: '', value: '', id: ''})
+                           insertEntry(formData, newEntryType, monthURL);
+                           success === true && setFormData({description: '', category: '', date: '', icon: '', fixed: false, end_date: '', value: '', id: ''})
                         }} 
                         text="Adicionar" 
-                     >{loading === true &&
+                     >{loading &&
                         <Spinner />
                      }</ ButtonSave >
                   </div>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-export function useAvailablesTables(){
+export function useGetAvailablesTables(){
 
-   const [availableTables, setData] = useState({});
+   const [availableTables, setData] = useState();
 
       useEffect(() => {
          const getData = async () => {
@@ -39,5 +39,5 @@ export function useAvailablesTables(){
          getData();
       },[])
       
-   return {availableTables};
+   return { availableTables };
 }

@@ -33,8 +33,13 @@ export function useUtils() {
       return new Date(date + 'T00:00:00').toLocaleDateString('pt-br', { day: "2-digit", month: "2-digit", year: 'numeric'})
    }
 
-   function getMonthName(date, caracters){
-      const monthName = new Date(date + 'T00:00:00').toLocaleDateString('pt-br', { month: "long"});
+   function getMonthName(date, caracters, format){
+      let dateToGetMonth = date;
+      if(format == 'br'){
+         const splicedDate = date.split((/\/|\-/));
+         dateToGetMonth = `${splicedDate[2]}-${splicedDate[1]}-${splicedDate[0]}`;
+      }
+      const monthName = new Date(dateToGetMonth).toLocaleDateString('pt-br', { month: "long"});
       if(caracters){ return monthName.slice(0, caracters)}
       return monthName;
    }

@@ -10,10 +10,11 @@ export function useInsertNewEntry(){
    const setAuth = useAuthStatus((state) => state.setAuth);
    const setToAnimateEntry = useTableStore((state) => state.setToAnimateEntry);
    const [loading, setLoading] = useState(false);
+   const [success, setSuccess] = useState(false);
    const { updateStore } = useUpdateEntriesStore();
-   const { convertDateToYMD, convertValueToNumeric, gerarCUID } = useUtils();
+   const { convertDateToYMD, convertValueToNumeric, gerarCUID, getMonthName, toUpperFirstLeter } = useUtils();
 
-   async function insertEntry(entry, type){
+   async function insertEntry(entry, type, tableMonth){
 
       //Formata os dados para o mesmo formato que vem do DB,
       //para depois fazer a comparação.
@@ -47,13 +48,21 @@ export function useInsertNewEntry(){
       
       if(hasEmptyField) {
          setNotifications('Todos os campos são obrigatórios.', 'warn', gerarCUID());
-         setLoading(false)
+         setLoading(false);
          return;
       };
+
+      if(tableMonth != getMonthName(insertingEntry.date)){
+         setNotifications(`Selecione uma data no mês de ${toUpperFirstLeter(tableMonth)} par continuar.`, 'error', gerarCUID());
+         setLoading(false);
+         return;
+      }
       
       insertingEntry.id = gerarCUID();
       insertingEntry.type = type;
+      
       setLoading(true);
+      setSuccess(false);
       await fetch('http://localhost/organizze-bk/public/entries.php', {
          method: 'POST',
          credentials: 'include',
@@ -64,6 +73,7 @@ export function useInsertNewEntry(){
          if(response.status == 201){
             setNotifications(`Nova ${type == 'expense' ? 'Despesa' : 'Receita'} adiconada.`, 'success', gerarCUID());
             setLoading(false);
+            setSuccess(true);
             updateStore(insertingEntry, `${type}s`);
             setToAnimateEntry(insertingEntry.id)
          }
@@ -86,7 +96,7 @@ export function useInsertNewEntry(){
       })
    }
   
-   return { insertEntry, loading };
+   return { insertEntry, loading, success };
 }
 
 export function useUpdateEntriesStore(){

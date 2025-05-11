@@ -61,8 +61,6 @@ export function useChartDoughnut(){
                      ).toFixed(2); // Calcula a porcentagem com 2 casas decimais
 
                      // Retorna o texto personalizado
-                     // ${label}:
-                     
                      return ` ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)} - (${percentage}%)`;
                   },
                   labelPointStyle: function (context) {
@@ -83,11 +81,14 @@ export function useChartDoughnut(){
                const chartLabels = data.labels;
                let tooltipLength = false;
                if(chartLabels.length == 1) {tooltipLength = 1};
+               let onlyFirsValueSeted = false;
 
                chart.getDatasetMeta(0).data.forEach((slice, index) => {
 
-                  //Evita criar uma tooltip para uma label que não foi enviada.
-                  if(tooltipLength--  == 0) return;
+                  //Adiciona apenas o primeiro valor no gráfico.
+                  if(chartArea.onlyFirsValue && !onlyFirsValueSeted){
+                     return onlyFirsValueSeted = true;
+                  }
 
                   const { x, y } = slice.tooltipPosition(); // Posição central da fatia
                   const value = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.datasets[0].data[index]);
@@ -95,7 +96,7 @@ export function useChartDoughnut(){
                   ctx.fillStyle = '#fff'; // Cor do texto
                   ctx.font = '9px Arial'; // Estilo da fonte
                   // Configurando a sombra
-                  ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // Cor da sombra
+                  ctx.shadowColor = 'rgba(0, 0, 0, 0.9)'; // Cor da sombra
                   ctx.shadowBlur = 10; // Nível de desfoque
                   ctx.shadowOffsetX = 5; // Deslocamento horizontal
                   ctx.shadowOffsetY = 5; // Deslocamento verticalF
