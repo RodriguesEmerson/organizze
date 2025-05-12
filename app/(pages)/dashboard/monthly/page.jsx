@@ -19,6 +19,7 @@ import { ModalInsertEntry } from "@/app/components/modals/ModalInsertEntry";
 import { useTableStore } from "@/app/zustand/useTablesStore";
 import { useEffect } from "react";
 import { SummaryGraphic } from "@/app/UI/Board/SummaryGraphic";
+import { ModalConfirmAction } from "@/app/components/modals/ModalConfirmAction";
 
 export default function MonthlyDashBoard() {
 
@@ -41,7 +42,7 @@ export default function MonthlyDashBoard() {
          <ModalEditEntry />
          <ModalInsertEntry />
          <ToastNotifications />
-         
+         <ModalConfirmAction text={'Lançamento'}/>
          <PageModel title={`${toUpperFirstLeter(monthURL)} de ${yearURL}`}>
             {(entriesData?.loading || !entriesData) &&
                <MonthlyPageSqueleton />

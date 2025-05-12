@@ -1,17 +1,18 @@
 'use client';
-import { useEffect, useState } from "react"
-import { ButtonClose } from "../buttons/ButtonClose"
-import { ButtonSave } from "../buttons/ButtonSave";
-import { CategorieSelect } from "../selects/CategorieSelect";
-import { Calendar } from "../Calendar";
-import { useTableStore } from "../../zustand/useTablesStore";
-import { ModalBackGround } from "./../ModalBackGround";
-import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
+import { useDeleteEntry } from "@/app/hooks/entries/useDeleteEntry";
 import { useEntryHandler } from "@/app/hooks/entries/useEntryHandler";
 import { useUtils } from "@/app/hooks/useUtils";
+import { useModalConfirmActionStore } from "@/app/zustand/useModalConfirmActionStore";
+import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
+import { useEffect, useState } from "react";
+import { useTableStore } from "../../zustand/useTablesStore";
+import { ButtonClose } from "../buttons/ButtonClose";
+import { ButtonDelete } from "../buttons/ButtonDelete";
+import { ButtonSave } from "../buttons/ButtonSave";
+import { Calendar } from "../Calendar";
 import { Spinner } from "../loads/spinner";
-import { ButtonDelete } from "../buttons/ButtonDelete"; 
-import { useDeleteEntry } from "@/app/hooks/entries/useDeleteEntry";
+import { CategorieSelect } from "../selects/CategorieSelect";
+import { ModalBackGround } from "./../ModalBackGround";
 
 export function ModalEditEntry(){
    const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
@@ -28,7 +29,9 @@ function ModalEditEntryBody() {
    const { convertDateToDMY } = useUtils();
    const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
    const [formData, setFormData] = useState({description: '', category: '', date: '', fixed: false, end_date: '', value: '', id: ''});
-   
+   const setAction = useModalConfirmActionStore(state => state.setAction);
+   const setShowAddConfirmModal = useModalsHiddenStore(state => state.setShowAddConfirmModal);
+
    //Dados do item em edição.
    const editingEntry = useTableStore((state) => state.editingEntry);
    const [fixedRelease, setFixedRelease] = useState(false);
@@ -164,9 +167,10 @@ function ModalEditEntryBody() {
                      <ButtonDelete  
                         onClick={(e) => {
                            e.preventDefault();
-                           deleteEntry(editingEntry, editingEntry.type)
+                           setAction(() => deleteEntry(editingEntry, editingEntry.type));
+                           setShowAddConfirmModal(true);
                         }}
-                        text={`Deletar ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}
+                        text={`Excluir ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}
                      >{loading &&
                         <Spinner />
                      }</ ButtonDelete >

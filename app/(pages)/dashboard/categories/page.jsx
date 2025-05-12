@@ -2,18 +2,20 @@
 import { ButtonDeleteBin } from "@/app/components/buttons/ButtonDeleteBin";
 import { ButtonSave } from "@/app/components/buttons/ButtonSave";
 import { Spinner } from "@/app/components/loads/spinner";
+import { TableSkeleton } from "@/app/components/loads/TableSkeleton";
+import { ModalConfirmAction } from "@/app/components/modals/ModalConfirmAction";
+import { ModalEditCategory } from "@/app/components/modals/ModalEditCategory";
+import { ToastNotifications } from "@/app/components/notificatons/ToastNotifications";
 import { PageModel } from "@/app/components/PageModel";
 import { IconSelect } from "@/app/components/selects/IconSelect";
 import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
-import { useGetCategories } from "@/app/hooks/categories/useGetCategories";
-import { useEffect, useState } from "react";
 import { useCategoriesHandler } from "@/app/hooks/categories/useCategoriesHandler";
-import { ToastNotifications } from "@/app/components/notificatons/ToastNotifications";
-import { useCategoriesDataStore } from "@/app/zustand/useCategoriesDataStore";
-import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
-import { ModalEditCategory } from "@/app/components/modals/ModalEditCategory";
 import { useDeleteCategory } from "@/app/hooks/categories/useDeleteCategory";
-import { TableSkeleton } from "@/app/components/loads/TableSkeleton";
+import { useGetCategories } from "@/app/hooks/categories/useGetCategories";
+import { useCategoriesDataStore } from "@/app/zustand/useCategoriesDataStore";
+import { useModalConfirmActionStore } from "@/app/zustand/useModalConfirmActionStore";
+import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
+import { useEffect, useState } from "react";
 
 export default function CategoriesManage() {
    useAuthGuard(); //Checks if the user is Authenticated;
@@ -23,17 +25,17 @@ export default function CategoriesManage() {
    const categoriesLoadedType = useCategoriesDataStore(state => state.categoriesLoadedType);
    const setCategoriesLoadedType = useCategoriesDataStore(state => state.setCategoriesLoadedType);
 
+   //Carrega todas a categorias se estiver apenas um tipo carredas, incomes ou expenes.
    if (categoriesLoadedType != 'all') {
       getCategories();
       setCategoriesLoadedType('all');
    }
 
-   //CONSERTAR BUG DE QUE ABRE CATEGORIAS JÁ CARREGADAS EM OUTRA ABA
-
    return (
       <>
-         <ModalEditCategory />
+         <ModalEditCategory/>
          <ToastNotifications />
+         <ModalConfirmAction  text={'Categoria'}/>
          <PageModel title={'Gerenciar Categorias'}>
             <FormNewCategory categories={categories} />
             <div className="z-[5] max-w-[730px] w-fit bg-white rounded-md px-1 shadow-md">
@@ -67,7 +69,10 @@ export default function CategoriesManage() {
 function Tr({ category }) {
    const { deleteCategoryHandler, deleting } = useDeleteCategory();
    const setShowEditCategoryModal = useModalsHiddenStore(state => state.setShowEditCategoryModal);
+   const setShowAddConfirmModal = useModalsHiddenStore(state => state.setShowAddConfirmModal);
    const setEditingCategory = useCategoriesDataStore(state => state.setEditingCategory);
+   const setAction = useModalConfirmActionStore(state => state.setAction);
+
    return (
       <tr key={category.id}
          className={`h-9 border-t border-gray-200  hover:bg-gray-100 transition-all cursor-pointer
@@ -87,7 +92,13 @@ function Tr({ category }) {
                <Spinner size={5}/>
             }
             {!deleting &&
-               <ButtonDeleteBin onClick={(e) => {e.stopPropagation(); deleteCategoryHandler.delete(category)}}/>
+               <ButtonDeleteBin 
+                  onClick={(e) => {
+                     e.stopPropagation(); 
+                     setAction(() => deleteCategoryHandler.delete(category));
+                     setShowAddConfirmModal(true);
+                  }}
+               />
             }
          </td>
       </tr>
