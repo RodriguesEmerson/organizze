@@ -71,7 +71,7 @@ function BarGraphicYSkeleton() {
    )
 }
 
-function ChartDoughnutSkeleton({size = 10}) {
+function ChartDoughnutSkeleton({size = 20}) {
    return (
       <div className="h-[300px] w-[230px] flex flex-row items-center justify-center p-1 pr-2 bg-white shadow-md rounded-md">
          <div className="flex items-center justify-center h-40 w-40 rounded-full animate-pulse bg-gray-300">

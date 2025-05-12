@@ -29,6 +29,7 @@ export function CategorieSelect({ defaultValue, name, value, setValue, formData,
                name={name}
                defaultValue={defaultValue}
                onChange={()=>{}}
+               readOnly
             />
             <span className="material-icons">keyboard_arrow_down</span>
          </div>

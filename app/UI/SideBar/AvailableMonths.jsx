@@ -16,26 +16,20 @@ export function AvailableMonths({ year, availableMonths }) {
    const monthURL = searchParams.get('month');
 
    return (
-      <li
+      <div
          key={year}
          className={`w-full overflow-hidden transition-max-height duration-200 ease-in-out`}
          style={{ maxHeight: expandMonthSelect ? '24px' : `${availableMonths.length * 24 + 27}px` }}
       >
-         <div className="flex flex-row h-6 gap-1 items-center mb-1 cursor-pointer hover:bg-gray-300 transition-all"
-            onClick={() => { setExpandMonthSelect(!expandMonthSelect) }}
-         >
-            <span className={`material-icons-outlined !text-lg transition-all ${!expandMonthSelect && "rotate-180"}`}>
-               expand_circle_down
-            </span>
-            <h3 className="font-semibold text-xs leading-7">{year}</h3>
-
+         <div className="flex flex-row h-6 gap-1 items-start mb-1 p-1 pl-2">
+            <h3 className="font-semibold text-xs leading-6">Ano selecionado:</h3>
          </div>
          <ul className="flex flex-col gap-[2px] ml-4 pl-1 pb-2 border-l border-l-gray-400">
             {availableMonths.map((month, index) => (
                <li
                   key={index}
-                  className={`cursor-pointer text-xs transition-all duration-200 w-fit  rounded-sm hover:bg-gray-300
-                     ${(yearURL == year && monthURL == month) && "!bg-cyan-600 text-white"}
+                  className={`cursor-pointer text-xs transition-all duration-200 w-fit  rounded-[4px] hover:bg-gray-300
+                     ${(yearURL == year && monthURL == month) && "!bg-gray-900 text-white"}
                   `}
                   onClick={() => { changeTable(year, month) }}
                >
@@ -48,6 +42,6 @@ export function AvailableMonths({ year, availableMonths }) {
                </li>
             ))}
          </ul>
-      </li>
+      </div>
    )
 }

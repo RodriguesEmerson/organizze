@@ -2,21 +2,23 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 
-export function Nav(){
+export function Nav({year}){
    const pathName = usePathname();
 
    const navLinks = [
-      { ref: 'http://localhost:3000/dashboard/categories', text:'Gerenciar Categorias'}
+      { ref: 'http://localhost:3000/dashboard/categories', text:'Gerenciar Categorias', icon: 'category', path: '/dashboard/categories'},
+      { ref: `/dashboard?year=${year}`, text:`Ver relatório de ${year}`, icon: 'leaderboard', path: `/dashboard`},
    ]
 
    return(
       <nav>
-         <ul>
+         <ul className='flex flex-col p-1 gap-[2px]'>
             {navLinks.map(link => (
-               <li key={link.ref} className={`h-7 text-xs hover:bg-gray-200 transition-all duration-300
-                  ${pathName == '/dashboard/categories' && 'bg-gray-900 text-white hover:bg-gray-900'}
+               <li key={link.ref} className={` hover:bg-gray-200 transition-all duration-300 rounded-md
+                  ${pathName == link.path && 'bg-gray-900 text-white hover:bg-gray-900 font-thin'}
                `}>
-                  <Link href={link.ref} className='h-full text-center leading-7 block border-b border-b-gray-300'>
+                  <Link href={link.ref} className='flex flex-row gap-1 pl-2 items-center h-8 text-xs'>
+                  <span className='material-icons-outlined'>{link.icon}</span>
                      {link.text}
                   </Link>
                </li>

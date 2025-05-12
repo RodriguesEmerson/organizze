@@ -1,5 +1,5 @@
 'use client';  
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { AvailableYears } from "./AvailableYears";
 import { Spinner } from "@/app/components/loads/spinner";
 import { UserBox } from './UserBox';
@@ -16,6 +16,9 @@ export default function SideBar() {
    const isAuthenticated = useAuthStatus(state => state.isAuthenticated);
    if( pathName === '/signin' ) return;
 
+   const searchParams = useSearchParams();
+   const yearURL = searchParams.get('year');
+
    const { availableTables } = useGetAvailablesTables();
    const setNotifications = useToastNotifications(state => state.setNotifications);
    const setAuth = useAuthStatus(state => state.setAuth);
@@ -30,7 +33,7 @@ export default function SideBar() {
          {availableTables && 
             <>
                <AvailableYears availableTables={availableTables}/>
-               <Nav />
+               <Nav year={yearURL ? yearURL : Object.keys(availableTables)[0]}/>
             </>
          }
          <div className='absolute bottom-4 left-0 w-full'>
