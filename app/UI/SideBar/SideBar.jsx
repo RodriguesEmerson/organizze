@@ -22,12 +22,12 @@ export default function SideBar() {
    
    return (
       <section className={`fixed z-[12] bg-white rounded-md shadow-2xl left-0 top-12 transition-all text-sm border-t border-t-white w-[185px]`} style={{ height: 'calc(100% - 45px' }}>
-         <UserBox />
          {!availableTables &&
             <Spinner />
          }
          {availableTables && 
             <>
+               <UserBox />
                <AvailableYears availableTables={availableTables}/>
                <Nav />
             </>

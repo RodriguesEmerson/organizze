@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
 
 export default function Signin() {
+   
    useAuthGuard(true); //Redireciona o usuário se já existir um token válido e o parâmetro for TRUE.
 
    return(
@@ -29,7 +30,6 @@ function SigninForm() {
             <div className="h-[90%] content-center">
                <form className="flex flex-col gap-3">
                   <div className="flex flex-col">
-                     {/* <label htmlFor="signin-email" className="text-gray-500 text-sm pl-1">E-mail</label> */}
                      <input type="email" name="email" id="signin-email" required
                         className="border border-gray-300 text-sm rounded-[4px] h-9 pl-2"
                         value={data.email}
@@ -38,7 +38,6 @@ function SigninForm() {
                      />
                   </div>
                   <div className="flex flex-col">
-                     {/* <label htmlFor="signin-password" className="text-gray-500 text-sm pl-1">Senha</label> */}
                      <input type="password" name="password" id="signin-password" required
                         className="border border-gray-300 text-sm rounded-[4px] h-9 pl-2"
                         value={data.password}

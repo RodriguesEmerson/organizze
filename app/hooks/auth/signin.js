@@ -6,7 +6,7 @@ export async function useSignin(data, setStatus){
    }
 
    if(credentials.email && credentials.password){
-      await fetch('http://localhost/organizze-bk/public/signin.php', {
+      await fetch('http://localhost/organizze-bk/public/auth/signin.php', {
          method: 'POST', 
          headers: {'Content-Type': 'application/json'},
          credentials: 'include',
@@ -14,6 +14,7 @@ export async function useSignin(data, setStatus){
       })
       .then(async response => {
          const result = await response.json();
+         console.log(result)
          if(response.status === 200){
             return window.location.href = result.redirect;
          }

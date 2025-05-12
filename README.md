@@ -3,13 +3,10 @@ Este é um projeto criado  com NextJS, Tailwind e ChartJs, integarado ao reposit
 /============================== A fazer ===============================
 *Tarefa*                                                 *prioridade (1-5)*
 
-
 Criar função no front e backend para que seja criadas
 entreis aos respectivos meses fixados
 Ex: Se a entry foi adicionada hoje e é fixada para três         *3*
 meses, estão deve ser criadas entradas nos repectivos
 meses automaticamente.
-
-Buscar dados do usuário e mostrar na UserBox na SideBar         *4*
 
 Criar página de SignUp no front, o back já está pronto.         *5*

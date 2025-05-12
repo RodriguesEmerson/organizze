@@ -8,7 +8,7 @@ export function useAuthGuard(redirect = false){
 
    useEffect(() => {
       const verifyToken = async () => {
-         await fetch('http://localhost/organizze-bk/public/validatetoken.php', {
+         await fetch('http://localhost/organizze-bk/public/auth/validatetoken.php', {
             method: 'POST',
             credentials: 'include'
          })
@@ -24,11 +24,13 @@ export function useAuthGuard(redirect = false){
                   setAuth(false);
                   window.location.href ='http://localhost:3000/signin';
                }
-            }
+            }  
          })
          .catch(error => {
-            setAuth(false);
-            window.location.href ='http://localhost:3000/signin';
+            if(!redirect){
+               setAuth(false);
+               window.location.href ='http://localhost:3000/signin';
+            }
          })
       }
 

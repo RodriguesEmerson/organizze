@@ -1,11 +1,11 @@
 
 import { useEffect, useState } from "react";
 import { useUtils } from "../hooks/useUtils";
-import { Spinner } from "../UI/spinner";
 import { useEntriesDataStore } from "../zustand/useEntriesDataStore";
 import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
 import { useTableStore } from "../zustand/useTablesStore";
 import { useUtilsStore } from "../zustand/useUtilsStore";
+import { Spinner } from "./loads/spinner";
 
 export function Table({ type }) {
    const tablesHeaders = ['Descrição', 'Categoria', 'Data', 'Valor'];

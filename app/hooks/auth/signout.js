@@ -1,7 +1,7 @@
 
 export async function useSignout(setAuth, setNotifications, gerarCUID){
 
-   await fetch('http://localhost/organizze-bk/public/signout.php', {
+   await fetch('http://localhost/organizze-bk/public/auth/signout.php', {
       method: 'POST', 
       headers: {'Content-Type': 'application/json'},
       credentials: 'include',

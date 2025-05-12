@@ -6,7 +6,7 @@ import { ChartBar } from "../../components/charts/ChartBar";
 import { ChartLine } from "../../components/charts/ChartLine";
 import { useUtils } from "../../hooks/useUtils";
 import { useYearlyPage } from "../../hooks/useYearlyPage";
-import { Spinner } from "../../UI/spinner";
+import { Spinner } from "@/app/components/loads/spinner";
 import { useAuthGuard } from "../../hooks/auth/useAuthGuard";
 import { useGetYearlySumary } from "@/app/hooks/entries/useGetYearlySumary";
 
