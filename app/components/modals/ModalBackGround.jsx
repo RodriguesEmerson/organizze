@@ -1,4 +1,4 @@
-import { useModalsHiddenStore } from "../zustand/useModalsHiddenStore";
+import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 
 export function ModalBackGround({ children }) {
    const setHiddenAllModals = useModalsHiddenStore((state) => state.setHiddenAllModals);

@@ -4,7 +4,7 @@ import { ButtonClose } from "../buttons/ButtonClose"
 import { ButtonSave } from "../buttons/ButtonSave";
 import { CategorieSelect } from "../selects/CategorieSelect";
 import { Calendar } from "../Calendar";
-import { ModalBackGround } from "./../ModalBackGround";
+import { ModalBackGround } from "./ModalBackGround";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { Spinner } from "../loads/spinner";
 import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";

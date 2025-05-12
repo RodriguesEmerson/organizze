@@ -12,7 +12,7 @@ import { ButtonSave } from "../buttons/ButtonSave";
 import { Calendar } from "../Calendar";
 import { Spinner } from "../loads/spinner";
 import { CategorieSelect } from "../selects/CategorieSelect";
-import { ModalBackGround } from "./../ModalBackGround";
+import { ModalBackGround } from "./ModalBackGround";
 
 export function ModalEditEntry(){
    const showEditModal = useModalsHiddenStore((state) => state.showEditModal);

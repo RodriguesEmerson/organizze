@@ -2,12 +2,14 @@
 import { useEffect, useState } from "react"
 import { ButtonClose } from "../buttons/ButtonClose"
 import { ButtonSave } from "../buttons/ButtonSave";
-import { ModalBackGround } from "./../ModalBackGround";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { Spinner } from "../loads/spinner";
 import { IconSelect } from "../selects/IconSelect";
 import { useCategoriesDataStore } from "@/app/zustand/useCategoriesDataStore";
 import { useUpdateCategories } from "@/app/hooks/categories/useUpdateCategory";
+import { ModalBackGround } from "./ModalBackGround";
+import { ButtonDelete } from "../buttons/ButtonDelete";
+import { useDeleteCategory } from "@/app/hooks/categories/useDeleteCategory";
 
 export function ModalEditCategory() {
    const showEditCategoryModal = useModalsHiddenStore((state) => state.showEditCategoryModal);
@@ -21,6 +23,7 @@ export function ModalEditCategory() {
 function ModalEditCategoryBody() {
 
    const { updateCategoryHandler, loading } = useUpdateCategories();
+   const { deleteCategoryHandler, deleting } = useDeleteCategory();
    const setShowEditCategoryModal = useModalsHiddenStore(state => state.setShowEditCategoryModal);
    const icons = useCategoriesDataStore(state => state.icons);
    const editingCategory = useCategoriesDataStore(state => state.editingCategory);
@@ -67,7 +70,7 @@ function ModalEditCategoryBody() {
                            maxLength={50}
                         />
                      </div>
-                     
+
                      <div className="flex flex-row justify-between gap-2">
                         <div className="flex items-center flex-row gap-2 mb-2 pr-2">
                            <p className="font-bold">Tipo:</p>
@@ -107,10 +110,30 @@ function ModalEditCategoryBody() {
                         >{loading &&
                            <Spinner />
                            }</ ButtonSave >
+
+                        <div className="flex flex-row items-center">
+                           <div className="flex-1"><hr /></div>
+                           <span className="px-2">ou</span>
+                           <div className="flex-1"><hr /></div>
+                        </div>
+
+                        <ButtonDelete
+                           onClick={(e) => {
+                              e.stopPropagation(); 
+                              setAction(() => deleteCategoryHandler.delete(editingCategory));
+                              setShowAddConfirmModal(true);
+                           }}
+                           text={`Excluir categoria`}
+                        >{deleting &&
+                           <Spinner />
+                           }</ ButtonDelete >
                      </div>
                   </form>
                }
-
+            </div>
+            <div className="flex flex-row items-center gap-2 mt-2 justify-center text-xs text-red-800">
+               <span className="material-icons-outlined pl-3">warning</span>
+               <p className="w-[85%]">Atenção. Ao alterar ou exluir uma categoria, todas os lançamentos com a respectiva categoria serão alteradas!</p>
             </div>
          </div>
       </ModalBackGround>

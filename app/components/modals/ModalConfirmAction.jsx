@@ -2,7 +2,7 @@ import { useModalConfirmActionStore } from "@/app/zustand/useModalConfirmActionS
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { ButtonClose } from "../buttons/ButtonClose";
 import { ButtonDelete } from "../buttons/ButtonDelete";
-import { ModalBackGround } from "../ModalBackGround";
+import { ModalBackGround } from "./ModalBackGround";
 
 
 export function ModalConfirmAction({ text }) {

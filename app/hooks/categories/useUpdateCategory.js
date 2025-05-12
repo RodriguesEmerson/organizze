@@ -16,6 +16,7 @@ export function useUpdateCategories(){
          
          setLoading(true);
          if(!this.validateCategory(category, editingCategory)) return;
+         category.categoryOldName = editingCategory.name; //Necessário para atualizar com base no nome.
 
          await fetch('http://localhost/organizze-bk/public/categories.php', {
             method: 'PUT',
@@ -24,7 +25,6 @@ export function useUpdateCategories(){
             body: JSON.stringify(category)
          })
          .then(async response => {
-            
             if(response.status == 200){
                setLoading(false);
                setNotifications('Categoria atualizada.', 'success', gerarCUID());

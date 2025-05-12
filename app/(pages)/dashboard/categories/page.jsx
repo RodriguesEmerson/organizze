@@ -43,7 +43,7 @@ export default function CategoriesManage() {
                   <thead className="h-7">
                      <tr>
                         <th scope="col" className="w-96">Categoria</th>
-                        <th scope="col" className="w-40">Tipo</th>
+                        <th scope="col" className="w-60">Tipo</th>
                         <th scope="col" className="w-36">Icone</th>
                         {!categories && 
                         <th scope="col" className="w-9"></th>
@@ -87,7 +87,7 @@ function Tr({ category }) {
          <td className="text-center">
             <img className="w-5 h-5 m-auto" src={`/icons/${category.icon}`} />
          </td>
-         <td className="text-center">
+         {/* <td className="text-center">
             {deleting &&
                <Spinner size={5}/>
             }
@@ -100,7 +100,7 @@ function Tr({ category }) {
                   }}
                />
             }
-         </td>
+         </td> */}
       </tr>
    )
 }
