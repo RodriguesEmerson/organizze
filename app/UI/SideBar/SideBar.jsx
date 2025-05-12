@@ -9,6 +9,7 @@ import { useSignout } from '@/app/hooks/auth/signout';
 import { useAuthStatus } from '@/app/zustand/useAuthStatus';
 import { useUtils } from '@/app/hooks/useUtils';
 import { useGetAvailablesTables } from '@/app/hooks/entries/useGetAvailableTables';
+import { SidebarSkeleton } from '@/app/components/loads/SidebarSkeleton';
 
 export default function SideBar() {
    const pathName = usePathname()
@@ -22,12 +23,12 @@ export default function SideBar() {
    
    return (
       <section className={`fixed z-[12] bg-white rounded-md shadow-2xl left-0 top-12 transition-all text-sm border-t border-t-white w-[185px]`} style={{ height: 'calc(100% - 45px' }}>
+         <UserBox />
          {!availableTables &&
-            <Spinner />
+            <SidebarSkeleton />
          }
          {availableTables && 
             <>
-               <UserBox />
                <AvailableYears availableTables={availableTables}/>
                <Nav />
             </>
