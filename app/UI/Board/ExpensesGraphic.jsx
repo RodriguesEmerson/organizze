@@ -2,7 +2,6 @@ import { memo, useEffect, useState } from "react"
 import { Chart, registerables } from "chart.js";
 import { useExpensesGraphic } from "@/app/hooks/useExpensesGraphic";
 import { ChartBar } from "@/app/components/charts/ChartBar";
-import { ChartDoughnut } from "@/app/components/charts/ChartDoughnut";
 import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { Spinner } from "@/app/components/loads/spinner";
 
@@ -15,11 +14,9 @@ export function ExpesesGraphic() {
 
    useEffect(() => {
       if (entriesData) {
-         setData({
-            expenses: entriesData.entries.expenses,
-         });
+         setData( entriesData.entries.all);
       }
-   }, [entriesData.entries.expenses]);
+   }, [entriesData.entries.all]);
 
    return (
       < ExpesesGraphicBody data={data} />
@@ -42,10 +39,10 @@ const ExpesesGraphicBody = memo(({ data }) => {
                   <div className="flex-1 min-w-[400px] h-[250px] pt-4">
                      <ChartBar
                         data={{
-                           labels: getExpensesData(data.expenses).labels,
+                           labels: getExpensesData(data).labels,
                            datasets: [
                               {
-                                 data: getExpensesData(data.expenses).values,
+                                 data: getExpensesData(data).values,
                                  backgroundColor: ['#D91136'],
                               }
                            ],

@@ -6,9 +6,11 @@ export function useIncomesGraphic() {
       if (incomes) { 
          const incomesData = {};
          incomes.forEach(income => {
-            incomesData[income.category]
-               ? incomesData[income.category] = Number(incomesData[income.category]) + Number(income.value)
-               : incomesData[income.category] = Number(income.value);
+            if(income.type == 'income'){
+               incomesData[income.category]
+                  ? incomesData[income.category] = Number(incomesData[income.category]) + Number(income.value)
+                  : incomesData[income.category] = Number(income.value);
+            }
          });
          const categoriesNames = Object.keys(incomesData);
          const categoriesValues = Object.values(incomesData);

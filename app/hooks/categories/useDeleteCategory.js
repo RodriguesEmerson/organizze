@@ -20,10 +20,9 @@ export function useDeleteCategory(){
             method: 'DELETE',
             credentials: 'include',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({id: category.id})
+            body: JSON.stringify(category)
          })
          .then(async response => {
-
             if(response.status == 200){
                setDeleting(false);
                setNotifications('Categoria excluída.', 'success', gerarCUID());

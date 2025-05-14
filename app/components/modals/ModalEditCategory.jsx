@@ -10,6 +10,7 @@ import { useUpdateCategories } from "@/app/hooks/categories/useUpdateCategory";
 import { ModalBackGround } from "./ModalBackGround";
 import { ButtonDelete } from "../buttons/ButtonDelete";
 import { useDeleteCategory } from "@/app/hooks/categories/useDeleteCategory";
+import { useModalConfirmActionStore } from "@/app/zustand/useModalConfirmActionStore";
 
 export function ModalEditCategory() {
    const showEditCategoryModal = useModalsHiddenStore((state) => state.showEditCategoryModal);
@@ -25,6 +26,8 @@ function ModalEditCategoryBody() {
    const { updateCategoryHandler, loading } = useUpdateCategories();
    const { deleteCategoryHandler, deleting } = useDeleteCategory();
    const setShowEditCategoryModal = useModalsHiddenStore(state => state.setShowEditCategoryModal);
+   const setShowAddConfirmModal = useModalsHiddenStore(state => state.setShowAddConfirmModal);
+   const setAction = useModalConfirmActionStore(state => state.setAction);
    const icons = useCategoriesDataStore(state => state.icons);
    const editingCategory = useCategoriesDataStore(state => state.editingCategory);
    const [formData, setFormData] = useState();
@@ -41,7 +44,7 @@ function ModalEditCategoryBody() {
       <ModalBackGround >
          <div className="relative modal flex flex-col justify-between h-fit w-[350px] bg-white rounded-md shadow-lg py-2 px-3">
 
-            <div className="text-center h-9 leading-7 w-[350px] rounded-t-md -ml-3 -mt-[9px] text-sm pt-[5px] border-b mb-3 bg-cyan-600 text-white">
+            <div className="text-center h-9 leading-7 w-[350px] rounded-t-md -ml-3 -mt-[9px] text-sm pt-[5px] border-b mb-3 bg-gray-900 text-white">
                <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
                   <img className="w-6 transition-all" src={"/gif/edit.gif"} />
                </div>
@@ -119,7 +122,7 @@ function ModalEditCategoryBody() {
 
                         <ButtonDelete
                            onClick={(e) => {
-                              e.stopPropagation(); 
+                              e.preventDefault();
                               setAction(() => deleteCategoryHandler.delete(editingCategory));
                               setShowAddConfirmModal(true);
                            }}
@@ -133,7 +136,7 @@ function ModalEditCategoryBody() {
             </div>
             <div className="flex flex-row items-center gap-2 mt-2 justify-center text-xs text-red-800">
                <span className="material-icons-outlined pl-3">warning</span>
-               <p className="w-[85%]">Atenção. Ao alterar ou exluir uma categoria, todas os lançamentos com a respectiva categoria serão alteradas!</p>
+               <p className="w-[85%]">Atenção. Ao alterar ou exluir uma categoria, todas os lançamentos com a respectiva categoria serão alterados!</p>
             </div>
          </div>
       </ModalBackGround>

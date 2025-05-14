@@ -21,6 +21,9 @@ export function useGetEntries(year, month){
             if(response.status == 200){
                const incomes = [];
                const expenses = [];
+               const all = data.entries.sort((curr, prev) => { 
+                  return new Date(prev.date).getTime() - new Date(curr.date).getTime();
+               });
                
                data.entries.forEach(entry => {
                   if(entry.type == 'income'){
@@ -40,17 +43,27 @@ export function useGetEntries(year, month){
                setEntriesData({
                   entries: {
                      incomes: sortedIncomes,
-                     expenses: sortedExpenses
+                     expenses: sortedExpenses,
+                     all: all
                   },
-                  sum: {...data.sum[0], balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum},
+                  sum: {
+                     expenses_sum: data.sum[0].expenses_sum ?? 0,
+                     incomes_sum: data.sum[0].incomes_sum ?? 0,
+                     balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum
+                  },
                }); 
 
                setEntriesDataStore({
                   entries: {
                      incomes: sortedIncomes,
-                     expenses: sortedExpenses
+                     expenses: sortedExpenses,
+                     all: all
                   },
-                  sum: {...data.sum[0], balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum},
+                  sum: {
+                     expenses_sum: data.sum[0].expenses_sum ?? 0,
+                     incomes_sum: data.sum[0].incomes_sum ?? 0,
+                     balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum
+                  },
                });
             }
             if(response.status == 401){

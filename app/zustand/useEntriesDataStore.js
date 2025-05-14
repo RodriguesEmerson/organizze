@@ -14,6 +14,10 @@ export const useEntriesDataStore = create((set) => ({
             ...state.entriesData.entries,
             [type]: entries
          }
+         // entries: {
+         //    ...state.entriesData.entries,
+         //    [type]: entries
+         // }
       }
    })),
    updateEntriesExpensesSum: (expensesSum, balance) => set((state) => ({

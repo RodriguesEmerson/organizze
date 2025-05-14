@@ -15,11 +15,9 @@ export function IncomesGraphic() {
 
    useEffect(() => {
       if (entriesData) {
-         setData({
-            incomes: entriesData.entries.incomes,
-         });
+         setData( entriesData.entries.all);
       }
-   }, [entriesData.entries.incomes]);
+   }, [entriesData.entries.all]);
 
    return (
       < IncomesGraphicBody data={data} />
@@ -44,10 +42,10 @@ export const IncomesGraphicBody = memo(({ data }) => {
                   <div className="flex-1 min-w-[400px] h-[250px] pt-4">
                      <ChartBar
                         data={{
-                           labels: getIncomesData(data.incomes).labels,
+                           labels: getIncomesData(data).labels,
                            datasets: [
                               {
-                                 data: getIncomesData(data.incomes).values,
+                                 data: getIncomesData(data).values,
                                  backgroundColor: ['#316628'],
                               }
                            ],

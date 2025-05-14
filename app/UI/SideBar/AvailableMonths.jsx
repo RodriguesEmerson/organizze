@@ -19,7 +19,7 @@ export function AvailableMonths({ year, availableMonths }) {
       <div
          key={year}
          className={`w-full overflow-hidden transition-max-height duration-200 ease-in-out`}
-         style={{ maxHeight: expandMonthSelect ? '24px' : `${availableMonths.length * 24 + 27}px` }}
+         style={{ maxHeight: expandMonthSelect ? '24px' : `${(availableMonths.length + 1) * (24 + 27)}px` }}
       >
          <div className="flex flex-row h-6 gap-1 items-start mb-1 p-1 pl-2">
             <h3 className="font-semibold text-xs leading-6">Ano selecionado:</h3>
@@ -41,6 +41,9 @@ export function AvailableMonths({ year, availableMonths }) {
                   </Link>
                </li>
             ))}
+            <li className={`flex flex-row gap-1 cursor-pointer py-[2px] px-2 text-xs transition-all duration-200 w-fit  rounded-[4px] hover:bg-gray-300`}>
+               <p>Criar nova tabela</p><span className="material-icons-outlined text-sm h-3 -mt-[2px]">add_circle</span>
+            </li>
          </ul>
       </div>
    )

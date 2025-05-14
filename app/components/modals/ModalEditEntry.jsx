@@ -60,7 +60,7 @@ function ModalEditEntryBody() {
                <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
                   <img className="w-6 transition-all" src={"/gif/edit.gif"} />
                </div>
-                <h4>{`Editando ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}</h4>
+                <h4>{`Editando ${editingEntry.type == 'expense' ? 'Despesa' : 'Receita'}`}</h4>
                <div className="absolute h-5 w-5 top-0 right-0">
                   <ButtonClose onClick={() => { setShowEditModal(false) }} />
                </div>
@@ -89,7 +89,7 @@ function ModalEditEntryBody() {
                            value={formData.category}
                            setValue={ setFormData }
                            formData={formData}
-                           type={editingEntry.type.slice(0,-1)}
+                           type={editingEntry.type}
                         />
                      </div>
 
@@ -130,7 +130,7 @@ function ModalEditEntryBody() {
                               id={`${editingEntry.type}-fixedReleaseCheckbox`}
                            />
                            <label htmlFor={`${editingEntry.type}-fixedReleaseCheckbox`}>
-                              {`${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'} fixa`}
+                              {`${editingEntry.type == 'expense' ? 'Despesa' : 'Receita'} fixa`}
                            </label>
                         </div>
                      </div>
@@ -170,7 +170,7 @@ function ModalEditEntryBody() {
                            setAction(() => deleteEntry(editingEntry, editingEntry.type));
                            setShowAddConfirmModal(true);
                         }}
-                        text={`Excluir ${editingEntry.type == 'expenses' ? 'Despesa' : 'Receita'}`}
+                        text={`Excluir ${editingEntry.type == 'expense' ? 'Despesa' : 'Receita'}`}
                      >{loading &&
                         <Spinner />
                      }</ ButtonDelete >

@@ -17,7 +17,7 @@ export function useAuthGuard(redirect = false){
             if(response.status === 200){
                setAuth(true);
                if(redirect){
-                   return window.location.href = result.redirect;
+                  return window.location.href = result.redirect;
                }
             }else{
                if(!redirect){
@@ -27,9 +27,10 @@ export function useAuthGuard(redirect = false){
             }  
          })
          .catch(error => {
+            console.log(error)
             if(!redirect){
-               setAuth(false);
-               window.location.href ='http://localhost:3000/signin';
+               // setAuth(false);
+               // window.location.href ='http://localhost:3000/signin';
             }
          })
       }

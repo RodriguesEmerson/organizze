@@ -110,7 +110,7 @@ export function useUpdateEntriesStore(){
    function updateStore(updatedEntry, type){
 
       let toUpdatedEntry, toUpdatedValue;
-      const editingEntries = [...entriesData.entries[type]];
+      const editingEntries = [...entriesData.entries.all];
 
       editingEntries.forEach((entry, index) => {
          if(entry.id === updatedEntry.id){
@@ -125,24 +125,25 @@ export function useUpdateEntriesStore(){
          }
          
          if(Object.keys(updatedEntry).indexOf('value') != -1){
-            const intactType = type == 'expenses' ? 'incomes' : 'expenses'; //Salva o tipo de entries não editadas
+            const intactType = type == 'expense' ? 'income' : 'expense'; //Salva o tipo de entries não editadas
             const intactValue = entriesData.sum[`${intactType}_sum`]; //Guarda o valor que não será alterado
             const updatedValue = entriesData.sum[`${type}_sum`] - toUpdatedValue; //Subtrai o valor antigo
             const newValue = updatedValue + updatedEntry.value; //Adiciona o novo valor inserido
 
-            const newBalance = type == 'expenses'
+            const newBalance = type == 'expense'
             ? intactValue - newValue
             : newValue - intactValue;
 
-            type == 'expenses'
+            type == 'expense'
                ? updateEntriesExpensesSum(newValue, newBalance)
                : updateEntriesIncomesSum(newValue, newBalance);
          }
 
          if(Object.keys(updatedEntry).indexOf('category') != -1){
-            updateEntriesSum(`${type}_sum`);
+            updateEntriesSum(`${type}s_sum`);
          }
       });
+
 
       //Retira a versção antiga da entry editada
       const entriesWITHOUTUpdatedEntry = editingEntries.filter(entry => entry.id != updatedEntry.id);
@@ -153,7 +154,7 @@ export function useUpdateEntriesStore(){
          return new Date(prev.date).getTime() - new Date(curr.date).getTime();
       });
 
-      updateEntriesDataStore(sortedEntries, type);
+      updateEntriesDataStore(sortedEntries, 'all');
    }
 
    return { updateStore }

@@ -20,6 +20,7 @@ import { useTableStore } from "@/app/zustand/useTablesStore";
 import { useEffect } from "react";
 import { SummaryGraphic } from "@/app/UI/Board/SummaryGraphic";
 import { ModalConfirmAction } from "@/app/components/modals/ModalConfirmAction";
+import EntriesTable from "@/app/UI/Board/EntriesTable";
 
 export default function MonthlyDashBoard() {
 
@@ -58,7 +59,7 @@ export default function MonthlyDashBoard() {
                <div className="flex flex-col gap-2 pb-3 ">
                   <div className="w-full h-full">
                      <div>
-                        <div className="flex flex-row gap-2 mb-2 justify-between">
+                        <div className="flex flex-row mb-2 gap-2 justify-between">
                            {<ExpensesTotal />}
                            {<IncomesTotal />}
                            {<BalanceTotal />}
@@ -72,9 +73,7 @@ export default function MonthlyDashBoard() {
                         <SummaryGraphic />
                      </div>
 
-                     <div className="flex items-center justify-center border-b border-b-gray-400 my-3 mr-2">
-                        <h2 className="text-sm font-extrabold text-gray-500 mt-2">Tabelas</h2>
-                     </div>
+                     <hr className="bg-gray-400 h-[1.5px] my-2"/>
                   </div>
                   <Tables />
                </div>
@@ -88,8 +87,9 @@ function Tables() {
    return (
       <div className="tables !relative justify-stretch flex flex-row gap-2">
          {/* <TooltipInfo /> */}
-         <ExpenseTable />
-         <IncomeTable />
+         {/* <ExpenseTable /> */}
+         {/* <IncomeTable /> */}
+         <EntriesTable />
       </div>
    )
 }

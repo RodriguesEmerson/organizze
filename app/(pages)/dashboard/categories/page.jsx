@@ -18,6 +18,7 @@ import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { useEffect, useState } from "react";
 
 export default function CategoriesManage() {
+   
    useAuthGuard(); //Checks if the user is Authenticated;
 
    const { getCategories } = useGetCategories();

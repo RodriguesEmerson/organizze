@@ -10,6 +10,3 @@ meses, estão deve ser criadas entradas nos repectivos
 meses automaticamente.
 
 Criar página de SignUp no front, o back já está pronto.         *5*
-
-Criar fução para alterar ou excluir todas a categorias 
-do mesmo tipo quando uma for alterada pelo usuário.             *3*
