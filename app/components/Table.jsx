@@ -7,6 +7,7 @@ import { useTableStore } from "../zustand/useTablesStore";
 import { useUtilsStore } from "../zustand/useUtilsStore";
 import { Spinner } from "./loads/spinner";
 import { Switch } from "@mui/material";
+import { useUpdateEffected } from "../hooks/entries/useUpdateEffeced";
 
 export function Table({ type }) {
    const tablesHeaders = ['Descrição', 'Categoria', 'Data', 'Fixa', 'Valor', 'Efetivado'];
@@ -95,7 +96,7 @@ function TableTr({ entry, type }){
          <td className="pr-2 max-w-10 text-center">
             {Number(entry.value).toLocaleString('pt-BR', { style: "currency", currency: "BRL" })}
          </td>
-         <EffetivedSwitch effected={entry.effected}/>
+         <EffetivedSwitch effected={entry.effected} entry={entry}/>
       </tr>
    )
 }
@@ -116,12 +117,15 @@ function TableTd({ icon, categ }) {
    )
 }
 
-function EffetivedSwitch({ effected }){
+function EffetivedSwitch({ entry, effected }){
+   const { updateEffected, updateStatus } = useUpdateEffected();
    return(
        <td className="text-center"
-         onClick={(e) => {e.stopPropagation()}} 
-      >
-         <Switch color="success" defaultChecked={effected}/>
+         onClick={(e) => {e.stopPropagation(); !updateStatus.loading && updateEffected(entry, !effected)}} 
+      >{updateStatus?.loading 
+         ? <Spinner />
+         : <Switch color="success" defaultChecked={effected}/>
+      }
       </td>
    )
 }

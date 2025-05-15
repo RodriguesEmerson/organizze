@@ -8,7 +8,7 @@ export function ToastNotifications() {
    if(!notifications || notifications.length < 1) return;
    return (
       <div
-         className="fixed right-1 bottom-4 flex flex-col justify-end items-end gap-2 text-sm z-[40] w-fit h-52 p-2 transition-all duration-300 "
+         className="fixed right-1 pointer-events-none bottom-4 flex flex-col justify-end items-end gap-2 text-sm z-[40] w-fit h-52 p-2 transition-all duration-300 "
       >
          {notifications.map(notification => (
             !notification.isShowed && (
