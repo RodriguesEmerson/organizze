@@ -26,7 +26,6 @@ export function SummaryGraphic() {
 }
 
 export const SummaryGraphicBody = memo(({ sum }) => {
-   console.log(sum)
    return (
       <div className="!min-w-[200px] h-[300px] flex flex-1  flex-col items-center bg-white p-1 pr-2 shadow-md rounded-md overflow-hidden">
          {!sum &&

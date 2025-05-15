@@ -109,46 +109,51 @@ export function useUpdateEntriesStore(){
 
    function updateStore(updatedEntry, type){
 
-      let toUpdatedEntry, toUpdatedValue;
+      let toUpdateEntry, entryOldValue;
       const editingEntries = [...entriesData.entries.all];
 
       editingEntries.forEach((entry, index) => {
          if(entry.id === updatedEntry.id){
-            toUpdatedEntry = {...entry};
+            toUpdateEntry = {...entry};
             for(const key in updatedEntry){
                if(key == 'value') {
-                  toUpdatedValue = toUpdatedEntry[key];
+                  entryOldValue = toUpdateEntry[key];
                }
-               toUpdatedEntry[key] = updatedEntry[key];
+               toUpdateEntry[key] = updatedEntry[key];
             }
-            editingEntries[index] = toUpdatedEntry;
-         }
-         
-         if(Object.keys(updatedEntry).indexOf('value') != -1){
-            const intactType = type == 'expense' ? 'income' : 'expense'; //Salva o tipo de entries não editadas
-            const intactValue = entriesData.sum[`${intactType}_sum`]; //Guarda o valor que não será alterado
-            const updatedValue = entriesData.sum[`${type}_sum`] - toUpdatedValue; //Subtrai o valor antigo
-            const newValue = updatedValue + updatedEntry.value; //Adiciona o novo valor inserido
-
-            const newBalance = type == 'expense'
-            ? intactValue - newValue
-            : newValue - intactValue;
-
-            type == 'expense'
-               ? updateEntriesExpensesSum(newValue, newBalance)
-               : updateEntriesIncomesSum(newValue, newBalance);
-         }
-
-         if(Object.keys(updatedEntry).indexOf('category') != -1){
-            updateEntriesSum(`${type}s_sum`);
+            editingEntries[index] = toUpdateEntry;
          }
       });
+
+      const updateValue = {
+         income: function(){
+            const intactValue = entriesData.sum.expenses_sum //Guarda o valor que não será alterado
+            const newValue = (entriesData.sum.incomes_sum - entryOldValue) + updatedEntry.value; //Calcula o novo valor
+
+            const newBalance = newValue - intactValue;
+            updateEntriesIncomesSum(newValue, newBalance);
+         },
+         expense: function(){
+            const intactValue = entriesData.sum.incomes_sum //Guarda o valor que não será alterado
+            const newValue = (entriesData.sum.expenses_sum  - entryOldValue) + updatedEntry.value; //Calcula o novo valor
+            
+            const newBalance = intactValue - newValue;
+            updateEntriesExpensesSum(newValue, newBalance);
+         },
+      }
+      if(Object.keys(updatedEntry).indexOf('value') != -1){
+         updateValue[type](); //Atualizar os valor do tipo da entry atualizada
+      }
+      //Reatualiza o valor total para atualizar os gráficos com os novos valores;
+      if(Object.keys(updatedEntry).indexOf('category') != -1){
+         updateEntriesSum(`${type}s_sum`);
+      }
 
 
       //Retira a versção antiga da entry editada
       const entriesWITHOUTUpdatedEntry = editingEntries.filter(entry => entry.id != updatedEntry.id);
       //Adiciona a entry já editada
-      const entriesWITHUpdatedEntry = [...entriesWITHOUTUpdatedEntry, toUpdatedEntry];
+      const entriesWITHUpdatedEntry = [...entriesWITHOUTUpdatedEntry, toUpdateEntry];
       //Organiza por data descendente.
       const sortedEntries = entriesWITHUpdatedEntry.sort((curr, prev) => { 
          return new Date(prev.date).getTime() - new Date(curr.date).getTime();

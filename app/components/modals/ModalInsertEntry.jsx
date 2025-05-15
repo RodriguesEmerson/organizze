@@ -26,7 +26,8 @@ function ModalInsertEntryBody() {
    const searchParams = useSearchParams();
    const monthURL = searchParams.get('month');
    const [formData, setFormData] = useState(
-      {description: '', category: '', date: '', icon: '', fixed: false, end_date: '', value: '', id: ''}
+      {description: '', category: '', date: '', icon: '', fixed: false, 
+      end_date: '', value: '', id: '', effected: true, recurrence_id: ''}
    );
    const newEntryType = useEntriesDataStore(state => state.newEntryType);
    const [fixedEntry, setFixedEntry] = useState(false);
@@ -83,6 +84,7 @@ function ModalInsertEntryBody() {
                               setFormData={setFormData}
                               formData={formData}
                               formRef = "date"
+                              navButtons="off"
                               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                            />
                            <Calendar
@@ -93,6 +95,7 @@ function ModalInsertEntryBody() {
                               setFormData={setFormData}
                               formData={formData}
                               formRef = "end_date"
+                              navButtons={"on"}
                               onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
                            />
                         </div>
