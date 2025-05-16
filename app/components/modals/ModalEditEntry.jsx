@@ -104,6 +104,7 @@ function ModalEditEntryBody() {
                               setFormData={setFormData}
                               formData={formData}
                               formRef = "date"
+                              navButtons="off"
                               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                            />
                            <Calendar

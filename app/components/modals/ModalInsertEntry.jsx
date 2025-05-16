@@ -3,13 +3,13 @@ import { useState } from "react"
 import { ButtonClose } from "../buttons/ButtonClose"
 import { ButtonSave } from "../buttons/ButtonSave";
 import { CategorieSelect } from "../selects/CategorieSelect";
-import { Calendar } from "../Calendar";
 import { ModalBackGround } from "./ModalBackGround";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { Spinner } from "../loads/spinner";
 import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { useInsertNewEntry } from "@/app/hooks/entries/useInsertNewEntry";
 import { useSearchParams } from "next/navigation";
+import { Calendar } from "../calendar/Calendar";
 
 export function ModalInsertEntry(){
    const showInsertModal = useModalsHiddenStore((state) => state.showInsertModal);
@@ -77,26 +77,25 @@ function ModalInsertEntryBody() {
                         <label className="pl-1">Data *</label>
                         <div className="flex flex-row gap-1 w-full">
                            <Calendar
-                              name="data"
-                              value={formData.date}
-                              disabled={false}
-                              disabledCalendar={false}
-                              setFormData={setFormData}
-                              formData={formData}
-                              formRef = "date"
-                              navButtons="off"
-                              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                              params={{
+                                 name: 'date', 
+                                 value: formData.date, 
+                                 disabledCalendar: false,
+                                 setFormData: setFormData,
+                                 formData: formData,
+                                 navButtonsStatus: 'off',
+                                 defaultMonth: {year: 2025, month: 4}
+                              }}
                            />
                            <Calendar
-                              name="dataFim"
-                              value={formData.end_date}
-                              disabled={!fixedEntry}
-                              disabledCalendar={!fixedEntry}
-                              setFormData={setFormData}
-                              formData={formData}
-                              formRef = "end_date"
-                              navButtons={"on"}
-                              onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                              params={{
+                                 name: 'end_date', 
+                                 value: formData.end_date, 
+                                 disabledCalendar: !fixedEntry,
+                                 setFormData: setFormData,
+                                 formData: formData,
+                                 navButtonsStatus: 'on'
+                              }}
                            />
                         </div>
                         <div className="absolute right-[10px] h-5 flex flex-row items-center gap-[4px]">

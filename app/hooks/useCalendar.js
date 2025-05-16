@@ -29,7 +29,7 @@ export default function useCalendar() {
       },
       
       calendar: function (month, year) {
-         //Dia da semana que foi o primeiro dia do mês.
+         //Dia da semana que inicia o mês.
          const firsWeekDayOfMonth = (new Date(year, month, 1).getDay());
          
          //Cria um array com números do 1º dia da semana até o 1º dia do mês.

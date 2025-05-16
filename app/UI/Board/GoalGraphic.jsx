@@ -21,7 +21,6 @@ export function GoalGraphic(){
 }
 
 const GoalGraphicBody = memo(({sum}) =>{
-   console.log(sum)
    return(
       <div className="relative z-[5] flex pl-1  h-28 shadow-md w-72 bg-white flex-1 text-white rounded-md overflow-hidden">
          {!sum &&
