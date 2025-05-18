@@ -2,12 +2,14 @@
 import { useCalendar } from "@/app/hooks/calendar/useCalendar";
 import { useUtils } from "@/app/hooks/useUtils";
 import { useState } from "react";
+import { Spinner } from "../loads/spinner";
 
 export function Calendar({ params }) {
-   const { disabledCalendar, formData, setFormData, name, navButtonsStatus = 'on', defaultMonth = false} = params;
-   const { calendarHandler, calendarData, weekDays } = useCalendar(defaultMonth);
+   const { disabledCalendar, formData, setFormData, name, navButtonsStatus = 'on', defaultMonth = false } = params;
+   const { calendarHandler, selectedDateAtCalendar, calendarDays, weekDays } = useCalendar(defaultMonth);
+   const { year, month } = selectedDateAtCalendar;
    const [openCalendar, setOpenCalendar] = useState(false);
-   const { toUpperFirstLeter, getMonthName } = useUtils();
+   const { toUpperFirstLeter } = useUtils();
 
    //ADICIONAR MÊS MÍNIMO PARA DESABILIDAR O BOTÃO MES ANTERIOR
 
@@ -22,27 +24,26 @@ export function Calendar({ params }) {
       },
    }
 
-   const handleSetInputValue = ( value ) =>{
-      setFormData({...formData, [name]: value})
+   const handleSetDate = (date) => {
+      setFormData({ ...formData, [name]: date })
    }
 
-   let month = 4, year = 2025 ;
    return (
       <div className="relative modal calendar ">
 
          {/* CALENDAR INPUT/TEXT */}
          <div className="w-full flex flex-row">
-            <input type="text" readOnly
+            <input type="text" readOnly defaultValue={formData[name]}
                className={`h-8 pl-3 w-full font-thin border border-gray-300 rounded-md focus-within:outline-1 focus-within:outline-gray-400 ${disabledCalendar ? "bg-gray-200" : "bg-white"}`}
             />
-            <span 
+            <span
                className={`material-icons -ml-6 mt-[4px] cursor-pointer ${disabledCalendar ? "!text-gray-500 !cursor-default" : ''}`}
-               onClick={()=> {
+               onClick={() => {
                   !disabledCalendar && setOpenCalendar(!openCalendar);
                }}
             >calendar_month</span>
          </div>
-            
+
          {/* CALENDAR MODAL */}
          <div className={`z-10 absolute overflow-hidden  bg-white w-[276px] p-[10px] pt-2 rounded-lg shadow-lg transition-all
             ${openCalendar ? "h-[314px]" : "h-0 !p-0"}`}
@@ -62,21 +63,20 @@ export function Calendar({ params }) {
                <span
                   className={`material-icons h-7 w-7 pt-[2px] text-center rounded 
                      ${calendarConfig[navButtonsStatus].navButtonsClasses}`}
-                  onClick={() => navButtonsStatus == 'on' && calendarHandler.handleChangeMonth('previous')}
+                  onClick={() => navButtonsStatus == 'on' && calendarHandler.previousMonth()}
                >chevron_left
                </span>
                <p className="text-xs font-semibold cursor-default">
-                  {/**Gets month by index */}
-                  {`${toUpperFirstLeter(getMonthName(`${year}-0${month}-01`, false))} de ${year}`}
+                  {`${toUpperFirstLeter(new Date(year, month - 1, 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }))}`}
                </p>
                <span
                   className={`material-icons h-7 w-7 pt-[2px] text-center rounded 
                      ${calendarConfig[navButtonsStatus].navButtonsClasses}`}
-                  onClick={() => navButtonsStatus == 'on' &&  calendarHandler.handleChangeMonth('next')}
+                  onClick={() => navButtonsStatus == 'on' && calendarHandler.nextMonth()}
                >chevron_right
                </span>
             </div>
-                  
+
             {/* CALENDAR DAYS */}
             <div className="grid grid-cols-7 mb-2">
                {weekDays.map(day => (
@@ -86,41 +86,40 @@ export function Calendar({ params }) {
                   >{day}</span>
                ))}
 
-               {calendarData?.lastDaysOfPreviousMonth.map(day => (
+               {calendarDays?.prevMonthDays.map(day => (
                   <span
                      key={`mAnte${day}`}
                      className={`h-8 leading-8 rounded-[3px] text-[14px] text-center 
                         ${calendarConfig[navButtonsStatus].calendarNextAndPrevDaysClasses}`}
                      onClick={() => {
-                        if(navButtonsStatus == 'on'){
-                           handleSetInputValue(`${day}/${month < 1 ? "12" : month < 10 ? `0${month}` : month}/${month < 1 ? year -1 : year}`);
+                        if (navButtonsStatus == 'on') {
+                           handleSetDate(calendarHandler.getClickedCalendarDate(day, 'prev'));
                            setOpenCalendar(false);
                         }
                      }}
                   >{day}</span>
                ))}
 
-               {calendarData?.currentMonthDays.map(day => (
+               {calendarDays?.currentMonthDays.map(day => (
                   <span
                      key={`monthDay${day}`}
                      className={`h-8 leading-8 rounded-[3px] text-[14px] text-center hover:bg-blue-200   cursor-pointer border border-white
-                  ${(new Date(`${year}-${month}-01`).getTime() == calendarHandler.getCurrentMonthTime()) && "text-blue-600 font-bold border-b-[3px] border-b-blue-600"}
-               `}
+                        ${(new Date(`${year}-${month}-01`).getTime() == calendarHandler.getCurrentMonthTime()) && "text-blue-600 font-bold border-b-[3px] border-b-blue-600"}`}
                      onClick={() => {
-                        handleSetInputValue(calendarHandler.dateConvert(`${month + 1}/${day}/${year}`, 'br'));
+                        handleSetDate(calendarHandler.getClickedCalendarDate(day, 'curr'));
                         setOpenCalendar(false);
                      }}
                   >{day}</span>
                ))}
 
-               {calendarData?.firstDaysOfNextMonth.map(day => (
+               {calendarDays?.nextMonthDays.map(day => (
                   <span
                      key={`mAnte${day}`}
                      className={`h-8 leading-8 rounded-[3px] text-[14px] text-center 
                         ${calendarConfig[navButtonsStatus].calendarNextAndPrevDaysClasses}`}
-                     onClick={() => {  
-                        if(navButtonsStatus == 'on'){
-                           setInputValue(calendarHandler.dateConvert(`${(month + 2) % 12}/${day}/${month + 2 > 12 ? year + 1 : year}`, 'br'));
+                     onClick={() => {
+                        if (navButtonsStatus == 'on') {
+                           handleSetDate(calendarHandler.getClickedCalendarDate(day, 'next'));
                            setOpenCalendar(false);
                         }
                      }}

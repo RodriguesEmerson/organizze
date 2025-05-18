@@ -10,6 +10,7 @@ import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { useInsertNewEntry } from "@/app/hooks/entries/useInsertNewEntry";
 import { useSearchParams } from "next/navigation";
 import { Calendar } from "../calendar/Calendar";
+import { useUtils } from "@/app/hooks/useUtils";
 
 export function ModalInsertEntry(){
    const showInsertModal = useModalsHiddenStore((state) => state.showInsertModal);
@@ -23,14 +24,17 @@ export function ModalInsertEntry(){
 function ModalInsertEntryBody() {
    const { insertEntry, loading, success } = useInsertNewEntry(); 
    const setShowInsertModal = useModalsHiddenStore(state => state.setShowInsertModal);
+   const { yearMonths } = useUtils(); 
    const searchParams = useSearchParams();
    const monthURL = searchParams.get('month');
+   const yearURL = searchParams.get('year');
    const [formData, setFormData] = useState(
       {description: '', category: '', date: '', icon: '', fixed: false, 
       end_date: '', value: '', id: '', effected: true, recurrence_id: ''}
    );
    const newEntryType = useEntriesDataStore(state => state.newEntryType);
    const [fixedEntry, setFixedEntry] = useState(false);
+
    //CRIANDO FUNÇÃO PARA PAGINAÇÃO
    return (
       <ModalBackGround >
@@ -84,8 +88,8 @@ function ModalInsertEntryBody() {
                                  setFormData: setFormData,
                                  formData: formData,
                                  navButtonsStatus: 'off',
-                                 defaultMonth: {year: 2025, month: 4}
-                              }}
+                                 defaultMonth: `${yearURL}-${yearMonths.indexOf(monthURL) + 1}-01`
+                              }} 
                            />
                            <Calendar
                               params={{
@@ -94,7 +98,8 @@ function ModalInsertEntryBody() {
                                  disabledCalendar: !fixedEntry,
                                  setFormData: setFormData,
                                  formData: formData,
-                                 navButtonsStatus: 'on'
+                                 navButtonsStatus: 'on',
+                                 defaultMonth: `${yearURL}-${yearMonths.indexOf(monthURL) + 1}-01`
                               }}
                            />
                         </div>

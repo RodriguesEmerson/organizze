@@ -35,10 +35,18 @@ export function useUtils() {
 
    function getMonthName(date, caracters, format){
       let dateToGetMonth = date;
-      if(format == 'br'){
-         const splicedDate = date.split((/\/|\-/));
-         dateToGetMonth = `${splicedDate[2]}-${splicedDate[1]}-${splicedDate[0]}`;
+      const splicedDate = date.split((/\/|\-/));
+
+      //Garante que o mês sempre tenha dois dígitos
+      if(splicedDate[1] < 10 && splicedDate[1].length == 1){
+         dateToGetMonth = `${splicedDate[0]}-0${splicedDate[1]}-${splicedDate[2]}`
       }
+
+      //Converte do formato brasileiro para formato EUA
+      if(format == 'br'){
+         dateToGetMonth = `${splicedDate[2]}-${splicedDate[1]}-${splicedDate[0]}`; 
+      }
+      
       const monthName = new Date(dateToGetMonth + 'T00:00:00').toLocaleDateString('pt-br', { month: "long"});
       if(caracters){ return monthName.slice(0, caracters)}
       return monthName;
@@ -49,5 +57,10 @@ export function useUtils() {
       return Number(valueWithoutPoint.replace(',', '.'));
    }
 
-   return { toUpperFirstLeter, currencyFormat, gerarCUID, convertDateToYMD, convertValueToNumeric, convertDateToDM, convertDateToDMY, getMonthName }
+   const  yearMonths = [
+      'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+      'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
+   ]
+
+   return { toUpperFirstLeter, currencyFormat, gerarCUID, convertDateToYMD, convertValueToNumeric, convertDateToDM, convertDateToDMY, getMonthName, yearMonths }
 }
