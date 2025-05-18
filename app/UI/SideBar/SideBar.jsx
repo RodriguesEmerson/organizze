@@ -8,7 +8,7 @@ import { useToastNotifications } from '@/app/zustand/useToastNotifications';
 import { useSignout } from '@/app/hooks/auth/signout';
 import { useAuthStatus } from '@/app/zustand/useAuthStatus';
 import { useUtils } from '@/app/hooks/useUtils';
-import { useGetAvailablesTables } from '@/app/hooks/entries/useGetAvailableTables';
+import { useGetAvailableTables } from '@/app/hooks/entries/useGetAvailableTables';
 import { SidebarSkeleton } from '@/app/components/loads/SidebarSkeleton';
 
 export default function SideBar() {
@@ -19,7 +19,7 @@ export default function SideBar() {
    const searchParams = useSearchParams();
    const yearURL = searchParams.get('year');
 
-   const { availableTables } = useGetAvailablesTables();
+   const { availableTables } = useGetAvailableTables();
    const setNotifications = useToastNotifications(state => state.setNotifications);
    const setAuth = useAuthStatus(state => state.setAuth);
    const { gerarCUID } = useUtils();

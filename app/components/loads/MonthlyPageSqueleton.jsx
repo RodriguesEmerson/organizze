@@ -1,4 +1,3 @@
-import { Spinner } from "./spinner";
 import { TableSkeleton } from "./TableSkeleton";
 
 

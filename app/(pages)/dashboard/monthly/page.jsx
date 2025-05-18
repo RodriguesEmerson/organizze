@@ -1,7 +1,6 @@
 'use client'
+
 import { PageModel } from "@/app/components/PageModel";
-import ExpenseTable from "/app/UI/Board/ExpenseTable";
-import IncomeTable from "/app/UI/Board/IncomeTable";
 import { useUtils } from "@/app/hooks/useUtils";
 import { ExpesesGraphic } from "@/app/UI/Board/ExpensesGraphic";
 import { IncomesGraphic } from "@/app/UI/Board/IncomesGraphic";
@@ -22,32 +21,58 @@ import { SummaryGraphic } from "@/app/UI/Board/SummaryGraphic";
 import { ModalConfirmAction } from "@/app/components/modals/ModalConfirmAction";
 import EntriesTable from "@/app/UI/Board/EntriesTable";
 
+/**
+ * Componente principal do dashboard mensal.
+ * 
+ * - Garante que o usuário está autenticado com useAuthGuard, caso contrário redireciona para login.
+ * - Obtém ano e mês via query params da URL usando useSearchParams.
+ * - Busca os lançamentos financeiros correspondentes ao mês e ano via hook useGetEntries.
+ * - Atualiza a tabela selecionada no Zustand para controlar o mês atual do calendário.
+ * - Exibe modais globais para edição, inserção e confirmação de ações.
+ * - Renderiza o layout principal com totais, gráficos e tabela de lançamentos.
+ *
+ * @returns {JSX.Element} O dashboard mensal.
+ */
 export default function MonthlyDashBoard() {
 
-   useAuthGuard(); //Verifica se o usuário está autenticado, se não estiver o redireciona para página de login;
+   // Verifica se o usuário está autenticado; redireciona se não estiver
+   useAuthGuard();
 
    const { toUpperFirstLeter } = useUtils();
+
+   // Obtém os parâmetros year e month da URL
    const searchParams = useSearchParams();
    const yearURL = searchParams.get('year');
    const monthURL = searchParams.get('month');
+
+   // Hook que busca os lançamentos para o ano e mês informados
    const { entriesData } = useGetEntries(yearURL, monthURL);
+
+   // Função para atualizar mês selecionado no Zustand (estado global)
    const setSelectedMonth = useTableStore(state => state.setSelectedMonth);
 
+   // Atualiza o mês selecionado ao carregar o componente (executa uma vez)
    useEffect(() => {
-      //Seta a tabela selecionada para o calendário abrir no mês correto.
       setSelectedMonth(yearURL, monthURL);
-   },[])
+   }, [])
 
    return (
       <>
+         {/* Modais globais usados em toda a página */}
          <ModalEditEntry />
          <ModalInsertEntry />
          <ToastNotifications />
-         <ModalConfirmAction text={'Lançamento'}/>
+         <ModalConfirmAction text={'Lançamento'} />
+
+         {/* Estrutura principal da página com título dinâmico */}
          <PageModel title={`${toUpperFirstLeter(monthURL)} de ${yearURL}`}>
+            
+            {/* Caso esteja carregando ou não tenha dados, exibe esqueleto de carregamento */}
             {(entriesData?.loading || !entriesData) &&
                <MonthlyPageSqueleton />
             }
+
+            {/* Caso haja erro, exibe mensagem 404 personalizada */}
             {entriesData?.erro &&
                <div className=" flex items-center justify-center h-[95%] text-gray-900">
                   <span className="text-3xl font-bold">404</span>
@@ -55,19 +80,23 @@ export default function MonthlyDashBoard() {
                   <p>{`As finanças de ${monthURL} de ${yearURL} não foram encontradas!`}</p>
                </div>
             }
+
+            {/* Caso existam lançamentos, renderiza o dashboard completo */}
             {entriesData?.entries &&
                <div className="flex flex-col gap-2 pb-3 ">
                   <div className="w-full h-full">
                      <div>
                         <div className="flex flex-row mb-2 gap-2 justify-between">
-                           {<ExpensesTotal />}
-                           {<IncomesTotal />}
-                           {<BalanceTotal />}
-                           {<GoalGraphic />}
+                           {/* Totais */}
+                           <ExpensesTotal />
+                           <IncomesTotal />
+                           <BalanceTotal />
+                           <GoalGraphic />
                         </div>
                      </div>
 
                      <div className="w-full flex flex-row gap-2 justify-between">
+                        {/* Gráficos das despesas, receitas e resumo */}
                         <ExpesesGraphic expenses={entriesData.entries.expenses} sumary={entriesData.sum} />
                         <IncomesGraphic incomes={entriesData.entries.incomes} sumary={entriesData.sum} />
                         <SummaryGraphic />
@@ -75,6 +104,8 @@ export default function MonthlyDashBoard() {
 
                      <hr className="bg-gray-400 h-[1.5px] my-2"/>
                   </div>
+                  
+                  {/* Tabelas com lançamentos */}
                   <Tables />
                </div>
             }
@@ -83,9 +114,16 @@ export default function MonthlyDashBoard() {
    )
 }
 
+/**
+ * Componente para exibir as tabelas de lançamentos.
+ * Atualmente renderiza somente EntriesTable.
+ *
+ * @returns {JSX.Element} Container com tabelas.
+ */
 function Tables() {
    return (
       <div className="tables !relative justify-stretch flex flex-row gap-2">
+         {/* Possíveis futuras tabelas comentadas */}
          {/* <TooltipInfo /> */}
          {/* <ExpenseTable /> */}
          {/* <IncomeTable /> */}

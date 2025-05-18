@@ -9,11 +9,19 @@ import { useTableStore } from "../../zustand/useTablesStore";
 import { ButtonClose } from "../buttons/ButtonClose";
 import { ButtonDelete } from "../buttons/ButtonDelete";
 import { ButtonSave } from "../buttons/ButtonSave";
-import { Calendar } from "../Calendar";
 import { Spinner } from "../loads/spinner";
 import { CategorieSelect } from "../selects/CategorieSelect";
 import { ModalBackGround } from "./ModalBackGround";
+import { Calendar } from "../calendar/Calendar";
 
+/**
+ * ModalEditEntry exibe um modal de edição para os lançamentos (despesa ou receita).
+ * - Carrega os dados do lançamento selecionado para edição (usando Zustand).
+ * - Permite editar descrição, categoria, datas (inicial e final) e valor.
+ * - Possui opção para marcar o lançamento como fixo (com data final ativada).
+ * - Envia atualizações para o banco de dados.
+ * - Permite excluir a entrada com confirmação.
+ */
 export function ModalEditEntry(){
    const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
    if(showEditModal){
@@ -28,14 +36,20 @@ function ModalEditEntryBody() {
    const { deleteEntry, loading } = useDeleteEntry();
    const { convertDateToDMY } = useUtils();
    const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
+
+   // Dados do formulário. Preenchido com os dados da entrada que está sendo editada.
    const [formData, setFormData] = useState({description: '', category: '', date: '', fixed: false, end_date: '', value: '', id: ''});
+
    const setAction = useModalConfirmActionStore(state => state.setAction);
    const setShowAddConfirmModal = useModalsHiddenStore(state => state.setShowAddConfirmModal);
 
-   //Dados do item em edição.
+   // Dados do lançamento em edição (obtidos via Zustand).
    const editingEntry = useTableStore((state) => state.editingEntry);
-   const [fixedRelease, setFixedRelease] = useState(false);
 
+   // Estado local para controlar se o lançamento é fixo (ativa segundo calendário).
+   const [fixedEntry, setFixedEntry] = useState(false);
+
+   // Ao abrir o modal, preenche o formulário com os dados do lançamento selecionado para edição.
    useEffect(() => {
       setFormData( 
          {   
@@ -49,13 +63,14 @@ function ModalEditEntryBody() {
             id: editingEntry.id
          } 
       );
-      setFixedRelease(!!editingEntry?.end_date && true);
+      setFixedEntry(!!editingEntry?.end_date && true);
    }, [editingEntry]);
    
    return (
       <ModalBackGround >
          <div className="relative modal flex flex-col justify-between h-fit w-[420px] bg-white rounded-md shadow-lg py-2 px-3">
 
+            {/* Cabeçalho do modal com título e botão de fechar */}
             <div className="text-center h-9 leading-7 w-[420px] rounded-t-md -ml-3 -mt-[9px] text-sm pt-[5px] border-b mb-3 bg-gray-900 text-white">
                <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
                   <img className="w-6 transition-all" src={"/gif/edit.gif"} />
@@ -66,6 +81,7 @@ function ModalEditEntryBody() {
                </div>
             </div>
             
+            {/* Formulário */}
             <div>
                <form className="text-[13px] text-gray-700" id="new-release-form">
                   <div className="flex flex-col gap-[2px] mb-2">
@@ -93,29 +109,31 @@ function ModalEditEntryBody() {
                         />
                      </div>
 
+                     {/* Calendários para data inicial e final */}
                      <div className="relative flex flex-col gap-[2px]">
                         <label className="pl-1">Data *</label>
                         <div className="flex flex-row gap-1 w-full">
                            <Calendar
-                              name="data"
-                              value={formData.date}
-                              disabled={false}
-                              disabledCalendar={false}
-                              setFormData={setFormData}
-                              formData={formData}
-                              formRef = "date"
-                              navButtons="off"
-                              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                              params={{
+                                 name: 'date', 
+                                 value: formData.date, 
+                                 disabledCalendar: false,
+                                 setFormData: setFormData,
+                                 formData: formData,
+                                 navButtonsStatus: 'off',
+                                 defaultMonth: formData.date
+                              }} 
                            />
                            <Calendar
-                              name="dataFim"
-                              value={formData.end_date}
-                              disabled={!fixedRelease}
-                              disabledCalendar={!fixedRelease}
-                              setFormData={setFormData}
-                              formData={formData}
-                              formRef = "end_date"
-                              onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                               params={{
+                                 name: 'end_date', 
+                                 value: formData.end_date, 
+                                 disabledCalendar: !formData.fixed,
+                                 setFormData: setFormData,
+                                 formData: formData,
+                                 navButtonsStatus: 'on',
+                                 defaultMonth: formData.end_date
+                              }}
                            />
                         </div>
                         <div className="absolute right-[10px] h-5 flex flex-row items-center gap-[4px]">
@@ -123,18 +141,19 @@ function ModalEditEntryBody() {
                               className="h-4"
                               type="checkbox"   
                               name="fixa"
-                              checked={fixedRelease}
+                              checked={fixedEntry}
                               onChange={() => { 
-                                 setFormData({ ...formData, end_date: '', fixed: !fixedRelease }); 
-                                 setFixedRelease(!fixedRelease); 
+                                 setFormData({ ...formData, end_date: '', fixed: !fixedEntry }); 
+                                 setFixedEntry(!fixedEntry); 
                               }}
-                              id={`${editingEntry.type}-fixedReleaseCheckbox`}
+                              id={`${editingEntry.type}-fixedEntryCheckbox`}
                            />
-                           <label htmlFor={`${editingEntry.type}-fixedReleaseCheckbox`}>
+                           <label htmlFor={`${editingEntry.type}-fixedEntryCheckbox`}>
                               {`${editingEntry.type == 'expense' ? 'Despesa' : 'Receita'} fixa`}
                            </label>
                         </div>
                      </div>
+
                   </div>
                   <div className="flex flex-row items-center justify-end gap-1 w-full">
                      <label className="pl-1">Valor *</label>
@@ -150,6 +169,7 @@ function ModalEditEntryBody() {
                   </div>
                   <div className="flex flex-col gap-[2px] justify-center mt-3">
                      <ButtonSave 
+                        // Atualiza a entrada no banco de dados
                         onClick={(e) => {
                            e.preventDefault();
                            updateEntry(formData, editingEntry.type);
@@ -166,6 +186,7 @@ function ModalEditEntryBody() {
                      </div>
 
                      <ButtonDelete  
+                        // Define a ação de exclusão e mostra o modal de confirmação
                         onClick={(e) => {
                            e.preventDefault();
                            setAction(() => deleteEntry(editingEntry, editingEntry.type));

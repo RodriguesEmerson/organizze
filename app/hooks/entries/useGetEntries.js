@@ -1,93 +1,81 @@
 import { useAuthStatus } from "@/app/zustand/useAuthStatus";
 import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { useEffect, useState } from "react";
+import { getEntriesService } from "@/app/services/entries/getEntriesService";
 
-export function useGetEntries(year, month){
-
+/**
+ * Hook para buscar e armazenar entries por ano e mês.
+ * 
+ * @param {string|number} year - Ano desejado
+ * @param {string} month - Nome do mês em português (ex: "janeiro")
+ * @returns {{ entriesData: object|null }}
+ */
+export function useGetEntries(year, month) {
    const [entriesData, setEntriesData] = useState(null);
    const setEntriesDataStore = useEntriesDataStore(state => state.setEntriesDataStore);
-   const setAuth = useAuthStatus((state) => state.setAuth);
-   
+   const setAuth = useAuthStatus(state => state.setAuth);
+
    useEffect(() => {
-      const getEntries = async () => {
-         setEntriesData({loading: true});
-         await fetch(`http://localhost/organizze-bk/public/entries.php?year=${year}&month=${getMonthNumber(month)}&reportType=monthly`, {
-            method: 'GET',
-            credentials: 'include'
-         })
-         .then(async response => {
-            const data = await response.json();
+      async function getEntries() {
+         setEntriesData({ loading: true });
 
-            if(response.status == 200){
-               const incomes = [];
-               const expenses = [];
-               const all = data.entries.sort((curr, prev) => { 
-                  return new Date(prev.date).getTime() - new Date(curr.date).getTime();
-               });
-               
-               data.entries.forEach(entry => {
-                  if(entry.type == 'income'){
-                     incomes.push(entry);
-                  }else{
-                     expenses.push(entry);
-                  }
-               });
+         try {
+            const monthNumber = getMonthNumber(month);
+            const data = await getEntriesService(year, monthNumber);
 
-               const sortedIncomes = incomes.sort((curr, prev) => { 
-                  return new Date(prev.date).getTime() - new Date(curr.date).getTime();
-               });
-               const sortedExpenses = expenses.sort((curr, prev) => { 
-                  return new Date(prev.date).getTime() - new Date(curr.date).getTime();
-               });
-               
-               setEntriesData({
-                  entries: {
-                     incomes: sortedIncomes,
-                     expenses: sortedExpenses,
-                     all: all
-                  },
-                  sum: {
-                     expenses_sum: data.sum[0].expenses_sum ?? 0,
-                     incomes_sum: data.sum[0].incomes_sum ?? 0,
-                     balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum
-                  },
-               }); 
+            const incomes = [];
+            const expenses = [];
+            const all = data.entries.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-               setEntriesDataStore({
-                  entries: {
-                     incomes: sortedIncomes,
-                     expenses: sortedExpenses,
-                     all: all
-                  },
-                  sum: {
-                     expenses_sum: data.sum[0].expenses_sum ?? 0,
-                     incomes_sum: data.sum[0].incomes_sum ?? 0,
-                     balance: data.sum[0].incomes_sum - data.sum[0].expenses_sum
-                  },
-               });
-            }
-            if(response.status == 401){
+            data.entries.forEach(entry => {
+               if (entry.type === 'income') {
+                  incomes.push(entry);
+               } else {
+                  expenses.push(entry);
+               }
+            });
+
+            const sortedIncomes = incomes.sort((a, b) => new Date(b.date) - new Date(a.date));
+            const sortedExpenses = expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            const formattedData = {
+               entries: {
+                  incomes: sortedIncomes,
+                  expenses: sortedExpenses,
+                  all: all,
+               },
+               sum: {
+                  expenses_sum: data.sum[0]?.expenses_sum ?? 0,
+                  incomes_sum: data.sum[0]?.incomes_sum ?? 0,
+                  balance: (data.sum[0]?.incomes_sum ?? 0) - (data.sum[0]?.expenses_sum ?? 0),
+               },
+            };
+
+            setEntriesData(formattedData);
+            setEntriesDataStore(formattedData);
+
+         } catch (error) {
+            if (error.message === '401') {
                setAuth(false);
-               window.location.href ='http://localhost:3000/signin';
+               window.location.href = 'http://localhost:3000/signin';
                return;
             }
-         })
-         .catch(error => {
-            setEntriesData({erro: true})
-            console.log(error)
-         })
+            setEntriesData({ error: true });
+            console.error(error);
+         }
       }
-      getEntries()
-   },[year, month])
 
-   function getMonthNumber (monthName){
+      getEntries();
+   }, [year, month, setAuth, setEntriesDataStore]);
+
+   function getMonthNumber(monthName) {
       const yearMonths = [
-         'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 
+         'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
          'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
       ];
-      const monthNumber = yearMonths.indexOf(monthName) + 1;
-      return monthNumber < 10 ? `0${monthNumber}` : monthNumber;
+      const monthNumber = yearMonths.indexOf(monthName.toLowerCase()) + 1;
+      return monthNumber < 10 ? `0${monthNumber}` : `${monthNumber}`;
    }
+
    return { entriesData };
-   
 }

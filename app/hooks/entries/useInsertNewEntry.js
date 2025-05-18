@@ -4,130 +4,144 @@ import { useState } from "react";
 import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { useAuthStatus } from "@/app/zustand/useAuthStatus";
 import { useTableStore } from "@/app/zustand/useTablesStore";
+import { insertEntryService } from "@/app/services/entries/insertEntryService";
 
-export function useInsertNewEntry(){
+/**
+ * Hook responsável por inserir uma nova entrada (despesa ou receita).
+ *
+ * @returns {{
+ *   insertEntry: (entry: Object, type: string, tableMonth: string) => Promise<void>,
+ *   loading: boolean,
+ *   success: boolean
+ * }} 
+ */
+export function useInsertNewEntry() {
    const setNotifications = useToastNotifications(state => state.setNotifications);
-   const setAuth = useAuthStatus((state) => state.setAuth);
-   const setToAnimateEntry = useTableStore((state) => state.setToAnimateEntry);
+   const setAuth = useAuthStatus(state => state.setAuth);
+   const setToAnimateEntry = useTableStore(state => state.setToAnimateEntry);
    const [loading, setLoading] = useState(false);
    const [success, setSuccess] = useState(false);
    const { updateStore } = useUpdateEntriesStore();
    const { convertDateToYMD, convertValueToNumeric, gerarCUID, getMonthName, toUpperFirstLeter } = useUtils();
 
-   async function insertEntry(entry, type, tableMonth){
-
-      //Formata os dados para o mesmo formato que vem do DB,
-      //para depois fazer a comparação.
+   /**
+    * Processa e insere uma nova entrada no sistema.
+    *
+    * @param {Object} entry - Objeto com os dados preenchidos pelo usuário.
+    * @param {string} type - Tipo da entrada: "expense" ou "income".
+    * @param {string} tableMonth - Nome do mês atualmente selecionado.
+    * @returns {Promise<void>}
+    */
+   async function insertEntry(entry, type, tableMonth) {
       const insertingEntry = {};
       let hasEmptyField = false;
-      for(const key in entry){
+
+      for (const key in entry) {
          let curr = entry[key];
-         if((key != 'end_date') && (key != 'id') && (key != 'fixed') ){
-            if(!curr){ hasEmptyField = true; }
+
+         if (!['end_date', 'id', 'fixed', 'recurrence_id'].includes(key)) {
+            if (!curr) hasEmptyField = true;
          }
-         switch(key){
+
+         switch (key) {
             case 'date':
-               curr = convertDateToYMD(entry[key]);
+               curr = convertDateToYMD(curr);
                break;
-               case 'end_date':
-                  curr = convertDateToYMD(entry[key]);
-                  if(entry.fixed && !curr){
-                     hasEmptyField = true;
-                     break;
-                  }
-            break;
+            case 'end_date':
+               curr = convertDateToYMD(curr);
+               if (entry.fixed && !curr) hasEmptyField = true;
+               break;
             case 'value':
-               curr = convertValueToNumeric(entry[key]);
-            break;
+               curr = convertValueToNumeric(curr);
+               break;
             case 'fixed':
                curr = entry[key] ? 1 : 0;
-            break;
+               break;
          }
+
          insertingEntry[key] = curr;
       }
-      
-      if(hasEmptyField) {
-         setNotifications('Todos os campos são obrigatórios.', 'warn', gerarCUID());
-         setLoading(false);
-         return;
-      };
 
-      if(tableMonth != getMonthName(insertingEntry.date)){
-         setNotifications(`Selecione uma data no mês de ${toUpperFirstLeter(tableMonth)} para continuar.`, 'error', gerarCUID());
-         setLoading(false);
+      if (hasEmptyField) {
+         setNotifications('Todos os campos são obrigatórios.', 'warn', gerarCUID());
          return;
       }
-      
+
+      if (tableMonth !== getMonthName(insertingEntry.date)) {
+         setNotifications(`Selecione uma data no mês de ${toUpperFirstLeter(tableMonth)} para continuar.`, 'error', gerarCUID());
+         return;
+      }
+
       insertingEntry.id = gerarCUID();
       insertingEntry.type = type;
 
       setLoading(true);
       setSuccess(false);
-      await fetch('http://localhost/organizze-bk/public/entries.php', {
-         method: 'POST',
-         credentials: 'include',
-         headers: {'Content-Type': 'application/json'},
-         body: JSON.stringify(insertingEntry)
-      })
-      .then(async response => {
-         if(response.status == 201){
-            setNotifications(`Nova ${type == 'expense' ? 'Despesa' : 'Receita'} adiconada.`, 'success', gerarCUID());
-            setLoading(false);
-            setSuccess(true);
+
+      try {
+         const response = await insertEntryService(insertingEntry);
+
+         if (response.status === 201) {
+            setNotifications(`Nova ${type === 'expense' ? 'Despesa' : 'Receita'} adicionada.`, 'success', gerarCUID());
             updateStore(insertingEntry, `${type}s`);
-            setToAnimateEntry(insertingEntry.id)
-         }
-         if(response.status == 400){
+            setToAnimateEntry(insertingEntry.id);
+            setSuccess(true);
+         } else if (response.status === 400) {
             setNotifications('Cheque os dados e tente novamente.', 'warn', gerarCUID());
-            setLoading(false);
-            return;
-         }
-         if(response.status == 401){
+         } else if (response.status === 401) {
             setAuth(false);
-            window.location.href ='http://localhost:3000/signin';
-            return;
+            window.location.href = 'http://localhost:3000/signin';
          }
-      })
-      .catch(error => {
-         console.log(error)
-         setNotifications(`Erro tentar adicionar nova ${type == 'expense' ? 'Despesa' : 'Receita'}, tente novamente`, 'error', gerarCUID());
+      } catch (error) {
+         console.error(error);
+         setNotifications(`Erro ao tentar adicionar nova ${type === 'expense' ? 'Despesa' : 'Receita'}, tente novamente.`, 'error', gerarCUID());
+      } finally {
          setLoading(false);
-         return;
-      })
+      }
    }
-  
+
    return { insertEntry, loading, success };
 }
 
-export function useUpdateEntriesStore(){
+/**
+ * Hook que atualiza o estado da store com uma nova entrada.
+ *
+ * @returns {{ updateStore: (insertingEntry: Object, type: string) => void }}
+ */
+export function useUpdateEntriesStore() {
    const entriesData = useEntriesDataStore(state => state.entriesData);
    const updateEntriesDataStore = useEntriesDataStore(state => state.updateEntriesDataStore);
    const updateEntriesExpensesSum = useEntriesDataStore(state => state.updateEntriesExpensesSum);
    const updateEntriesIncomesSum = useEntriesDataStore(state => state.updateEntriesIncomesSum);
 
-   function updateStore(insertingEntry, type){
-      
-      const intactType = type == 'expenses' ? 'incomes' : 'expenses'; //Salva o tipo de entries não editadas
-      const intactValue = entriesData.sum[`${intactType}_sum`]; //Guarda o valor que não será alterado
-      const newValue = Number(entriesData.sum[`${type}_sum`]) + Number(insertingEntry.value);
-      
-      const newBalance = type == 'expenses'
-      ? intactValue - newValue
-      : newValue - intactValue;
-      
-      type == 'expenses'
-      ? updateEntriesExpensesSum(newValue, newBalance)
-      : updateEntriesIncomesSum(newValue, newBalance);
-      
-      //Adiciona a nova entry
-      const entriesWithNewEntry = [...entriesData.entries[type], insertingEntry];
-      //Organiza por data descendente.
-      const sortedEntries = entriesWithNewEntry.sort((curr, prev) => { 
+   /**
+    * Atualiza a store após inserir nova entrada e recalcula os valores totais.
+    *
+    * @param {Object} insertingEntry - Objeto da nova entrada.
+    * @param {string} type - Tipo no plural: "expenses" ou "incomes".
+    */
+   function updateStore(insertingEntry, type) {
+      const intactType = type === 'expense' ? 'incomes' : 'expenses';
+      const intactValue = entriesData.sum[`${intactType}_sum`];
+      const newValue = Number(entriesData.sum[`${type}s_sum`]) + Number(insertingEntry.value);
+
+      const newBalance = type === 'expense'
+         ? intactValue - newValue
+         : newValue - intactValue;
+
+      if (type === 'expenses') {
+         updateEntriesExpensesSum(newValue, newBalance);
+      } else {
+         updateEntriesIncomesSum(newValue, newBalance);
+      }
+
+      const entriesWithNewEntry = [...entriesData.entries.all, insertingEntry];
+      const sortedEntries = entriesWithNewEntry.sort((curr, prev) => {
          return new Date(prev.date).getTime() - new Date(curr.date).getTime();
       });
+
       updateEntriesDataStore(sortedEntries, type);
    }
 
-   return { updateStore }
+   return { updateStore };
 }
-
