@@ -1,3 +1,9 @@
+'use client';
+import { Spinner } from "@/app/components/loads/spinner";
+import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
+import Link from "next/link";
+import { useState } from "react";
+
 /**
  * Página de login (SignIn).
  *

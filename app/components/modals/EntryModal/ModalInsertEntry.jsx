@@ -2,16 +2,16 @@
 import { useState, useEffect } from "react"
 import { ButtonClose } from "../buttons/ButtonClose"
 import { ButtonSave } from "../buttons/ButtonSave";
-import { CategorieSelect } from "../selects/CategorieSelect";
-import { ModalBackGround } from "./ModalBackGround";
+import { ModalBackGround } from "./../ModalBackGround";
 import { useModalsHiddenStore } from "@/app/zustand/useModalsHiddenStore";
 import { Spinner } from "../loads/spinner";
 import { useEntriesDataStore } from "@/app/zustand/useEntriesDataStore";
 import { useInsertNewEntry } from "@/app/hooks/entries/useInsertNewEntry";
 import { useSearchParams } from "next/navigation";
-import { Calendar } from "../calendar/Calendar";
+import { Calendar } from "../../calendar/Calendar";
 import { useUtils } from "@/app/hooks/useUtils";
 import { Radio, Switch } from "@mui/material";
+import { CategorieSelect } from "../../selects/CategorieSelect";
 
 /**
  * Componente modal para inserção de um novo lançamento financeiro.

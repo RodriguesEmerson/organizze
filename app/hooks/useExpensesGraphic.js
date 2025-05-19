@@ -1,4 +1,3 @@
-import { useTable } from "./useTable";
 
 export function useExpensesGraphic() {
 
@@ -8,7 +7,7 @@ export function useExpensesGraphic() {
          
          //Agrupa as categorias com seus respectivos valores somados.
          expenses.forEach(expense => {
-            if(expense.type == 'expense'){
+            if(expense.type == 'expense' && expense.effected){
                expensesData[expense.category]
                   ? expensesData[expense.category] = Number(expensesData[expense.category]) + Number(expense.value)
                   : expensesData[expense.category] = Number(expense.value);

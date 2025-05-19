@@ -15,8 +15,7 @@ import { ExpensesTotal } from "@/app/UI/Board/ExpensesTotal";
 import { GoalGraphic } from "@/app/UI/Board/GoalGraphic";
 import { MonthlyPageSqueleton } from "@/app/components/loads/MonthlyPageSqueleton";
 import { ModalInsertEntry } from "@/app/components/modals/ModalInsertEntry";
-import { useTableStore } from "@/app/zustand/useTablesStore";
-import { useEffect } from "react";
+import { memo } from "react";
 import { SummaryGraphic } from "@/app/UI/Board/SummaryGraphic";
 import { ModalConfirmAction } from "@/app/components/modals/ModalConfirmAction";
 import EntriesTable from "@/app/UI/Board/EntriesTable";
@@ -33,28 +32,20 @@ import EntriesTable from "@/app/UI/Board/EntriesTable";
  *
  * @returns {JSX.Element} O dashboard mensal.
  */
-export default function MonthlyDashBoard() {
 
+export default function MonthlyDashBoard() {
    // Verifica se o usuário está autenticado; redireciona se não estiver
    useAuthGuard();
-
    const { toUpperFirstLeter } = useUtils();
+
 
    // Obtém os parâmetros year e month da URL
    const searchParams = useSearchParams();
-   const yearURL = searchParams.get('year');
-   const monthURL = searchParams.get('month');
+   const yearURL = searchParams?.get('year');
+   const monthURL = searchParams?.get('month');
 
    // Hook que busca os lançamentos para o ano e mês informados
    const { entriesData } = useGetEntries(yearURL, monthURL);
-
-   // Função para atualizar mês selecionado no Zustand (estado global)
-   const setSelectedMonth = useTableStore(state => state.setSelectedMonth);
-
-   // Atualiza o mês selecionado ao carregar o componente (executa uma vez)
-   useEffect(() => {
-      setSelectedMonth(yearURL, monthURL);
-   }, [])
 
    return (
       <>
@@ -64,55 +55,67 @@ export default function MonthlyDashBoard() {
          <ToastNotifications />
          <ModalConfirmAction text={'Lançamento'} />
 
-         {/* Estrutura principal da página com título dinâmico */}
-         <PageModel title={`${toUpperFirstLeter(monthURL)} de ${yearURL}`}>
-            
-            {/* Caso esteja carregando ou não tenha dados, exibe esqueleto de carregamento */}
-            {(entriesData?.loading || !entriesData) &&
+         {/* Caso esteja carregando ou não tenha dados, exibe esqueleto de carregamento */}
+         {(entriesData?.loading || !entriesData) &&
+            < PageModel title={`${toUpperFirstLeter(monthURL)} de ${yearURL}`}>
                <MonthlyPageSqueleton />
-            }
+            </PageModel>
+         }
+         {/* Caso haja erro, exibe mensagem 404 personalizada */}
+         {
+            entriesData?.erro &&
+            <div className=" flex items-center justify-center h-[95%] text-gray-900">
+               <span className="text-3xl font-bold">404</span>
+               <span className="inline-block h-12 w-[2px] mx-2 bg-gray-900"></span>
+               <p>{`As finanças de ${monthURL} de ${yearURL} não foram encontradas!`}</p>
+            </div>
+         }
 
-            {/* Caso haja erro, exibe mensagem 404 personalizada */}
-            {entriesData?.erro &&
-               <div className=" flex items-center justify-center h-[95%] text-gray-900">
-                  <span className="text-3xl font-bold">404</span>
-                  <span className="inline-block h-12 w-[2px] mx-2 bg-gray-900"></span>
-                  <p>{`As finanças de ${monthURL} de ${yearURL} não foram encontradas!`}</p>
-               </div>
-            }
+         {/* Caso existam lançamentos, renderiza o dashboard completo */}
+         {entriesData?.entries &&
+            <MonthlyDashBoardBody entriesData={entriesData} monthURL={monthURL} yearURL={yearURL}/>
+         }
 
-            {/* Caso existam lançamentos, renderiza o dashboard completo */}
-            {entriesData?.entries &&
-               <div className="flex flex-col gap-2 pb-3 ">
-                  <div className="w-full h-full">
-                     <div>
-                        <div className="flex flex-row mb-2 gap-2 justify-between">
-                           {/* Totais */}
-                           <ExpensesTotal />
-                           <IncomesTotal />
-                           <BalanceTotal />
-                           <GoalGraphic />
-                        </div>
-                     </div>
-
-                     <div className="w-full flex flex-row gap-2 justify-between">
-                        {/* Gráficos das despesas, receitas e resumo */}
-                        <ExpesesGraphic expenses={entriesData.entries.expenses} sumary={entriesData.sum} />
-                        <IncomesGraphic incomes={entriesData.entries.incomes} sumary={entriesData.sum} />
-                        <SummaryGraphic />
-                     </div>
-
-                     <hr className="bg-gray-400 h-[1.5px] my-2"/>
-                  </div>
-                  
-                  {/* Tabelas com lançamentos */}
-                  <Tables />
-               </div>
-            }
-         </PageModel>
       </>
    )
 }
+
+const MonthlyDashBoardBody = memo(({ entriesData, monthURL, yearURL }) => {
+   const { toUpperFirstLeter } = useUtils();
+
+   return (
+      <>
+         {/* Estrutura principal da página com título dinâmico */}
+         < PageModel title={`${toUpperFirstLeter(monthURL)} de ${yearURL}`}>
+            <div className="flex flex-col gap-2 pb-3 ">
+               <div className="w-full h-full">
+                  <div>
+                     <div className="flex flex-row mb-2 gap-2 justify-between">
+                        {/* Totais */}
+                        <ExpensesTotal />
+                        <IncomesTotal />
+                        <BalanceTotal />
+                        <GoalGraphic />
+                     </div>
+                  </div>
+
+                  <div className="w-full flex flex-row gap-2 justify-between">
+                     {/* Gráficos das despesas, receitas e resumo */}
+                     <ExpesesGraphic expenses={entriesData.entries.expenses} sumary={entriesData.sum} />
+                     <IncomesGraphic incomes={entriesData.entries.incomes} sumary={entriesData.sum} />
+                     <SummaryGraphic />
+                  </div>
+
+                  <hr className="bg-gray-400 h-[1.5px] my-2" />
+               </div>
+
+               {/* Tabelas com lançamentos */}
+               <Tables />
+            </div>
+         </ PageModel>
+      </>
+   )
+})
 
 /**
  * Componente para exibir as tabelas de lançamentos.

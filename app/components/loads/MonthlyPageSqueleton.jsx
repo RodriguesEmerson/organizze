@@ -23,13 +23,12 @@ export function MonthlyPageSqueleton() {
 
          <div className="flex w-full flex-row mb-2 mt-2 gap-2">
             <TableSkeleton />
-            <TableSkeleton />
          </div>
       </div>
    )
 }
 
-function SumaryBoxSkeleton({ text, color }) {
+export function SumaryBoxSkeleton({ text, color }) {
    return (
       <div className="relative z-[5] pl-1 flex items-center justify-center  h-28 shadow-md w-72 bg-white flex-1 rounded-md">
          {text &&
@@ -56,7 +55,7 @@ function SumaryBoxSkeleton({ text, color }) {
    )
 }
 
-function BarGraphicYSkeleton() {
+export function BarGraphicYSkeleton() {
    return (
       <div className="h-[300px] flex flex-row flex-1 items-center justify-center p-1 pr-2 bg-white shadow-md rounded-md">
          <div className="flex flex-row gap-2 items-end mr-5 border-b border-b-gray-300">
@@ -70,7 +69,7 @@ function BarGraphicYSkeleton() {
    )
 }
 
-function ChartDoughnutSkeleton({size = 20}) {
+export function ChartDoughnutSkeleton({size = 20}) {
    return (
       <div className="h-[300px] w-[230px] flex flex-row items-center justify-center p-1 pr-2 bg-white shadow-md rounded-md">
          <div className="flex items-center justify-center h-40 w-40 rounded-full animate-pulse bg-gray-300">

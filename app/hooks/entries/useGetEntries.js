@@ -14,59 +14,69 @@ export function useGetEntries(year, month) {
    const [entriesData, setEntriesData] = useState(null);
    const setEntriesDataStore = useEntriesDataStore(state => state.setEntriesDataStore);
    const setAuth = useAuthStatus(state => state.setAuth);
+   const [selectedTable, setSelectedTable] = useState(null)
+
+
 
    useEffect(() => {
-      async function getEntries() {
-         setEntriesData({ loading: true });
+      //Evita buscar novamente os dados do mês ao clicar no link do mês já selecionado.
+      if (!entriesData || selectedTable?.month != month || selectedTable?.year != year) {
 
-         try {
-            const monthNumber = getMonthNumber(month);
-            const data = await getEntriesService(year, monthNumber);
+         async function getEntries() {
+            setEntriesData({ loading: true });
 
-            const incomes = [];
-            const expenses = [];
-            const all = data.entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            try {
+               const monthNumber = getMonthNumber(month);
+               const data = await getEntriesService(year, monthNumber);
+               setSelectedTable({ month: month, year: year })
 
-            data.entries.forEach(entry => {
-               if (entry.type === 'income') {
-                  incomes.push(entry);
-               } else {
-                  expenses.push(entry);
+               const incomes = [];
+               const expenses = [];
+               const all = data.entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+               data.entries.forEach(entry => {
+                  if (entry.type === 'income') {
+                     incomes.push(entry);
+                  } else {
+                     expenses.push(entry);
+                  }
+               });
+
+               //Coloca os dados organizados pela data descrescente
+               const sortedIncomes = incomes.sort((a, b) => new Date(b.date) - new Date(a.date));
+               const sortedExpenses = expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+               const formattedData = {
+                  entries: {
+                     incomes: sortedIncomes,
+                     expenses: sortedExpenses,
+                     all: all,
+                  },
+                  sum: {
+                     expenses_sum: data.sum[0]?.expenses_sum ?? 0,
+                     incomes_sum: data.sum[0]?.incomes_sum ?? 0,
+                     balance: (data.sum[0]?.incomes_sum ?? 0) - (data.sum[0]?.expenses_sum ?? 0),
+                  },
+               };
+
+               setEntriesData(formattedData);
+               setEntriesDataStore(formattedData);
+
+            } catch (error) {
+               if (error.message === '401') {
+                  setAuth(false);
+                  window.location.href = 'http://localhost:3000/signin';
+                  return;
                }
-            });
-
-            const sortedIncomes = incomes.sort((a, b) => new Date(b.date) - new Date(a.date));
-            const sortedExpenses = expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            const formattedData = {
-               entries: {
-                  incomes: sortedIncomes,
-                  expenses: sortedExpenses,
-                  all: all,
-               },
-               sum: {
-                  expenses_sum: data.sum[0]?.expenses_sum ?? 0,
-                  incomes_sum: data.sum[0]?.incomes_sum ?? 0,
-                  balance: (data.sum[0]?.incomes_sum ?? 0) - (data.sum[0]?.expenses_sum ?? 0),
-               },
-            };
-
-            setEntriesData(formattedData);
-            setEntriesDataStore(formattedData);
-
-         } catch (error) {
-            if (error.message === '401') {
-               setAuth(false);
-               window.location.href = 'http://localhost:3000/signin';
-               return;
+               setEntriesData({ error: true });
+               console.error(error);
             }
-            setEntriesData({ error: true });
-            console.error(error);
          }
+
+         getEntries();
       }
 
-      getEntries();
-   }, [year, month, setAuth, setEntriesDataStore]);
+   }, [year, month]);
 
    function getMonthNumber(monthName) {
       const yearMonths = [

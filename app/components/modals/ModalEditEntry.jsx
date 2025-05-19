@@ -22,9 +22,9 @@ import { Calendar } from "../calendar/Calendar";
  * - Envia atualizações para o banco de dados.
  * - Permite excluir a entrada com confirmação.
  */
-export function ModalEditEntry(){
+export function ModalEditEntry() {
    const showEditModal = useModalsHiddenStore((state) => state.showEditModal);
-   if(showEditModal){
+   if (showEditModal) {
       return (
          <ModalEditEntryBody />
       )
@@ -38,7 +38,10 @@ function ModalEditEntryBody() {
    const setShowEditModal = useModalsHiddenStore(state => state.setShowEditModal);
 
    // Dados do formulário. Preenchido com os dados da entrada que está sendo editada.
-   const [formData, setFormData] = useState({description: '', category: '', date: '', fixed: false, end_date: '', value: '', id: ''});
+   const [formData, setFormData] = useState({
+      description: '', category: '', date: '', type: 'expense', icon: '', fixed: false, end_date: '', value: '',
+      id: '', effected: true, recurrence_id: ''
+   });
 
    const setAction = useModalConfirmActionStore(state => state.setAction);
    const setShowAddConfirmModal = useModalsHiddenStore(state => state.setShowAddConfirmModal);
@@ -51,21 +54,24 @@ function ModalEditEntryBody() {
 
    // Ao abrir o modal, preenche o formulário com os dados do lançamento selecionado para edição.
    useEffect(() => {
-      setFormData( 
-         {   
+      setFormData(
+         {
             description: editingEntry.description,
             category: editingEntry.category,
             date: convertDateToDMY(editingEntry.date),
+            type: editingEntry.type,
             fixed: !!editingEntry?.end_date ? true : false,
             icon: editingEntry.icon,
             end_date: editingEntry.end_date ? convertDateToDMY(editingEntry.end_date) : '',
-            value: new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(editingEntry.value).slice(3,),
-            id: editingEntry.id
-         } 
+            value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(editingEntry.value).slice(3,),
+            id: editingEntry.id,
+            effected: editingEntry.effected,
+            recurrence_id: editingEntry.recurrence_id
+         }
       );
       setFixedEntry(!!editingEntry?.end_date && true);
    }, [editingEntry]);
-   
+
    return (
       <ModalBackGround >
          <div className="relative modal flex flex-col justify-between h-fit w-[420px] bg-white rounded-md shadow-lg py-2 px-3">
@@ -75,12 +81,12 @@ function ModalEditEntryBody() {
                <div className="absolute flex items-center justify-center top-0 left-2 w-9 h-9 bg-white rounded-full overflow-hidden">
                   <img className="w-6 transition-all" src={"/gif/edit.gif"} />
                </div>
-                <h4>{`Editando ${editingEntry.type == 'expense' ? 'Despesa' : 'Receita'}`}</h4>
+               <h4>{`Editando ${editingEntry.type == 'expense' ? 'Despesa' : 'Receita'}`}</h4>
                <div className="absolute h-5 w-5 top-0 right-0">
                   <ButtonClose onClick={() => { setShowEditModal(false) }} />
                </div>
             </div>
-            
+
             {/* Formulário */}
             <div>
                <form className="text-[13px] text-gray-700" id="new-release-form">
@@ -103,7 +109,7 @@ function ModalEditEntryBody() {
                         <CategorieSelect
                            name={"categoria"}
                            value={formData.category}
-                           setValue={ setFormData }
+                           setValue={setFormData}
                            formData={formData}
                            type={editingEntry.type}
                         />
@@ -115,36 +121,36 @@ function ModalEditEntryBody() {
                         <div className="flex flex-row gap-1 w-full">
                            <Calendar
                               params={{
-                                 name: 'date', 
-                                 value: formData.date, 
+                                 name: 'date',
+                                 value: formData.date,
                                  disabledCalendar: false,
                                  setFormData: setFormData,
                                  formData: formData,
                                  navButtonsStatus: 'off',
                                  defaultMonth: formData.date
-                              }} 
+                              }}
                            />
                            <Calendar
-                               params={{
-                                 name: 'end_date', 
-                                 value: formData.end_date, 
+                              params={{
+                                 name: 'end_date',
+                                 value: formData.end_date,
                                  disabledCalendar: !formData.fixed,
                                  setFormData: setFormData,
                                  formData: formData,
                                  navButtonsStatus: 'on',
-                                 defaultMonth: formData.end_date
+                                 defaultMonth: formData.end_date ? formData.end_date : formData.date
                               }}
                            />
                         </div>
                         <div className="absolute right-[10px] h-5 flex flex-row items-center gap-[4px]">
                            <input
                               className="h-4"
-                              type="checkbox"   
+                              type="checkbox"
                               name="fixa"
                               checked={fixedEntry}
-                              onChange={() => { 
-                                 setFormData({ ...formData, end_date: '', fixed: !fixedEntry }); 
-                                 setFixedEntry(!fixedEntry); 
+                              onChange={() => {
+                                 setFormData({ ...formData, end_date: '', fixed: !fixedEntry });
+                                 setFixedEntry(!fixedEntry);
                               }}
                               id={`${editingEntry.type}-fixedEntryCheckbox`}
                            />
@@ -168,24 +174,24 @@ function ModalEditEntryBody() {
                      />
                   </div>
                   <div className="flex flex-col gap-[2px] justify-center mt-3">
-                     <ButtonSave 
+                     <ButtonSave
                         // Atualiza a entrada no banco de dados
                         onClick={(e) => {
                            e.preventDefault();
                            updateEntry(formData, editingEntry.type);
-                        }} 
-                        text="Salvar alteraçôes" 
+                        }}
+                        text="Salvar alteraçôes"
                      >{updateDBSAnswer.loading &&
                         <Spinner />
-                     }</ ButtonSave >
+                        }</ ButtonSave >
 
                      <div className="flex flex-row items-center">
                         <div className="flex-1"><hr /></div>
-                        <span className="px-2">ou</span> 
+                        <span className="px-2">ou</span>
                         <div className="flex-1"><hr /></div>
                      </div>
 
-                     <ButtonDelete  
+                     <ButtonDelete
                         // Define a ação de exclusão e mostra o modal de confirmação
                         onClick={(e) => {
                            e.preventDefault();
@@ -195,7 +201,7 @@ function ModalEditEntryBody() {
                         text={`Excluir ${editingEntry.type == 'expense' ? 'Despesa' : 'Receita'}`}
                      >{loading &&
                         <Spinner />
-                     }</ ButtonDelete >
+                        }</ ButtonDelete >
                   </div>
                </form>
             </div>

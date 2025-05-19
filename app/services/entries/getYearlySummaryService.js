@@ -6,16 +6,16 @@
  * @throws {Error} Lança erro se a resposta da requisição não for OK, com o status HTTP.
  */
 export async function getYearlySumaryService(year) {
-  const url = `http://localhost/organizze-bk/public/entries.php?year=${year}&reportType=yearly`;
+   const url = `http://localhost/organizze-bk/public/entries.php?year=${year}&reportType=yearly`;
 
-  const response = await fetch(url, {
-    method: 'GET',
-    credentials: 'include',
-  });
+   const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+   });
 
-  if (!response.ok) {
-    throw new Error(response.status.toString());
-  }
+   if (!response.ok) {
+      throw new Error(response.status.toString());
+   }
 
-  return response.json();
+   return response.json();
 }

@@ -19,7 +19,6 @@ import { useGetYearlySummary } from "@/app/hooks/entries/useGetYearlySummary";
  * - Renderiza informações financeiras e gráficos relacionados ao ano.
  */
 export default function YearlyDashBoard() {
-
    // Verifica se o usuário está autenticado; redireciona se não estiver
    useAuthGuard();
 

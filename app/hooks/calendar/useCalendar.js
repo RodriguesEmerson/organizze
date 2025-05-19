@@ -28,21 +28,29 @@ export function useCalendar(defaultDate) {
    const defaultMonth = defaultDate ? Number(defaultDate.split(/\/|\-/)[1]) : false;
    const defaultYear = defaultDate ? Number(defaultDate.split(/\/|\-/)[2]) : false;
 
-   const [selectedDateAtCalendar, setSelectedDateAtCalendar] = useState({ year: defaultYear, month: defaultMonth });
+   const [selectedDateAtCalendar, setSelectedDateAtCalendar] = useState({ year: false, month: false });
    const [calendarDays, setCalendarDays] = useState();
+   const [isDefaultDateSeted, setIsDefaultDateSeted] = useState(false);
+
 
    useEffect(() => {
+
+      //Seta o mês enviado caso haja.
+      if (!isDefaultDateSeted && defaultDate) {
+         setSelectedDateAtCalendar({ year: defaultYear, month: defaultMonth });
+         setIsDefaultDateSeted(true);
+         return;
+      }
+
       if (selectedDateAtCalendar.year) {
          // Subtrai 1 do mês porque o construtor Date usa meses baseados em índice (0-11)
          setCalendarDays(genereTeCalendar(selectedDateAtCalendar?.month - 1, selectedDateAtCalendar?.year));
          return;
       }
-
       // Caso não haja data inicial, define o mês atual como padrão
       const month = new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit' }).split('/');
       setSelectedDateAtCalendar({ month: Number(month[0]), year: Number(month[1]) });
-   }, [selectedDateAtCalendar.month]);
-
+   }, [selectedDateAtCalendar.month, defaultDate]);
    /**
     * Gera os dias do calendário com base no mês e ano.
     *

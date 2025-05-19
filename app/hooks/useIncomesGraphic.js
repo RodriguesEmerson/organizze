@@ -6,7 +6,7 @@ export function useIncomesGraphic() {
       if (incomes) { 
          const incomesData = {};
          incomes.forEach(income => {
-            if(income.type == 'income'){
+            if(income.type == 'income' && income.effected){
                incomesData[income.category]
                   ? incomesData[income.category] = Number(incomesData[income.category]) + Number(income.value)
                   : incomesData[income.category] = Number(income.value);

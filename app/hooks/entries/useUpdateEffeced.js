@@ -35,8 +35,6 @@ export function useUpdateEffected() {
 
       try {
          const response = await updateEntryEffectedStatusService(data);
-         const result = await response.json();
-         console.log(result);
 
          if (response.status === 200) {
             setNotifications('Dados atualizados com sucesso.', 'success', gerarCUID());

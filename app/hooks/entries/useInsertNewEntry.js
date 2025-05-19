@@ -36,13 +36,17 @@ export function useInsertNewEntry() {
       const insertingEntry = {};
       let hasEmptyField = false;
 
+      
+      // console.table(entry);return;
       for (const key in entry) {
          let curr = entry[key];
 
+         //Checa se algum dos campos enviados estão vazios.
          if (!['end_date', 'id', 'fixed', 'recurrence_id'].includes(key)) {
             if (!curr) hasEmptyField = true;
          }
 
+         //Formata os dados enviados para serem aceitos no backend
          switch (key) {
             case 'date':
                curr = convertDateToYMD(curr);
@@ -54,9 +58,9 @@ export function useInsertNewEntry() {
             case 'value':
                curr = convertValueToNumeric(curr);
                break;
-            case 'fixed':
-               curr = entry[key] ? 1 : 0;
-               break;
+            // case 'fixed':
+            //    curr = entry[key] ? 1 : 0;
+            //    break;
          }
 
          insertingEntry[key] = curr;
@@ -66,24 +70,26 @@ export function useInsertNewEntry() {
          setNotifications('Todos os campos são obrigatórios.', 'warn', gerarCUID());
          return;
       }
-
       if (tableMonth !== getMonthName(insertingEntry.date)) {
          setNotifications(`Selecione uma data no mês de ${toUpperFirstLeter(tableMonth)} para continuar.`, 'error', gerarCUID());
          return;
       }
+      //Gera um id único para a entry;
+      insertingEntry.id = gerarCUID(); 
 
-      insertingEntry.id = gerarCUID();
-      insertingEntry.type = type;
+      //Caso seja uma entry fixa, cria um id para identificar todos os lançamentos derivados dele.
+      if(entry.fixed){insertingEntry.recurrence_id = gerarCUID()}
+
 
       setLoading(true);
-      setSuccess(false);
-
+      setSuccess(false);   
       try {
          const response = await insertEntryService(insertingEntry);
-
+         const result = await response.json();
+         console.log(result)
          if (response.status === 201) {
             setNotifications(`Nova ${type === 'expense' ? 'Despesa' : 'Receita'} adicionada.`, 'success', gerarCUID());
-            updateStore(insertingEntry, `${type}s`);
+            updateStore(insertingEntry, `${type}`);
             setToAnimateEntry(insertingEntry.id);
             setSuccess(true);
          } else if (response.status === 400) {
@@ -118,7 +124,7 @@ export function useUpdateEntriesStore() {
     * Atualiza a store após inserir nova entrada e recalcula os valores totais.
     *
     * @param {Object} insertingEntry - Objeto da nova entrada.
-    * @param {string} type - Tipo no plural: "expenses" ou "incomes".
+    * @param {string} type - Tipo do lançamento: "expense" ou "income".
     */
    function updateStore(insertingEntry, type) {
       const intactType = type === 'expense' ? 'incomes' : 'expenses';
@@ -129,7 +135,7 @@ export function useUpdateEntriesStore() {
          ? intactValue - newValue
          : newValue - intactValue;
 
-      if (type === 'expenses') {
+      if (type === 'expense') {
          updateEntriesExpensesSum(newValue, newBalance);
       } else {
          updateEntriesIncomesSum(newValue, newBalance);
@@ -140,7 +146,7 @@ export function useUpdateEntriesStore() {
          return new Date(prev.date).getTime() - new Date(curr.date).getTime();
       });
 
-      updateEntriesDataStore(sortedEntries, type);
+      updateEntriesDataStore(sortedEntries, 'all');
    }
 
    return { updateStore };
