@@ -28,7 +28,7 @@ const GoalGraphicBody = memo(({sum}) =>{
          }
          {sum && 
          <>
-            <div className="w-[250px] h-[130px]">
+            <div className="w-full h-[130px] xl:w-[80%]">
                {/*Labels, values, colors, orientation*/}
                <ChartBar
                   data={{
@@ -43,8 +43,8 @@ const GoalGraphicBody = memo(({sum}) =>{
                   }}
                />
             </div>
-            <div className="absolute flex flex-row text-center w-10 right-7 top-11 text-gray-500">
-               <span className="text-xl font-semibold">
+            <div className="absolute hidden flex-row text-center w-10 right-2 top-11 text-gray-500 xl:flex">
+               <span className="text-md font-semibold">
                   {(sum.balance >= 0
                      ? `${(sum.balance / 4000 * 100).toFixed(0)}`
                      : '0')

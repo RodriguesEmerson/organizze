@@ -33,7 +33,7 @@ export function SummaryGraphic() {
 
 export const SummaryGraphicBody = memo(({ sum }) => {
    return (
-      <div className="!min-w-[200px] h-[300px] flex flex-1  flex-col items-center bg-white p-1 pr-2 shadow-md rounded-md overflow-hidden">
+      <div className="!min-w-[200px] max-w-[230px] h-[300px] flex flex-1  flex-col items-center bg-white p-1 pr-2 shadow-md rounded-md overflow-hidden">
          <>
             <div className="flex items-center justify-center text-gray-900 text-xs mb-1 h-8">
                <h2>Resumo</h2>

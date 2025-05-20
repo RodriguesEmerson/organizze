@@ -7,6 +7,7 @@ import { useUtilsStore } from "../zustand/useUtilsStore";
 import { Spinner } from "./loads/spinner";
 import { Switch } from "@mui/material";
 import { useUpdateEffected } from "../hooks/entries/useUpdateEffeced";
+import { TableSkeleton } from "./loads/TableSkeleton";
 
 /**
  * Componente que exibe uma tabela de lançamentos (despesas ou receitas).
@@ -28,7 +29,7 @@ export function Table({ type }) {
       }
    }, [entriesData.entries.all]);
 
-   if (!entries) return <Spinner />;
+   if (!entries) return <TableSkeleton />;
 
    return (
       <>
@@ -96,18 +97,18 @@ function TableTr({ entry, type }) {
    return(
       <tr
          key={entry.id}
-         className={`h-10 border-t-[1px] border-t-gray-200 text-[13px] hover:bg-gray-100 transition-all cursor-pointer
-         ${animate && 'animate-fadeIn'} ${entry.type === 'expense' ? 'text-red-800' : 'text-green-700'}`}
+         className={`h-10  text-[13px] hover:bg-gray-200 transition-all cursor-pointer
+         ${animate && 'animate-fadeIn'} ${entry.type === 'expense' ? 'text-red-800' : 'text-green-700'} odd:bg-gray-100`}
          onClick={() => {
             setEditingEntry({...entry, type: entry.type});
             setShowEditModal(true);
          }}
       >
-         <td className="pl-2 max-w-[120px] whitespace-nowrap overflow-hidden text-ellipsis font-semibold">
+         <td className="pl-2 max-w-[120px] whitespace-nowrap overflow-hidden text-ellipsis font-semibold rounded-l-md">
             {entry.description}
          </td>
 
-         <TableTd icon={`/icons/${entry.icon}`} categ={entry.category} />
+         <TableTdIcon icon={`/icons/${entry.icon}`} categ={entry.category} />
 
          <td className="relative text-center">
             {convertDateToDM(entry.date)}
@@ -132,7 +133,7 @@ function TableTr({ entry, type }) {
  * @param {string} props.categ - Nome da categoria
  * @returns {JSX.Element} Célula da tabela com ícone e nome da categoria
  */
-function TableTd({ icon, categ }) {
+function TableTdIcon({ icon, categ }) {
    const setTooltipInfoText = useUtilsStore((state) => state.setTooltipInfoText);
 
    return (
@@ -162,7 +163,7 @@ function EffetivedSwitch({ entry, effected }) {
    const { updateEffected, updateStatus } = useUpdateEffected();
 
    return (
-      <td className="text-center"
+      <td className="text-center  rounded-r-md"
          onClick={(e) => {
             e.stopPropagation();
             if (!updateStatus.loading) {
@@ -171,8 +172,10 @@ function EffetivedSwitch({ entry, effected }) {
          }}
       >
          {updateStatus?.loading
-            ? <Spinner />
-            : <Switch color="success" defaultChecked={effected} />
+            ?  <Spinner size={6}/>
+            :  <Switch 
+                  defaultChecked={effected} 
+               />
          }
       </td>
    )

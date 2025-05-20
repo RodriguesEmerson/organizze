@@ -99,11 +99,13 @@ const MonthlyDashBoardBody = memo(({ entriesData, monthURL, yearURL }) => {
                      </div>
                   </div>
 
-                  <div className="w-full flex flex-row gap-2 justify-between">
+                  <div className="w-full flex flex-col gap-2 justify-between xl:flex-row">
                      {/* Gráficos das despesas, receitas e resumo */}
                      <ExpesesGraphic expenses={entriesData.entries.expenses} sumary={entriesData.sum} />
-                     <IncomesGraphic incomes={entriesData.entries.incomes} sumary={entriesData.sum} />
-                     <SummaryGraphic />
+                     <div className="w-full flex flex-col gap-2 items-stretch lg:flex-row">
+                        <IncomesGraphic incomes={entriesData.entries.incomes} sumary={entriesData.sum} />
+                        <SummaryGraphic />
+                     </div>
                   </div>
 
                   <hr className="bg-gray-400 h-[1.5px] my-2" />

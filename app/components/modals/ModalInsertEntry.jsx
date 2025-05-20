@@ -137,7 +137,6 @@ function ModalInsertEntryBody() {
                            <Switch
                               id="switchEffected"
                               size="medium"
-                              color={formData.type == 'expense' ? 'error' : 'success'}
                               checked={formData.effected}
                               onClick={() => setFormData({ ...formData, effected: !formData.effected })}
                            />
