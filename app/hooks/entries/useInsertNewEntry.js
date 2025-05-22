@@ -36,7 +36,6 @@ export function useInsertNewEntry() {
       const insertingEntry = {};
       let hasEmptyField = false;
 
-      
       // console.table(entry);return;
       for (const key in entry) {
          let curr = entry[key];

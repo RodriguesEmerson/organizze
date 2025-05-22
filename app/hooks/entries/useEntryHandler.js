@@ -39,7 +39,7 @@ export function useEntryHandler() {
 
       for (const key in entry) {
          let curr = entry[key];
-
+         
          if (key === 'date' || key === 'end_date') {
             curr = convertDateToYMD(entry[key]);
          } else if (key === 'fixed') {
@@ -48,8 +48,10 @@ export function useEntryHandler() {
             curr = convertValueToNumeric(entry[key]);
          }
 
-         if (curr !== editingEntry[key]) {
-            updatedEntry[key] = curr;
+         if(key != 'change_recurrence'){
+            if (curr !== editingEntry[key]) {
+               updatedEntry[key] = curr;
+            }
          }
       }
 
@@ -67,15 +69,25 @@ export function useEntryHandler() {
          return;
       }
 
+      
       setUpdateDBSAnswer({ loading: true });
       updatedEntry.id = editingEntry.id;
+      //Readiciona essa informação, pois foi tirada ao checar os dados.
+      updatedEntry.change_recurrence = entry.change_recurrence; 
+      if(entry.change_recurrence === true){
+         //Mesmo que a se a data não for editada, ela será enviada 
+         //para que o backend altere alpenas lançamentos com a data igual o maior a ela;
+         updatedEntry.date = convertDateToYMD(entry.date);
+         updatedEntry.recurrence_id = entry.recurrence_id;
+      }
 
       if (updatedEntry.hasOwnProperty('end_date')) {
          if (updatedEntry.end_date) updatedEntry.fixed = 1;
       }
 
       try {
-         const { status } = await updateEntryService(updatedEntry);
+         const { status, result } = await updateEntryService(updatedEntry);
+         console.log(result)
 
          if (status === 200) {
             setNotifications('Dados atualizados com sucesso.', 'success', gerarCUID());

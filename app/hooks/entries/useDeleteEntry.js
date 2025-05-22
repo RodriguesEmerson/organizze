@@ -27,7 +27,7 @@ export function useDeleteEntry() {
          const response = await deleteEntryService(entryId);
 
          if (response.status === 200) {
-            setNotifications(`${type === 'expenses' ? 'Despesa' : 'Receita'} excluída.`, 'success', gerarCUID());
+            setNotifications(`${type === 'expense' ? 'Despesa' : 'Receita'} excluída.`, 'success', gerarCUID());
             updateStore(entry, type);
             setTimeout(() => {
                setShowEditModal(false);
@@ -82,7 +82,7 @@ function useUpdateEntriesStore() {
       const entriesWithoutDeletedEntry = entriesData.entries.all.filter(entry => entry.id !== deletingEntry.id);
       const sortedEntries = entriesWithoutDeletedEntry.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-      updateEntriesDataStore(sortedEntries, type);
+      updateEntriesDataStore(sortedEntries, 'all');
    }
 
    return { updateStore };

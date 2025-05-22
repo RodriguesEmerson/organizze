@@ -1,5 +1,6 @@
 'use client';
 import { Spinner } from "@/app/components/loads/spinner";
+import { useSignin } from "@/app/hooks/auth/signin";
 import { useAuthGuard } from "@/app/hooks/auth/useAuthGuard";
 import Link from "next/link";
 import { useState } from "react";
@@ -45,7 +46,7 @@ function SigninForm() {
             <div className="h-[90%] content-center">
                <form className="flex flex-col gap-3">
                   {/* Campo de e-mail */}
-                  <input type="email" required
+                  <input type="email" 
                      className="border border-gray-300 text-sm rounded-[4px] h-9 pl-2"
                      value={data.email}
                      placeholder="Email"
@@ -53,7 +54,7 @@ function SigninForm() {
                   />
 
                   {/* Campo de senha */}
-                  <input type="password" required
+                  <input type="password" 
                      className="border border-gray-300 text-sm rounded-[4px] h-9 pl-2"
                      value={data.password}
                      placeholder="Senha"

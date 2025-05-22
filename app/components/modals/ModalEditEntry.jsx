@@ -40,7 +40,7 @@ function ModalEditEntryBody() {
    // Dados do formulário. Preenchido com os dados da entrada que está sendo editada.
    const [formData, setFormData] = useState({
       description: '', category: '', date: '', type: 'expense', icon: '', fixed: false, end_date: '', value: '',
-      id: '', effected: true, recurrence_id: ''
+      id: '', effected: true, recurrence_id: '', change_recurrence: false
    });
 
    const setAction = useModalConfirmActionStore(state => state.setAction);
@@ -66,7 +66,8 @@ function ModalEditEntryBody() {
             value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(editingEntry.value).slice(3,),
             id: editingEntry.id,
             effected: editingEntry.effected,
-            recurrence_id: editingEntry.recurrence_id
+            recurrence_id: editingEntry.recurrence_id,
+            change_recurrence: false
          }
       );
       setFixedEntry(!!editingEntry?.end_date && true);
@@ -86,6 +87,28 @@ function ModalEditEntryBody() {
                   <ButtonClose onClick={() => { setShowEditModal(false) }} />
                </div>
             </div>
+
+            {/* Informção se o lançamento for fixo */}
+            {/* Você está editando um lançamento fixo. Deseja que as informações alteradas
+                        reflitam nos meses seguintes? */}
+            {editingEntry?.fixed ?
+               <div className="mb-3 flex gap-2 items-center justify-around px-2">
+                  <div className="flex items-center gap-1 justify-center text-blue-900">
+                     <div className="text-sm">
+                        Refletir alterações nos meses seguintes?
+                     </div>
+                     <input id="checkBoxChangeForward" className="w-5" type="checkbox" 
+                        checked={formData?.change_recurrence}
+                        onChange={() => {
+                           setFormData({...formData, change_recurrence: !formData.change_recurrence});
+                        }}
+                     />
+                     <label htmlFor="checkBoxChangeForward" className="-ml-1">Sim</label>
+                  </div>
+                     <span className="material-icons-outlined text-gray-900 text-[20px] leading-5  cursor-pointer">info</span>
+               </div> 
+               : ''
+            }  
 
             {/* Formulário */}
             <div>
@@ -134,7 +157,7 @@ function ModalEditEntryBody() {
                               params={{
                                  name: 'end_date',
                                  value: formData.end_date,
-                                 disabledCalendar: !formData.fixed,
+                                 disabledCalendar: true,
                                  setFormData: setFormData,
                                  formData: formData,
                                  navButtonsStatus: 'on',
@@ -148,6 +171,7 @@ function ModalEditEntryBody() {
                               type="checkbox"
                               name="fixa"
                               checked={fixedEntry}
+                              disabled={true}
                               onChange={() => {
                                  setFormData({ ...formData, end_date: '', fixed: !fixedEntry });
                                  setFixedEntry(!fixedEntry);
